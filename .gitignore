@@ -1,0 +1,10 @@
+# Local tool/editor settings — not part of the deployed site
+.claude/
+
+# OS junk files
+.DS_Store
+Thumbs.db
+
+# Local environment secrets (never commit real tokens/keys)
+.env
+.env.local

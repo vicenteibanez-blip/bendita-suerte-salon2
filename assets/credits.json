@@ -1,0 +1,68 @@
+{
+  "about": {
+    "src": "assets/img/about.webp",
+    "title": "Frank's Barber Shop — interior",
+    "creator": "chad_k",
+    "creator_url": "https://www.flickr.com/photos/99535234@N00",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/99535234@N00/4301839328",
+    "source": "flickr"
+  },
+  "gallery-mirror": {
+    "src": "assets/img/gallery-mirror.webp",
+    "title": "Proceso de corte frente al espejo",
+    "creator": "Openverse contributor",
+    "creator_url": "https://openverse.org",
+    "license": "pdm",
+    "license_version": "1.0",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "foreign_landing_url": "https://openverse.org",
+    "source": "flickr"
+  },
+  "gallery-tools": {
+    "src": "assets/img/gallery-tools.webp",
+    "title": "Estación de herramientas de barbería",
+    "creator": "Treforlutions TreVizionz",
+    "creator_url": "https://www.flickr.com/photos/99646269@N00",
+    "license": "by",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/99646269@N00/438793365",
+    "source": "flickr"
+  },
+  "gallery-cut": {
+    "src": "assets/img/gallery-cut.webp",
+    "title": "Corte de cabello en proceso",
+    "creator": "Openverse contributor",
+    "creator_url": "https://openverse.org",
+    "license": "pdm",
+    "license_version": "1.0",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "foreign_landing_url": "https://openverse.org",
+    "source": "flickr"
+  },
+  "gallery-clippers": {
+    "src": "assets/img/gallery-clippers.webp",
+    "title": "Detalle de máquina de corte",
+    "creator": "SurfaceWarriors",
+    "creator_url": "https://www.flickr.com/photos/55244200@N05",
+    "license": "by-sa",
+    "license_version": "2.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/55244200@N05/39349963235",
+    "source": "flickr"
+  },
+  "gallery-chairs": {
+    "src": "assets/img/gallery-chairs.webp",
+    "title": "Sillas vintage de barbería",
+    "creator": "krossbow",
+    "creator_url": "https://www.flickr.com/photos/13194817@N00",
+    "license": "cc0",
+    "license_version": "1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "foreign_landing_url": "https://www.rawpixel.com/image/5925744/photo-image-public-domain-black-vintage",
+    "source": "rawpixel"
+  }
+}
