@@ -26,6 +26,7 @@ const PRODUCTS = {
   "cera-matte-pomade-green": { name: "Cera Matte Pomade Green (ROQVEL)", priceCLP: 10000 },
   "curl-cream-rolda": { name: "Curl Cream (Rolda)", priceCLP: 10000 },
   "aceite-barba-maxcare": { name: "Aceite de Barba (MaxCare)", priceCLP: 10000 },
+  "producto-prueba-1000": { name: "Producto de Prueba", priceCLP: 1000 },
 };
 
 // Debe coincidir con lib/manifest.js -> shipping
