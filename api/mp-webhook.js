@@ -139,12 +139,17 @@ module.exports = async function handler(req, res) {
     );
 
     if (payer.email) {
+      const shippingNoteHTML = metadata.entrega === "despacho"
+        ? "<p>El envío se hace efectivo dentro de <strong>3 días hábiles</strong>. El código de seguimiento te llegará a este correo apenas esté disponible.</p>"
+        : "";
+
       const customerHTML =
         "<h2>¡Gracias por tu compra! 🍀</h2>" +
         "<p>Confirmamos que recibimos tu pago en <strong>Bendita Suerte Salón</strong>.</p>" +
         "<p><strong>Tu pedido:</strong></p><ul>" + itemsHTML + "</ul>" +
         "<p><strong>Total pagado:</strong> " + formatCLP(payment.transaction_amount) + "</p>" +
         "<p><strong>Entrega:</strong> " + entregaHTML + "</p>" +
+        shippingNoteHTML +
         "<p>Cualquier duda, escríbenos al " + escapeHTML(SHOP_PHONE) + ".</p>" +
         "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";
 
