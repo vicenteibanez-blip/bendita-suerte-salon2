@@ -157,6 +157,7 @@ module.exports = async function handler(req, res) {
       pending: origin + "/pendiente.html",
     },
     auto_return: "approved",
+    notification_url: origin + "/api/mp-webhook",
     external_reference: externalReference,
     statement_descriptor: "BENDITA SUERTE",
     metadata: {

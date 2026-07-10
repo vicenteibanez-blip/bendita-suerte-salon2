@@ -71,7 +71,17 @@ Cuando todo funcione bien:
 
 ## Cómo te enteras de cada venta
 
-No agregamos ninguna base de datos ni sistema aparte: cada vez que un cliente paga, MercadoPago te va a notificar automáticamente en su app/panel (y por email si lo tienes activado), mostrando qué productos compró, el monto y — si eligió despacho — la dirección de entrega. Revisa tu [panel de actividad de MercadoPago](https://www.mercadopago.cl/activities) después de cada venta.
+Tienes dos avisos independientes, así que aunque falle uno te enteras por el otro:
+
+1. **MercadoPago:** te notifica automáticamente en su app/panel (y por email si lo tienes activado). Revisa tu [panel de actividad de MercadoPago](https://www.mercadopago.cl/activities) después de cada venta.
+2. **Correo propio por Resend:** el sitio manda un correo a `benditasuerte.salon@gmail.com` apenas MercadoPago confirma que el pago quedó aprobado, con el detalle de los productos, el cliente y si es retiro o despacho. Esto lo hace la función `api/mp-webhook.js`, a la que MercadoPago avisa automáticamente (webhook) cada vez que cambia el estado de un pago.
+
+Para que el correo por Resend funcione, agrega estas variables en Vercel (**Settings → Environment Variables**), igual que hiciste con `MERCADOPAGO_ACCESS_TOKEN`:
+
+- **`RESEND_API_KEY`** (obligatoria): tu clave de API de Resend ([resend.com/api-keys](https://resend.com/api-keys)).
+- **`RESEND_FROM_EMAIL`** (opcional): la dirección remitente, por ejemplo `Bendita Suerte Salón <avisos@tudominio.cl>` — requiere tener ese dominio verificado en Resend. Si no la configuras, se usa el remitente de prueba `onboarding@resend.dev`, que funciona pero puede llegar a spam con más frecuencia.
+
+Después de agregar las variables, haz "Redeploy" en Vercel para que tomen efecto.
 
 ---
 
