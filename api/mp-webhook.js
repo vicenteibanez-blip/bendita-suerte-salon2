@@ -4,8 +4,9 @@
    Función serverless de Vercel (Node.js). MercadoPago llama a esta
    URL automáticamente cada vez que cambia el estado de un pago
    (creado, aprobado, rechazado, etc). Cuando el pago queda
-   APROBADO, mandamos un correo de aviso al dueño de la barbería
-   usando Resend, con el detalle de la venta.
+   APROBADO, mandamos dos correos usando Resend: uno de aviso de
+   venta al dueño de la barbería, y otro de confirmación de compra
+   al comprador (a su email de pago en MercadoPago).
 
    Nunca confiamos en los datos que vienen en el aviso: solo usamos
    el ID de pago que trae, y le volvemos a preguntar a MercadoPago
@@ -23,6 +24,10 @@
 
 const NOTIFY_EMAIL = "benditasuerte.salon@gmail.com";
 
+// Debe coincidir con lib/manifest.js (address.full / phoneDisplay).
+const SHOP_ADDRESS = "Av. Valle Del Sol 5556, Puente Alto, Santiago";
+const SHOP_PHONE = "+56 9 8697 6527";
+
 function escapeHTML(s) {
   return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
     return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -31,6 +36,20 @@ function escapeHTML(s) {
 
 function formatCLP(n) {
   return "$" + Math.round(Number(n) || 0).toLocaleString("es-CL");
+}
+
+async function sendEmail(resendApiKey, fromEmail, to, subject, html) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + resendApiKey,
+    },
+    body: JSON.stringify({ from: fromEmail, to: [to], subject: subject, html: html }),
+  });
+  if (!res.ok) {
+    console.error("Resend error (" + to + "):", await res.text());
+  }
 }
 
 module.exports = async function handler(req, res) {
@@ -99,9 +118,9 @@ module.exports = async function handler(req, res) {
     const entregaHTML = metadata.entrega === "despacho"
       ? "Despacho a domicilio — " + escapeHTML(metadata.direccion) + ", " + escapeHTML(metadata.comuna) +
         (metadata.referencia ? " (" + escapeHTML(metadata.referencia) + ")" : "")
-      : "Retiro en local";
+      : "Retiro en local — " + escapeHTML(SHOP_ADDRESS);
 
-    const html =
+    const ownerHTML =
       "<h2>Nueva venta aprobada 🍀</h2>" +
       "<p><strong>Monto total:</strong> " + formatCLP(payment.transaction_amount) + "</p>" +
       "<p><strong>Cliente:</strong> " + escapeHTML((payer.first_name || "") + " " + (payer.last_name || "")).trim() +
@@ -111,19 +130,32 @@ module.exports = async function handler(req, res) {
       "<p><strong>Productos:</strong></p><ul>" + itemsHTML + "</ul>" +
       "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";
 
-    await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Bearer " + resendApiKey,
-      },
-      body: JSON.stringify({
-        from: fromEmail,
-        to: [NOTIFY_EMAIL],
-        subject: "Nueva venta — " + formatCLP(payment.transaction_amount) + " · Bendita Suerte Salón",
-        html: html,
-      }),
-    });
+    await sendEmail(
+      resendApiKey,
+      fromEmail,
+      NOTIFY_EMAIL,
+      "Nueva venta — " + formatCLP(payment.transaction_amount) + " · Bendita Suerte Salón",
+      ownerHTML
+    );
+
+    if (payer.email) {
+      const customerHTML =
+        "<h2>¡Gracias por tu compra! 🍀</h2>" +
+        "<p>Confirmamos que recibimos tu pago en <strong>Bendita Suerte Salón</strong>.</p>" +
+        "<p><strong>Tu pedido:</strong></p><ul>" + itemsHTML + "</ul>" +
+        "<p><strong>Total pagado:</strong> " + formatCLP(payment.transaction_amount) + "</p>" +
+        "<p><strong>Entrega:</strong> " + entregaHTML + "</p>" +
+        "<p>Cualquier duda, escríbenos al " + escapeHTML(SHOP_PHONE) + ".</p>" +
+        "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";
+
+      await sendEmail(
+        resendApiKey,
+        fromEmail,
+        payer.email,
+        "Confirmamos tu compra 🍀 · Bendita Suerte Salón",
+        customerHTML
+      );
+    }
 
     res.status(200).json({ ok: true });
   } catch (err) {

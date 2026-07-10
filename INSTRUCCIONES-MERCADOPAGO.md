@@ -74,7 +74,11 @@ Cuando todo funcione bien:
 Tienes dos avisos independientes, así que aunque falle uno te enteras por el otro:
 
 1. **MercadoPago:** te notifica automáticamente en su app/panel (y por email si lo tienes activado). Revisa tu [panel de actividad de MercadoPago](https://www.mercadopago.cl/activities) después de cada venta.
-2. **Correo propio por Resend:** el sitio manda un correo a `benditasuerte.salon@gmail.com` apenas MercadoPago confirma que el pago quedó aprobado, con el detalle de los productos, el cliente y si es retiro o despacho. Esto lo hace la función `api/mp-webhook.js`, a la que MercadoPago avisa automáticamente (webhook) cada vez que cambia el estado de un pago.
+2. **Correo propio por Resend:** apenas MercadoPago confirma que el pago quedó aprobado, el sitio manda dos correos automáticos:
+   - A `benditasuerte.salon@gmail.com`, con el detalle de la venta (productos, cliente, retiro o despacho).
+   - Al comprador (a su email de pago), confirmando su compra y cómo retirar o recibir su pedido.
+
+   Esto lo hace la función `api/mp-webhook.js`, a la que MercadoPago avisa automáticamente (webhook) cada vez que cambia el estado de un pago.
 
 Para que el correo por Resend funcione, agrega estas variables en Vercel (**Settings → Environment Variables**), igual que hiciste con `MERCADOPAGO_ACCESS_TOKEN`:
 
