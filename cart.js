@@ -22,11 +22,30 @@
   }
 
   /* ---------- Estado (localStorage) ---------- */
+  function getValidProductIds() {
+    var brand = window.__BRAND__ || {};
+    var products = Array.isArray(brand.products) ? brand.products : [];
+    var ids = {};
+    products.forEach(function (p) { if (p && p.id) ids[p.id] = true; });
+    return ids;
+  }
+
   function getCart() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       var cart = raw ? JSON.parse(raw) : [];
-      return Array.isArray(cart) ? cart : [];
+      if (!Array.isArray(cart)) return [];
+      // Si un cliente dejó un producto en el carrito de una visita anterior
+      // y ese producto ya no existe (se eliminó o cambió de nombre en
+      // lib/manifest.js), lo sacamos automáticamente en vez de dejarlo
+      // atascado ahí para siempre (recargar la página no lo quitaba).
+      var validIds = getValidProductIds();
+      if (Object.keys(validIds).length === 0) return cart; // manifest aún no cargó: no filtrar a ciegas
+      var cleaned = cart.filter(function (it) { return it && validIds[it.id]; });
+      if (cleaned.length !== cart.length) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(cleaned)); } catch (e2) { /* ignore */ }
+      }
+      return cleaned;
     } catch (e) {
       return [];
     }
