@@ -29,9 +29,6 @@ const PRODUCTS = {
   "producto-prueba-1000": { name: "Producto de Prueba", priceCLP: 1000 },
 };
 
-// Debe coincidir con lib/manifest.js -> shipping
-const SHIPPING = { flatFee: 2500, freeFrom: 0 };
-
 const MAX_QTY_PER_ITEM = 20;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -112,8 +109,10 @@ module.exports = async function handler(req, res) {
   }
 
   // --- Validar entrega ---
+  // El envío a domicilio es "por pagar": el comprador solo paga el producto
+  // aquí (nunca se agrega un costo de despacho a la orden de MercadoPago).
+  // El flete se paga aparte, directo al courier, cuando le llega el pedido.
   const deliveryType = delivery.type === "despacho" ? "despacho" : "retiro";
-  let shipments;
   if (deliveryType === "despacho") {
     const direccion = String(delivery.direccion || "").trim();
     const comuna = String(delivery.comuna || "").trim();
@@ -121,24 +120,6 @@ module.exports = async function handler(req, res) {
       res.status(400).json({ error: "Falta la dirección o la comuna para el despacho." });
       return;
     }
-    const shippingCost = SHIPPING.freeFrom && subtotal >= SHIPPING.freeFrom ? 0 : SHIPPING.flatFee;
-    if (shippingCost > 0) {
-      mpItems.push({
-        title: "Despacho a domicilio",
-        quantity: 1,
-        unit_price: shippingCost,
-        currency_id: "CLP",
-      });
-    }
-    shipments = {
-      receiver_address: {
-        street_name: direccion,
-        city_name: comuna,
-        // MercadoPago exige street_number; si el cliente lo incluyó en la
-        // dirección igual queda registrado ahí como texto libre.
-        street_number: 0,
-      },
-    };
   }
 
   const origin = baseUrl(req);
@@ -167,7 +148,6 @@ module.exports = async function handler(req, res) {
       referencia: delivery.referencia || "",
     },
   };
-  if (shipments) preferenceBody.shipments = shipments;
 
   try {
     const mpRes = await fetch("https://api.mercadopago.com/checkout/preferences", {

@@ -212,6 +212,13 @@
         addItem(addBtn.getAttribute("data-id"), addBtn.getAttribute("data-name"), addBtn.getAttribute("data-price"));
         return;
       }
+      var buyNowBtn = e.target.closest("[data-buy-now]");
+      if (buyNowBtn) {
+        e.preventDefault();
+        addItem(buyNowBtn.getAttribute("data-id"), buyNowBtn.getAttribute("data-name"), buyNowBtn.getAttribute("data-price"));
+        if (window.BSCheckout) window.BSCheckout.openModal();
+        return;
+      }
       var minusBtn = e.target.closest("[data-qty-minus]");
       if (minusBtn) {
         var itemEl = minusBtn.closest("[data-cart-item]");

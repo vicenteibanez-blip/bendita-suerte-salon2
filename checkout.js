@@ -22,33 +22,24 @@
     var form = $("#checkout-form");
     var addressWrap = $("#checkout-address");
     var totalEl = $("#checkout-total");
-    var shippingFeeEl = $("#checkout-shipping-fee");
     var errorEl = $("#checkout-error");
     var submitBtn = $("#checkout-submit");
 
     if (!form || !window.BSCart) return; // markup/carrito no disponible en esta página
 
     var brand = window.__BRAND__ || {};
-    var shipping = brand.shipping || { flatFee: 0, freeFrom: 0 };
     var apiEndpoint = (brand.mercadopago && brand.mercadopago.apiEndpoint) || "/api/create-preference";
-
-    if (shippingFeeEl) shippingFeeEl.textContent = "+" + window.BSCart.formatCLP(shipping.flatFee || 0);
 
     function getDeliveryType() {
       var checked = form.querySelector('input[name="entrega"]:checked');
       return checked ? checked.value : "retiro";
     }
 
-    function shippingCost(subtotal) {
-      if (getDeliveryType() !== "despacho") return 0;
-      if (shipping.freeFrom && subtotal >= shipping.freeFrom) return 0;
-      return shipping.flatFee || 0;
-    }
-
     function updateTotals() {
+      // El envío a domicilio es "por pagar" (se paga aparte al courier),
+      // así que el total a pagar aquí es siempre solo el subtotal de productos.
       var subtotal = window.BSCart.getSubtotal();
-      var total = subtotal + shippingCost(subtotal);
-      if (totalEl) totalEl.textContent = window.BSCart.formatCLP(total);
+      if (totalEl) totalEl.textContent = window.BSCart.formatCLP(subtotal);
       addressWrap.hidden = getDeliveryType() !== "despacho";
       var addressInputs = addressWrap.querySelectorAll("input");
       addressInputs.forEach(function (input) {
@@ -86,6 +77,9 @@
       errorEl.hidden = true;
       errorEl.textContent = "";
     }
+
+    // Expone openModal para el botón "Comprar ahora" de cada producto (cart.js).
+    window.BSCheckout = { openModal: openModal };
 
     if (cartCheckoutBtn) cartCheckoutBtn.addEventListener("click", openModal);
     if (closeBtn) closeBtn.addEventListener("click", closeModal);

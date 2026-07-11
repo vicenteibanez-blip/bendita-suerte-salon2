@@ -302,6 +302,8 @@
               '<div><dt>Modo de uso</dt><dd>' + escHTML(p.modoUso) + '</dd></div>' +
               '<div><dt>Tipo de cabello</dt><dd>' + escHTML(p.tipoCabello) + '</dd></div>' +
             '</dl></details>' +
+            '<button class="btn btn-primary btn-sm btn-block" type="button" data-buy-now data-id="' + escHTML(cartId) + '" data-name="' + escHTML(cartLabel) + '" data-price="' + cartPrice + '">' +
+              '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg> Comprar ahora</button>' +
             '<button class="btn btn-cart btn-sm btn-block" type="button" data-add-to-cart data-id="' + escHTML(cartId) + '" data-name="' + escHTML(cartLabel) + '" data-price="' + cartPrice + '">' +
               '<svg class="icon" aria-hidden="true"><use href="#icon-cart"/></svg> Agregar al carrito</button>' +
           '</div>' +

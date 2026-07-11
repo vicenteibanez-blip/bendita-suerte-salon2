@@ -116,7 +116,7 @@ module.exports = async function handler(req, res) {
       : "<li>(sin detalle de productos)</li>";
 
     const entregaHTML = metadata.entrega === "despacho"
-      ? "Despacho a domicilio — " + escapeHTML(metadata.direccion) + ", " + escapeHTML(metadata.comuna) +
+      ? "Despacho a domicilio (envío por pagar) — " + escapeHTML(metadata.direccion) + ", " + escapeHTML(metadata.comuna) +
         (metadata.referencia ? " (" + escapeHTML(metadata.referencia) + ")" : "")
       : "Retiro en local — " + escapeHTML(SHOP_ADDRESS);
 
@@ -140,7 +140,7 @@ module.exports = async function handler(req, res) {
 
     if (payer.email) {
       const shippingNoteHTML = metadata.entrega === "despacho"
-        ? "<p>El envío se hace efectivo dentro de <strong>3 días hábiles</strong>. El código de seguimiento te llegará a este correo apenas esté disponible.</p>"
+        ? "<p>El envío se hace efectivo dentro de <strong>3 días hábiles</strong>, por courier (Starken o Bluexpress, según disponibilidad). <strong>El costo del envío se paga aparte, directo al courier</strong> cuando te llega el pedido — no fue incluido en este pago. El código de seguimiento te llegará a este correo apenas esté disponible.</p>"
         : "";
 
       const customerHTML =

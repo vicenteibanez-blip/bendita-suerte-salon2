@@ -95,4 +95,6 @@ Los precios que se muestran en el sitio están en `lib/manifest.js` (campo `pric
 
 ## Costo de despacho
 
-El costo fijo de despacho a domicilio está en `lib/manifest.js` (`shipping.flatFee`, hoy en $2.500) y duplicado en `api/create-preference.js` (`SHIPPING.flatFee`) por el mismo motivo de seguridad anterior — cámbialos juntos.
+El envío a domicilio es **"por pagar"**: el comprador paga solo el producto aquí en MercadoPago, y paga el flete aparte, directo al courier (Starken o Bluexpress, según disponibilidad) cuando le llega el pedido. El sitio no cobra ni calcula un monto de envío. Esto está indicado en `lib/manifest.js` (`shipping.note` / `shipping.couriers`) y se le avisa al comprador tanto en el formulario de pago como en el correo de confirmación.
+
+También puedes agregar el botón **"Comprar ahora"** en cada producto (junto a "Agregar al carrito"): agrega el producto al carrito y abre el formulario de pago directamente, sin que el cliente tenga que abrir el carrito primero.
