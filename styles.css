@@ -323,7 +323,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .shop-price { font-weight: 700; font-size: 1.05rem; color: var(--ink); }
 .shop-card-info h3 { font-size: 1rem; font-family: var(--sans); font-weight: 600; margin-top: .2rem; }
 .shop-line { color: var(--ink-mute); font-size: .84rem; margin-top: .15rem; }
-.shop-detail { margin-top: .8rem; font-size: .82rem; }
+.shop-detail { margin-top: .8rem; font-size: .82rem; flex: 1; }
 .shop-detail summary { cursor: pointer; font-weight: 600; color: var(--accent-ink); list-style: none; }
 .shop-detail summary::-webkit-details-marker { display: none; }
 .shop-detail summary::after { content: "+"; margin-left: .4rem; }
