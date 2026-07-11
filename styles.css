@@ -288,7 +288,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .team-info { padding: 1.2rem 1.4rem 0; }
 .team-info h3 { font-size: 1.15rem; }
 .team-info .role { color: var(--accent-ink); font-size: .86rem; font-weight: 600; margin-top: .25rem; }
-.team-info .bio { color: var(--ink-mute); font-size: .86rem; line-height: 1.5; margin-top: .7rem; min-height: 5.4rem; }
+.team-info .bio { color: var(--ink-mute); font-size: .86rem; line-height: 1.5; margin-top: .7rem; min-height: 8rem; }
 .team-info .ig { display: inline-flex; align-items: center; gap: .35rem; color: var(--ink-mute); font-size: .85rem; margin-top: .6rem; }
 .team-info .ig:hover { color: var(--accent-ink); }
 .team-card .btn { margin: 1.1rem 1.4rem 0; width: calc(100% - 2.8rem); }
