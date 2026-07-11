@@ -197,6 +197,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .nav:not(.is-solid) .brand { color: #fff; }
 .brand .dot { width: 30px; height: 30px; color: var(--accent); }
 .brand-logo { height: 36px; width: auto; display: block; transition: filter .3s var(--ease-out); }
+.nav-inner .brand-logo { height: 52px; }
 .nav:not(.is-solid) .brand-logo { filter: brightness(0) invert(1); }
 .mobile-menu .brand-logo, .footer-brand .brand-logo { height: 42px; filter: brightness(0) invert(1); }
 .nav-menu { display: none; align-items: center; gap: 1.9rem; font-size: .95rem; font-weight: 500; }
@@ -482,7 +483,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .floating-reserve img { width: 24px; height: 24px; border-radius: 50%; flex: none; }
 
 /* --- Brand illustration accents --- */
-.hero-logo { width: clamp(130px, 18vw, 200px); height: auto; filter: brightness(0) invert(1); margin-bottom: 2rem; }
+.hero-logo { width: clamp(170px, 26vw, 280px); height: auto; filter: brightness(0) invert(1); margin-bottom: 1.5rem; }
 .section-stamp {
   display: none; position: absolute; top: 2.6rem; right: 6%; width: 112px; height: auto;
   opacity: .95; transform: rotate(6deg); pointer-events: none;
