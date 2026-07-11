@@ -482,7 +482,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .floating-reserve img { width: 24px; height: 24px; border-radius: 50%; flex: none; }
 
 /* --- Brand illustration accents --- */
-.hero-logo { width: clamp(170px, 26vw, 280px); height: auto; filter: brightness(0) invert(1); margin-bottom: 1.5rem; }
+.hero-logo { width: clamp(130px, 18vw, 200px); height: auto; filter: brightness(0) invert(1); margin-bottom: 2rem; }
 .section-stamp {
   display: none; position: absolute; top: 2.6rem; right: 6%; width: 112px; height: auto;
   opacity: .95; transform: rotate(6deg); pointer-events: none;
