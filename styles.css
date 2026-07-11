@@ -127,7 +127,7 @@ h1, h2, h3, h4 { text-wrap: balance; line-height: 1.05; letter-spacing: -0.01em;
   margin-bottom: .9rem;
 }
 .section--deep .kicker { color: var(--accent); }
-.kicker .clover { width: 16px; height: 16px; flex: none; }
+.kicker .dot { width: 8px; height: 8px; flex: none; }
 h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .section-sub { margin-top: 1rem; color: var(--ink-mute); font-size: 1.08rem; max-width: 56ch; }
 .section--deep .section-sub { color: rgba(244, 237, 224, 0.78); }
@@ -195,7 +195,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; width: 100%; gap: 1.5rem; }
 .brand { display: flex; align-items: center; gap: .6rem; font-family: var(--serif); font-weight: 600; font-size: 1.2rem; color: var(--ink); }
 .nav:not(.is-solid) .brand { color: #fff; }
-.brand .clover { width: 30px; height: 30px; color: var(--accent); }
+.brand .dot { width: 30px; height: 30px; color: var(--accent); }
 .brand-logo { height: 36px; width: auto; display: block; transition: filter .3s var(--ease-out); }
 .nav:not(.is-solid) .brand-logo { filter: brightness(0) invert(1); }
 .mobile-menu .brand-logo, .footer-brand .brand-logo { height: 42px; filter: brightness(0) invert(1); }
@@ -279,7 +279,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   background: linear-gradient(155deg, var(--accent-tint), var(--bg-3));
   display: flex; align-items: center; justify-content: center;
 }
-.team-avatar .clover { width: 74px; height: 74px; color: var(--accent); opacity: .9; }
+.team-avatar .dot { width: 74px; height: 74px; color: var(--accent); opacity: .9; }
 .team-avatar::after {
   content: "Foto\A próximamente"; white-space: pre; position: absolute; bottom: 12px; right: 12px;
   font-size: .68rem; font-weight: 600; letter-spacing: .04em; color: var(--accent-ink);
@@ -452,7 +452,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   display: inline-flex; align-items: center; gap: .8rem; padding: 1.1rem 2.2rem;
   font-family: var(--serif); font-style: italic; font-size: 1.2rem; color: var(--accent-ink); white-space: nowrap;
 }
-.marquee-track span .clover { width: 14px; height: 14px; color: var(--accent); flex: none; }
+.marquee-track span .dot { width: 6px; height: 6px; color: var(--accent); flex: none; }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 /* --- About strip (compact band) --- */
@@ -539,7 +539,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   background: rgba(20,43,27,.4); border: 1px solid rgba(255,255,255,.2);
   padding: .5rem 1rem; border-radius: 999px; margin-bottom: 1.6rem;
 }
-.hero-kicker .clover { width: 15px; height: 15px; }
+.hero-kicker .dot { width: 8px; height: 8px; }
 .hero-title { font-size: clamp(2.6rem, 7vw, 5.4rem); max-width: 15ch; }
 .hero-title em { font-style: italic; color: var(--accent); }
 .hero-sub { margin-top: 1.4rem; font-size: clamp(1.05rem, 1.6vw, 1.25rem); max-width: 46ch; color: rgba(255,255,255,.86); }
@@ -562,7 +562,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   position: absolute; bottom: 1.2rem; left: 1.2rem; background: var(--paper); border-radius: 14px;
   padding: .9rem 1.1rem; display: flex; align-items: center; gap: .7rem; box-shadow: 0 16px 30px -18px rgba(0,0,0,.4);
 }
-.about-media .badge .clover { width: 30px; height: 30px; color: var(--accent-ink); }
+.about-media .badge .dot { width: 30px; height: 30px; color: var(--accent-ink); }
 .about-media .badge strong { display: block; font-family: var(--serif); font-size: 1.05rem; }
 .about-media .badge span { font-size: .78rem; color: var(--ink-mute); }
 .about-copy .lead { font-size: 1.18rem; color: var(--ink-soft); margin-bottom: 1.2rem; }
@@ -596,7 +596,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 
 /* --- Final CTA --- */
 .final-cta { background: linear-gradient(155deg, var(--accent-deep), var(--accent-deep-2)); color: var(--cream); text-align: center; }
-.final-cta .clover-big { width: 56px; height: 56px; color: var(--accent); margin-inline: auto; margin-bottom: 1.4rem; }
+.final-cta .dot-big { width: 18px; height: 18px; color: var(--accent); margin-inline: auto; margin-bottom: 1.4rem; }
 .final-cta h2 { color: #fff; max-width: 20ch; margin-inline: auto; }
 .final-cta p { color: rgba(244,237,224,.78); max-width: 50ch; margin: 1.1rem auto 0; }
 .final-cta-actions { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; margin-top: 2.2rem; }
