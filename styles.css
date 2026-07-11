@@ -338,6 +338,8 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .embla__viewport {
   overflow-x: auto; overflow-y: hidden; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
   scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
 }
 .embla__viewport::-webkit-scrollbar { display: none; }
 .embla__viewport.is-embla-active { overflow: hidden; scroll-snap-type: none; cursor: grab; }
