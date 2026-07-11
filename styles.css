@@ -197,7 +197,6 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .nav:not(.is-solid) .brand { color: #fff; }
 .brand .dot { width: 30px; height: 30px; color: var(--accent); }
 .brand-logo { height: 36px; width: auto; display: block; transition: filter .3s var(--ease-out); }
-.nav-inner .brand-logo { height: 52px; }
 .nav:not(.is-solid) .brand-logo { filter: brightness(0) invert(1); }
 .mobile-menu .brand-logo, .footer-brand .brand-logo { height: 42px; filter: brightness(0) invert(1); }
 .nav-menu { display: none; align-items: center; gap: 1.9rem; font-size: .95rem; font-weight: 500; }
