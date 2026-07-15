@@ -772,3 +772,211 @@ body.cart-open-lock { overflow: hidden; }
 @media (max-width: 640px) {
   .cart-drawer { width: 100vw; }
 }
+
+/* =============================================================
+   11. Página de producto individual (PDP)
+   producto-cera-deluxe-matte-wax-peony.html — y sirve de plantilla
+   para futuras páginas de producto.
+   ============================================================= */
+
+.pdp-first-section { padding-top: calc(var(--nav-h) + var(--section-py)); }
+
+/* --- Breadcrumb --- */
+.breadcrumb { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; font-size: .85rem; color: var(--ink-mute); margin-bottom: 1.8rem; }
+.breadcrumb a { color: var(--accent-ink); font-weight: 600; }
+.breadcrumb a:hover { text-decoration: underline; }
+.breadcrumb .sep { opacity: .5; }
+
+/* --- Hero: galería + info --- */
+.pdp-hero { display: grid; grid-template-columns: 1fr; gap: 2.4rem; }
+.pdp-gallery-slide { position: absolute; inset: 0; opacity: 0; transition: opacity .3s var(--ease-out); pointer-events: none; }
+.pdp-gallery-slide.is-active { opacity: 1; pointer-events: auto; }
+
+.pdp-gallery-main {
+  aspect-ratio: 1/1; border-radius: var(--radius); overflow: hidden; position: relative;
+  background: linear-gradient(150deg, var(--accent-tint), var(--bg-3));
+}
+.pdp-gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-photo-placeholder {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .8rem;
+  color: var(--accent-ink); text-align: center; padding: 1.5rem;
+}
+.pdp-photo-placeholder .icon { width: 25%; height: 25%; min-width: 34px; min-height: 34px; stroke-width: 1.2; opacity: .5; }
+.pdp-photo-placeholder span {
+  font-size: .7rem; font-weight: 700; letter-spacing: .02em; color: #fff; background: var(--accent-deep);
+  padding: .35rem .7rem; border-radius: 999px; line-height: 1.4;
+}
+.pdp-gallery-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: .7rem; margin-top: .8rem; }
+.pdp-thumb {
+  aspect-ratio: 1/1; border-radius: var(--radius-sm); overflow: hidden; position: relative; cursor: pointer;
+  background: linear-gradient(150deg, var(--accent-tint), var(--bg-3)); border: 2px solid transparent;
+  transition: border-color .25s var(--ease-out);
+}
+.pdp-thumb.is-active { border-color: var(--accent-strong); }
+.pdp-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-thumb .pdp-photo-placeholder { padding: .35rem; gap: .25rem; }
+.pdp-thumb .pdp-photo-placeholder span { font-size: .52rem; padding: .18rem .38rem; }
+
+.pdp-info-brand { color: var(--ink-mute); font-size: .9rem; font-weight: 600; margin-bottom: .3rem; }
+.pdp-info h1 { font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+.pdp-rating-row { display: flex; align-items: center; flex-wrap: wrap; gap: .6rem; margin-top: .8rem; font-size: .9rem; color: var(--ink-mute); }
+.pdp-rating-row .stars { display: flex; gap: 2px; color: var(--gold); }
+.pdp-rating-row .stars .icon { width: 15px; height: 15px; }
+.pdp-rating-row a { color: var(--accent-ink); font-weight: 600; }
+.pdp-info-desc { margin-top: 1.1rem; color: var(--ink-soft); font-size: 1rem; line-height: 1.65; }
+
+.pdp-highlights { display: flex; flex-direction: column; gap: .55rem; margin: 1.3rem 0 0; }
+.pdp-highlights li { display: flex; align-items: flex-start; gap: .6rem; font-size: .93rem; color: var(--ink-soft); }
+.pdp-highlights .icon { width: 17px; height: 17px; color: var(--accent-strong); flex: none; margin-top: .15rem; }
+
+/* --- Selector de cantidad (venta por mayor) --- */
+.tier-legend { font-weight: 600; font-size: .95rem; margin-top: 1.8rem; margin-bottom: .8rem; }
+.tier-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; }
+.tier-card {
+  position: relative; display: block; text-align: left; padding: 1.1rem 1rem; border-radius: var(--radius-sm);
+  border: 2px solid var(--line); background: var(--paper); cursor: pointer;
+  transition: border-color .25s var(--ease-out), box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
+}
+.tier-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.tier-card.is-selected { border-color: var(--accent-strong); box-shadow: 0 0 0 3px var(--accent-tint); }
+.tier-card input { position: absolute; opacity: 0; pointer-events: none; }
+.tier-card .tier-qty { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; }
+.tier-card .tier-unit { font-size: .76rem; color: var(--ink-mute); margin-top: .15rem; }
+.tier-card .tier-total { font-weight: 700; font-size: 1.02rem; margin-top: .5rem; color: var(--accent-ink); }
+.tier-card .tier-save { font-size: .74rem; color: #8a6a1a; font-weight: 600; margin-top: .15rem; }
+.tier-badge {
+  position: absolute; top: -.65rem; right: .8rem; background: var(--gold); color: #fff; font-size: .62rem; font-weight: 700;
+  letter-spacing: .03em; text-transform: uppercase; padding: .28rem .6rem; border-radius: 999px;
+}
+.tier-wholesale-note { font-size: .72rem; color: var(--ink-mute); margin-top: .4rem; font-style: italic; line-height: 1.4; }
+
+/* --- Caja de compra / CTA --- */
+.pdp-buybox { margin-top: 1.6rem; padding-top: 1.4rem; border-top: 1px solid var(--line); }
+.pdp-price-row { display: flex; align-items: baseline; gap: .7rem; flex-wrap: wrap; }
+.pdp-price-total { font-family: var(--serif); font-weight: 700; font-size: 2rem; color: var(--ink); }
+.pdp-price-compare { font-size: 1rem; color: var(--ink-mute); text-decoration: line-through; }
+.pdp-price-unit { font-size: .85rem; color: var(--ink-mute); width: 100%; }
+.pdp-cta-row { display: flex; flex-direction: column; gap: .8rem; margin-top: 1.2rem; }
+.pdp-shipping-banner {
+  display: flex; align-items: center; gap: .6rem; background: #fdf6e3; color: #7a5c1e; border: 1px solid #f0dfa8;
+  border-radius: var(--radius-sm); padding: .8rem 1rem; font-size: .85rem; font-weight: 600; margin-top: 1.1rem;
+}
+.pdp-shipping-banner .icon { width: 18px; height: 18px; flex: none; }
+.pdp-trust-mini { display: flex; flex-wrap: wrap; gap: 1.1rem; margin-top: 1.1rem; font-size: .82rem; color: var(--ink-mute); }
+.pdp-trust-mini div { display: flex; align-items: center; gap: .4rem; }
+.pdp-trust-mini .icon { width: 16px; height: 16px; color: var(--accent-strong); flex: none; }
+
+/* --- Barra de compra fija en mobile --- */
+.sticky-buy-bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 400; background: var(--paper);
+  border-top: 1px solid var(--line); box-shadow: 0 -12px 30px -18px rgba(0,0,0,.35);
+  padding: .8rem 1rem; display: flex; align-items: center; gap: .9rem;
+  transform: translateY(100%); transition: transform .35s var(--ease-out);
+}
+.sticky-buy-bar.is-visible { transform: translateY(0); }
+.sticky-buy-bar-info { flex: 1; min-width: 0; }
+.sticky-buy-bar-name { font-size: .76rem; color: var(--ink-mute); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sticky-buy-bar-price { font-weight: 700; font-size: 1.1rem; }
+.sticky-buy-bar .btn { flex: none; }
+
+/* --- Acordeón: beneficios / cómo se usa / ingredientes --- */
+.pdp-accordion { display: flex; flex-direction: column; gap: 1rem; }
+.pdp-accordion-item { padding: 1.5rem 1.7rem; }
+.pdp-accordion-item summary {
+  cursor: pointer; list-style: none; display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  font-family: var(--serif); font-weight: 600; font-size: 1.15rem; color: var(--ink);
+}
+.pdp-accordion-item summary::-webkit-details-marker { display: none; }
+.pdp-accordion-item summary::after {
+  content: "+"; font-size: 1.5rem; color: var(--accent-strong); font-family: var(--sans); flex: none; line-height: 1;
+}
+.pdp-accordion-item[open] summary::after { content: "\2013"; }
+.pdp-accordion-body { margin-top: 1.3rem; }
+
+.benefits-list { display: flex; flex-direction: column; gap: .9rem; }
+.benefits-list li { display: flex; align-items: flex-start; gap: .7rem; font-size: .96rem; color: var(--ink-soft); }
+.benefits-list .icon { width: 20px; height: 20px; color: var(--accent-strong); flex: none; margin-top: .1rem; }
+
+.steps-list { display: flex; flex-direction: column; gap: 1.2rem; counter-reset: step; }
+.steps-list li { display: flex; gap: 1rem; align-items: flex-start; }
+.steps-list li::before {
+  counter-increment: step; content: counter(step); font-family: var(--serif); font-weight: 700; font-size: 1.05rem;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.steps-list p { color: var(--ink-soft); font-size: .95rem; padding-top: .45rem; }
+
+.verify-note {
+  display: flex; gap: .7rem; align-items: flex-start; margin-top: 1.3rem; padding: .9rem 1.1rem;
+  background: #fdf6e3; border: 1px dashed var(--gold); border-radius: var(--radius-sm); font-size: .84rem; color: #7a5c1e; line-height: 1.55;
+}
+.verify-note .icon { width: 18px; height: 18px; flex: none; margin-top: .1rem; }
+.ingredients-list { font-size: .92rem; color: var(--ink-soft); line-height: 1.75; margin-top: 1.1rem; }
+
+/* --- Testimonios (reusa el look de .review-card, avatar propio) --- */
+.testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+.who-avatar--plain {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--accent-tint); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--serif); font-size: .95rem;
+  flex: none;
+}
+.icon-star-off { opacity: .3; }
+
+/* --- Tabla comparativa --- */
+.compare-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--line); }
+.compare-table { width: 100%; border-collapse: collapse; font-size: .9rem; min-width: 640px; }
+.compare-table th, .compare-table td { padding: 1rem 1.3rem; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.compare-table thead th { background: var(--accent-deep); color: var(--cream); font-family: var(--serif); font-weight: 600; font-size: 1rem; }
+.compare-table tbody th { font-weight: 600; color: var(--ink-soft); background: var(--bg-2); white-space: nowrap; }
+.compare-table td.is-ours { color: var(--accent-ink); font-weight: 600; background: var(--accent-tint); }
+.compare-table td.is-generic { color: var(--ink-mute); }
+.compare-table td .icon { width: 15px; height: 15px; margin-right: .35rem; vertical-align: -2px; }
+.compare-table td.is-ours .icon { color: var(--accent-strong); }
+.compare-table td.is-generic .icon { color: #c23b3b; }
+.compare-table tbody tr:last-child th, .compare-table tbody tr:last-child td { border-bottom: none; }
+
+/* --- Trust badges (asesoría + devoluciones) --- */
+.trust-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+.trust-card { display: flex; gap: 1.1rem; padding: 1.8rem; align-items: flex-start; }
+.trust-card .icon-wrap {
+  width: 52px; height: 52px; border-radius: 14px; background: var(--accent-tint); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.trust-card .icon-wrap .icon { width: 24px; height: 24px; }
+.trust-card h3 { font-size: 1.1rem; }
+.trust-card p { color: var(--ink-mute); font-size: .92rem; margin-top: .4rem; line-height: 1.6; }
+.trust-card .card-link { margin-top: .8rem; }
+
+/* --- Completa tu rutina (otros productos) --- */
+.related-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+.related-grid .shop-card-visual { aspect-ratio: 1/1; }
+
+/* --- Información transparente (envío, pagos, garantía, contacto) --- */
+.info-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+.info-card { padding: 1.7rem; }
+.info-card .icon-wrap {
+  width: 46px; height: 46px; border-radius: 12px; background: var(--accent-tint); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
+}
+.info-card .icon-wrap .icon { width: 22px; height: 22px; }
+.info-card h3 { font-size: 1.05rem; }
+.info-card p, .info-card li { color: var(--ink-mute); font-size: .88rem; line-height: 1.65; margin-top: .3rem; }
+.info-card ul { display: flex; flex-direction: column; gap: .25rem; margin-top: .5rem; }
+.payment-icons { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
+.payment-chip { padding: .4rem .75rem; border-radius: 8px; background: var(--bg-2); border: 1px solid var(--line); font-size: .76rem; font-weight: 600; color: var(--ink-soft); }
+
+@media (min-width: 720px) {
+  .pdp-hero { grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+  .tier-grid { grid-template-columns: repeat(4, 1fr); }
+  .testimonial-grid { grid-template-columns: repeat(3, 1fr); }
+  .related-grid { grid-template-columns: repeat(3, 1fr); }
+  .trust-grid { grid-template-columns: repeat(2, 1fr); }
+  .info-grid { grid-template-columns: repeat(2, 1fr); }
+  .pdp-cta-row { flex-direction: row; }
+  .sticky-buy-bar { display: none; }
+}
+
+@media (min-width: 960px) {
+  .pdp-hero { gap: 4rem; }
+  .info-grid { grid-template-columns: repeat(4, 1fr); }
+}

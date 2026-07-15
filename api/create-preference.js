@@ -19,6 +19,12 @@
 const PRODUCTS = {
   "polvo-textura-09": { name: "Polvo de Textura '09 (ROQVEL)", priceCLP: 10000 },
   "cera-deluxe-matte-wax-peony": { name: "Cera Deluxe Matte Wax Peony (ROQVEL)", priceCLP: 13000 },
+  // Packs por mayor de la página de producto (producto-cera-deluxe-matte-wax-peony.html).
+  // priceCLP acá es el precio del PACK completo (no por unidad) — coincide con
+  // lib/manifest.js (products, hidden:true) y con el selector de cantidad de la página.
+  "cera-deluxe-matte-wax-peony-pack3": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x3", priceCLP: 35100 },
+  "cera-deluxe-matte-wax-peony-pack6": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x6", priceCLP: 66300 },
+  "cera-deluxe-matte-wax-peony-pack12": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x12 (mayorista)", priceCLP: 124800 },
   "cera-deluxe-matte-pasta-fuchsia": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL)", priceCLP: 13000 },
   "cera-aqua-wax-orange": { name: "Cera Aqua Wax Orange (ROQVEL)", priceCLP: 10000 },
   "cera-matte-wax-brown": { name: "Cera Matte Wax Brown (ROQVEL)", priceCLP: 10000 },

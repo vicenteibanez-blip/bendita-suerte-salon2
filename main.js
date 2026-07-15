@@ -288,14 +288,21 @@
       var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
       var cartId = p.id || cartLabel;
       var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
+      var visualInner = '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
+      var visualHTML = p.productUrl
+        ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
+        : '<div class="shop-card-visual">' + visualInner + '</div>';
+      var nameHTML = p.productUrl
+        ? '<a class="shop-card-title-link" href="' + escHTML(p.productUrl) + '">' + escHTML(p.name) + '</a>'
+        : escHTML(p.name);
       return (
         '<article class="card shop-card embla__slide" data-category="' + escHTML(p.category) + '">' +
           '<button class="shop-fav" type="button" aria-label="Agregar a favoritos" data-fav="' + escHTML(p.name) + '">' +
             '<svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>' +
-          '<div class="shop-card-visual"><svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg></div>' +
+          visualHTML +
           '<div class="shop-card-info">' +
             '<p class="shop-price">' + escHTML(p.price) + '</p>' +
-            '<h3>' + escHTML(p.name) + '</h3>' +
+            '<h3>' + nameHTML + '</h3>' +
             '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>' +
             '<details class="shop-detail"><summary>Ver detalle</summary><dl>' +
               '<div><dt>Composición</dt><dd>' + escHTML(p.composicion) + '</dd></div>' +
@@ -332,7 +339,7 @@
     }
 
     function applyFilter(category) {
-      var products = data.products || [];
+      var products = (data.products || []).filter(function (p) { return !p.hidden; });
       if (!products.length) return; // no data available: keep the hardcoded "Todos" markup
       var html = category === "all"
         ? products.map(slideHTML).join("")
