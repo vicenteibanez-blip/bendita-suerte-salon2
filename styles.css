@@ -980,3 +980,20 @@ body.cart-open-lock { overflow: hidden; }
   .pdp-hero { gap: 4rem; }
   .info-grid { grid-template-columns: repeat(4, 1fr); }
 }
+
+/* --- Nav siempre "sólido" en páginas de producto ---
+   .nav:not(.is-solid) asume una foto oscura detrás (como el hero de
+   inicio) para que el texto blanco se lea. Esta página no tiene esa
+   foto, así que el texto blanco quedaba invisible sobre el fondo
+   claro apenas se cargaba o se volvía arriba. Se fuerza el aspecto
+   sólido siempre, sin depender del scroll. */
+.page-product .nav {
+  background: rgba(255,255,255,.92); backdrop-filter: blur(14px) saturate(160%); -webkit-backdrop-filter: blur(14px) saturate(160%);
+  border-bottom: 1px solid var(--line); box-shadow: 0 8px 24px -18px rgba(0,0,0,.35);
+}
+.page-product .nav .brand,
+.page-product .nav .nav-menu a,
+.page-product .nav .nav-phone,
+.page-product .nav .nav-toggle,
+.page-product .nav .cart-toggle { color: var(--ink); }
+.page-product .nav .brand-logo { filter: none; }
