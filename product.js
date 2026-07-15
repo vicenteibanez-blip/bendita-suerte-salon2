@@ -101,9 +101,30 @@
     window.addEventListener("scroll", onScroll, { passive: true });
   }
 
+  /* ---------- Carril de "Completa tu rutina" (prev/next) ----------
+     Mismo patrón que el carril de reseñas: scroll horizontal nativo,
+     los botones solo empujan el scroll una tarjeta a la vez. */
+  function initRelatedCarousel() {
+    var track = $("[data-related-carousel]");
+    var prev = $("[data-related-prev]");
+    var next = $("[data-related-next]");
+    if (!track) return;
+    var step = function () {
+      var card = $(".shop-card", track);
+      return card ? card.getBoundingClientRect().width + 18 : 280;
+    };
+    if (prev) prev.addEventListener("click", function () {
+      track.scrollBy({ left: -step(), behavior: "smooth" });
+    });
+    if (next) next.addEventListener("click", function () {
+      track.scrollBy({ left: step(), behavior: "smooth" });
+    });
+  }
+
   ready(function () {
     initTierSelector();
     initGallery();
     initStickyBuyBar();
+    initRelatedCarousel();
   });
 })();

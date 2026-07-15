@@ -947,8 +947,19 @@ body.cart-open-lock { overflow: hidden; }
 .trust-card p { color: var(--ink-mute); font-size: .92rem; margin-top: .4rem; line-height: 1.6; }
 .trust-card .card-link { margin-top: .8rem; }
 
-/* --- Completa tu rutina (otros productos) --- */
-.related-grid { display: grid; grid-template-columns: 1fr; gap: 1.2rem; }
+/* --- Completa tu rutina (otros productos) — carril deslizable, mismo
+   patrón que .reviews-carousel: scroll horizontal nativo con
+   scroll-snap, más un degradado en el borde para insinuar que sigue
+   otra tarjeta. --- */
+.related-grid-wrap { position: relative; }
+.related-grid {
+  display: flex; align-items: stretch; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-bottom: .5rem; scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+}
+.related-grid::-webkit-scrollbar { display: none; }
+.related-grid .shop-card { flex: 0 0 min(78vw, 280px); scroll-snap-align: start; }
 .related-grid .shop-card-visual { aspect-ratio: 1/1; }
 
 /* --- Información transparente (envío, pagos, garantía, contacto) --- */
@@ -969,7 +980,6 @@ body.cart-open-lock { overflow: hidden; }
   .pdp-hero { grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
   .tier-grid { grid-template-columns: repeat(4, 1fr); }
   .testimonial-grid { grid-template-columns: repeat(3, 1fr); }
-  .related-grid { grid-template-columns: repeat(3, 1fr); }
   .trust-grid { grid-template-columns: repeat(2, 1fr); }
   .info-grid { grid-template-columns: repeat(2, 1fr); }
   .pdp-cta-row { flex-direction: row; }

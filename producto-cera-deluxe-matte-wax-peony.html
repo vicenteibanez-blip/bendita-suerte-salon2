@@ -35,7 +35,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" />
 
-<link rel="stylesheet" href="styles.css?v=20260730" />
+<link rel="stylesheet" href="styles.css?v=20260731" />
 
 <!-- JSON-LD — Schema.org Product -->
 <script type="application/ld+json">
@@ -511,7 +511,8 @@
         <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Completa tu rutina</span>
         <h2 class="section-title reveal reveal-delay-1">Otras opciones ROQVEL</h2>
       </div>
-      <div class="related-grid">
+      <div class="related-grid-wrap">
+      <div class="related-grid" data-related-carousel>
         <article class="card shop-card reveal">
           <a class="shop-card-visual" href="index.html#productos" aria-label="Ver Cera Aqua Wax con Brillo Orange">
             <svg class="icon" aria-hidden="true"><use href="#icon-tin"/></svg>
@@ -545,6 +546,11 @@
             <a class="btn btn-ghost btn-sm btn-block" href="index.html#productos" style="margin-top:1rem">Ver producto</a>
           </div>
         </article>
+      </div>
+      <div class="carousel-nav reveal">
+        <button type="button" data-related-prev aria-label="Producto anterior"><svg class="icon" style="transform:rotate(180deg)" aria-hidden="true"><use href="#icon-chevron"/></svg></button>
+        <button type="button" data-related-next aria-label="Siguiente producto"><svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></button>
+      </div>
       </div>
     </div>
   </section>
@@ -757,6 +763,6 @@
 <script defer src="cart.js?v=20260727"></script>
 <script defer src="checkout.js?v=20260727"></script>
 <script defer src="main.js?v=20260727"></script>
-<script defer src="product.js?v=20260727"></script>
+<script defer src="product.js?v=20260731"></script>
 </body>
 </html>
