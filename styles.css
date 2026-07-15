@@ -959,7 +959,7 @@ body.cart-open-lock { overflow: hidden; }
   display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;
 }
 .info-card .icon-wrap .icon { width: 22px; height: 22px; }
-.info-card h3 { font-size: 1.05rem; }
+.info-card h3 { font-size: 1.05rem; color: var(--ink); }
 .info-card p, .info-card li { color: var(--ink-mute); font-size: .88rem; line-height: 1.65; margin-top: .3rem; }
 .info-card ul { display: flex; flex-direction: column; gap: .25rem; margin-top: .5rem; }
 .payment-icons { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .8rem; }
