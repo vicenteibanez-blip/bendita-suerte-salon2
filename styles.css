@@ -970,7 +970,7 @@ body.cart-open-lock { overflow: hidden; }
 .related-grid .shop-card-visual { aspect-ratio: 1/1; }
 
 /* --- Información transparente (envío, pagos, garantía, contacto) --- */
-.info-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+.info-grid { display: grid; grid-template-columns: 1fr; gap: 1.4rem; align-items: start; }
 .info-card { padding: 1.7rem; }
 .info-card .icon-wrap {
   width: 46px; height: 46px; border-radius: 12px; background: var(--accent-tint); color: var(--accent-ink);
