@@ -402,7 +402,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .rating-badge .count { color: var(--ink-mute); font-size: .88rem; }
 .rating-note { font-size: .78rem; color: var(--ink-mute); margin-top: .6rem; }
 
-.review-card { padding: 1.8rem; display: flex; flex-direction: column; gap: .9rem; }
+.review-card { padding: 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .6rem; }
 .review-card .stars { display: flex; gap: 2px; color: var(--gold); }
 .review-card .stars .icon { width: 15px; height: 15px; }
 .review-card p { color: var(--ink-soft); font-size: .96rem; flex: 1; }
@@ -432,7 +432,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 /* --- Reviews carousel --- */
 .reviews-carousel-wrap { position: relative; }
 .reviews-carousel {
-  display: flex; align-items: stretch; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  display: flex; align-items: flex-start; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
   padding-bottom: .5rem; scrollbar-width: none; -ms-overflow-style: none;
 }
 .reviews-carousel::-webkit-scrollbar { display: none; }
