@@ -326,11 +326,34 @@
     var autoplay = null;
     var hasEmbla = typeof window.EmblaCarousel === "function";
 
+    // Embla's loop mode necesita bastante más contenido que el ancho del
+    // viewport para calcular sus "loop points" sin saltos raros al llegar
+    // al borde (con 9 tarjetas nomás, en pantallas anchas se ve el catálogo
+    // "devolverse" a medio arrastre). El arreglo recomendado por Embla es
+    // duplicar las slides reales; la copia queda con inert + aria-hidden
+    // para que nunca sea clickeable ni la lean lectores de pantalla.
+    function ensureLoopClone() {
+      var oldClone = container.querySelector(":scope > [data-loop-clone]");
+      if (oldClone) oldClone.remove();
+      var realSlides = $$(".embla__slide", container);
+      if (realSlides.length < 2) return;
+      var cloneWrap = document.createElement("div");
+      cloneWrap.setAttribute("data-loop-clone", "");
+      cloneWrap.setAttribute("aria-hidden", "true");
+      cloneWrap.setAttribute("inert", "");
+      cloneWrap.className = "embla__loop-clone";
+      realSlides.forEach(function (slide) {
+        cloneWrap.appendChild(slide.cloneNode(true));
+      });
+      container.appendChild(cloneWrap);
+    }
+
     function reInit() {
       bindBrand(); // re-wire the whatsapp hrefs on the freshly rendered slides
       initFavButtons(container);
       if (hasEmbla) {
         if (emblaApi) { emblaApi.destroy(); }
+        ensureLoopClone();
         var plugins = [];
         if (typeof window.EmblaCarouselAutoplay === "function") {
           autoplay = window.EmblaCarouselAutoplay({ delay: 3800, stopOnInteraction: true, stopOnMouseEnter: true });
@@ -373,24 +396,6 @@
     reInit();
   }
 
-  /* ---------- Reviews carousel prev/next ---------- */
-  function initReviewsCarousel() {
-    var track = $("[data-reviews-carousel]");
-    var prev = $("[data-carousel-prev]");
-    var next = $("[data-carousel-next]");
-    if (!track) return;
-    var step = function () {
-      var card = $(".review-card", track);
-      return card ? card.getBoundingClientRect().width + 18 : 300;
-    };
-    if (prev) prev.addEventListener("click", function () {
-      track.scrollBy({ left: -step() * 2, behavior: reduced ? "auto" : "smooth" });
-    });
-    if (next) next.addEventListener("click", function () {
-      track.scrollBy({ left: step() * 2, behavior: reduced ? "auto" : "smooth" });
-    });
-  }
-
   /* ---------- Boot ---------- */
   function boot() {
     safe(bindBrand, "bindBrand");
@@ -404,7 +409,6 @@
     safe(initYear, "initYear");
     safe(initFloatingReserve, "initFloatingReserve");
     safe(initProductCarousel, "initProductCarousel");
-    safe(initReviewsCarousel, "initReviewsCarousel");
     document.documentElement.classList.add("is-ready");
   }
 

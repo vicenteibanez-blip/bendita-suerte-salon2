@@ -362,6 +362,11 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .embla__viewport.is-embla-active:active { cursor: grabbing; }
 .embla__container { display: flex; }
 .embla__slide { flex: 0 0 auto; width: min(78vw, 280px); margin-right: 1.1rem; scroll-snap-align: start; }
+/* Copia invisible/no-interactiva que main.js agrega para que el loop de
+   Embla tenga suficientes slides y no "salte" al llegar al borde.
+   pointer-events:none además de inert porque inert no bloquea un
+   .click() disparado por JS, solo la interacción real del usuario. */
+.embla__loop-clone { display: contents; pointer-events: none; }
 .embla__prev, .embla__next {
   position: absolute; top: 36%; width: 44px; height: 44px; border-radius: 50%; background: var(--paper); border: 1px solid var(--line);
   display: none; align-items: center; justify-content: center; box-shadow: 0 10px 22px -14px rgba(0,0,0,.35); z-index: 3;
@@ -441,14 +446,21 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   font-size: .84rem; color: var(--ink-mute); margin-top: 2rem;
 }
 
-/* --- Reviews carousel --- */
-.reviews-carousel-wrap { position: relative; }
+/* --- Reviews carousel ---
+   Cinta autoportante e infinita: no se puede arrastrar ni pausar. El
+   truco es un track con las 33 reseñas duplicadas una sola vez
+   (la copia va con aria-hidden + inert, invisible para lectores de
+   pantalla y no interactuable) animado de 0 a -50%, que es exactamente
+   el ancho de un set — el punto en que la copia calza con el original
+   y el ciclo se repite sin salto visible. */
+.reviews-carousel-wrap { position: relative; overflow: hidden; }
 .reviews-carousel {
-  display: flex; align-items: stretch; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
-  padding-bottom: .5rem; scrollbar-width: none; -ms-overflow-style: none;
+  display: flex; align-items: stretch; gap: 1.1rem; width: max-content;
+  animation: reviews-marquee 300s linear infinite;
 }
-.reviews-carousel::-webkit-scrollbar { display: none; }
-.reviews-carousel .review-card { flex: 0 0 280px; scroll-snap-align: start; }
+.reviews-carousel .review-card { flex: 0 0 280px; }
+.reviews-carousel-clone { display: contents; }
+@keyframes reviews-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .carousel-nav { display: flex; gap: .6rem; justify-content: flex-end; margin-top: 1.1rem; }
 .carousel-nav button {
   width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--line);
@@ -673,6 +685,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
    ============================================================= */
 @media (prefers-reduced-motion: reduce) {
   .marquee-track { animation-duration: 90s; }
+  .reviews-carousel { animation-duration: 900s; }
   .hero-scroll { animation: none; }
   .hero-bg img { transform: none; }
 }
