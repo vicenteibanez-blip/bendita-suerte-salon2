@@ -18,15 +18,21 @@
 
 const PRODUCTS = {
   "polvo-textura-09": { name: "Polvo de Textura '09 (ROQVEL)", priceCLP: 10000 },
-  "cera-deluxe-matte-wax-peony": { name: "Cera Deluxe Matte Wax Peony (ROQVEL)", priceCLP: 13000 },
+  "polvo-textura-10": { name: "Polvo de Textura '10 (ROQVEL)", priceCLP: 10000 },
+  "polvo-textura-13": { name: "Polvo de Textura '13 (ROQVEL)", priceCLP: 10000 },
+  "polvo-textura-15": { name: "Polvo de Textura '15 (ROQVEL)", priceCLP: 10000 },
+  "cera-deluxe-matte-wax-peony": { name: "Cera Deluxe Matte Wax Peony (ROQVEL)", priceCLP: 12000 },
   // Packs por mayor de la página de producto (producto-cera-deluxe-matte-wax-peony.html).
   // priceCLP acá es el precio del PACK completo (no por unidad) — coincide con
   // lib/manifest.js (products, hidden:true) y con el selector de cantidad de la página.
-  "cera-deluxe-matte-wax-peony-pack3": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x3", priceCLP: 35100 },
-  "cera-deluxe-matte-wax-peony-pack6": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x6", priceCLP: 66300 },
-  "cera-deluxe-matte-wax-peony-pack12": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x12 (mayorista)", priceCLP: 124800 },
-  "cera-deluxe-matte-pasta-fuchsia": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL)", priceCLP: 13000 },
+  "cera-deluxe-matte-wax-peony-pack6": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x6", priceCLP: 51000 },
+  "cera-deluxe-matte-wax-peony-pack12": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x12 (mayorista)", priceCLP: 92400 },
+  "cera-deluxe-matte-wax-peony-pack24": { name: "Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x24 (mayorista)", priceCLP: 172800 },
+  "cera-deluxe-matte-pasta-fuchsia": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL)", priceCLP: 12000 },
   "cera-aqua-wax-orange": { name: "Cera Aqua Wax Orange (ROQVEL)", priceCLP: 10000 },
+  "cera-aqua-wax-red": { name: "Cera Aqua Wax Red (ROQVEL)", priceCLP: 10000 },
+  "cera-aqua-wax-blue": { name: "Cera Aqua Wax Blue (ROQVEL)", priceCLP: 10000 },
+  "cera-spider-wax-purple": { name: "Cera Spider Wax Purple (ROQVEL)", priceCLP: 10000 },
   "cera-matte-wax-brown": { name: "Cera Matte Wax Brown (ROQVEL)", priceCLP: 10000 },
   "cera-cream-wax-fiber-effect": { name: "Cera Cream Wax Fiber Effect (ROQVEL)", priceCLP: 10000 },
   "cera-matte-pomade-green": { name: "Cera Matte Pomade Green (ROQVEL)", priceCLP: 10000 },
@@ -36,38 +42,58 @@ const PRODUCTS = {
 
   // Packs por mayor de cada página de producto — mismo criterio que
   // cera-deluxe-matte-wax-peony-packN de arriba: priceCLP es el precio
-  // del PACK completo, no por unidad.
-  "cera-deluxe-matte-pasta-fuchsia-pack3": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x3", priceCLP: 35100 },
-  "cera-deluxe-matte-pasta-fuchsia-pack6": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x6", priceCLP: 66300 },
-  "cera-deluxe-matte-pasta-fuchsia-pack12": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x12 (mayorista)", priceCLP: 124800 },
+  // del PACK completo, no por unidad. Curl Cream no tiene packs.
+  "cera-deluxe-matte-pasta-fuchsia-pack6": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x6", priceCLP: 51000 },
+  "cera-deluxe-matte-pasta-fuchsia-pack12": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x12 (mayorista)", priceCLP: 92400 },
+  "cera-deluxe-matte-pasta-fuchsia-pack24": { name: "Cera Deluxe Matte Pasta Fuchsia (ROQVEL) — Pack x24 (mayorista)", priceCLP: 172800 },
 
-  "polvo-textura-09-pack3": { name: "Polvo de Textura '09 (ROQVEL) — Pack x3", priceCLP: 27000 },
-  "polvo-textura-09-pack6": { name: "Polvo de Textura '09 (ROQVEL) — Pack x6", priceCLP: 51000 },
-  "polvo-textura-09-pack12": { name: "Polvo de Textura '09 (ROQVEL) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "polvo-textura-09-pack6": { name: "Polvo de Textura '09 (ROQVEL) — Pack x6", priceCLP: 48000 },
+  "polvo-textura-09-pack12": { name: "Polvo de Textura '09 (ROQVEL) — Pack x12 (mayorista)", priceCLP: 84000 },
+  "polvo-textura-09-pack24": { name: "Polvo de Textura '09 (ROQVEL) — Pack x24 (mayorista)", priceCLP: 144000 },
 
-  "cera-aqua-wax-orange-pack3": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x3", priceCLP: 27000 },
-  "cera-aqua-wax-orange-pack6": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x6", priceCLP: 51000 },
-  "cera-aqua-wax-orange-pack12": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "polvo-textura-10-pack6": { name: "Polvo de Textura '10 (ROQVEL) — Pack x6", priceCLP: 48000 },
+  "polvo-textura-10-pack12": { name: "Polvo de Textura '10 (ROQVEL) — Pack x12 (mayorista)", priceCLP: 84000 },
+  "polvo-textura-10-pack24": { name: "Polvo de Textura '10 (ROQVEL) — Pack x24 (mayorista)", priceCLP: 144000 },
 
-  "cera-matte-wax-brown-pack3": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x3", priceCLP: 27000 },
-  "cera-matte-wax-brown-pack6": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x6", priceCLP: 51000 },
-  "cera-matte-wax-brown-pack12": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "polvo-textura-13-pack6": { name: "Polvo de Textura '13 (ROQVEL) — Pack x6", priceCLP: 48000 },
+  "polvo-textura-13-pack12": { name: "Polvo de Textura '13 (ROQVEL) — Pack x12 (mayorista)", priceCLP: 84000 },
+  "polvo-textura-13-pack24": { name: "Polvo de Textura '13 (ROQVEL) — Pack x24 (mayorista)", priceCLP: 144000 },
 
-  "cera-cream-wax-fiber-effect-pack3": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x3", priceCLP: 27000 },
-  "cera-cream-wax-fiber-effect-pack6": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x6", priceCLP: 51000 },
-  "cera-cream-wax-fiber-effect-pack12": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "polvo-textura-15-pack6": { name: "Polvo de Textura '15 (ROQVEL) — Pack x6", priceCLP: 48000 },
+  "polvo-textura-15-pack12": { name: "Polvo de Textura '15 (ROQVEL) — Pack x12 (mayorista)", priceCLP: 84000 },
+  "polvo-textura-15-pack24": { name: "Polvo de Textura '15 (ROQVEL) — Pack x24 (mayorista)", priceCLP: 144000 },
 
-  "cera-matte-pomade-green-pack3": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x3", priceCLP: 27000 },
-  "cera-matte-pomade-green-pack6": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x6", priceCLP: 51000 },
-  "cera-matte-pomade-green-pack12": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "cera-aqua-wax-orange-pack6": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x6", priceCLP: 35400 },
+  "cera-aqua-wax-orange-pack12": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x12 (mayorista)", priceCLP: 62400 },
+  "cera-aqua-wax-orange-pack24": { name: "Cera Aqua Wax Orange (ROQVEL) — Pack x24 (mayorista)", priceCLP: 112800 },
 
-  "curl-cream-rolda-pack3": { name: "Curl Cream (Rolda) — Pack x3", priceCLP: 27000 },
-  "curl-cream-rolda-pack6": { name: "Curl Cream (Rolda) — Pack x6", priceCLP: 51000 },
-  "curl-cream-rolda-pack12": { name: "Curl Cream (Rolda) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "cera-aqua-wax-red-pack6": { name: "Cera Aqua Wax Red (ROQVEL) — Pack x6", priceCLP: 35400 },
+  "cera-aqua-wax-red-pack12": { name: "Cera Aqua Wax Red (ROQVEL) — Pack x12 (mayorista)", priceCLP: 62400 },
+  "cera-aqua-wax-red-pack24": { name: "Cera Aqua Wax Red (ROQVEL) — Pack x24 (mayorista)", priceCLP: 112800 },
 
-  "aceite-barba-maxcare-pack3": { name: "Aceite de Barba (MaxCare) — Pack x3", priceCLP: 27000 },
-  "aceite-barba-maxcare-pack6": { name: "Aceite de Barba (MaxCare) — Pack x6", priceCLP: 51000 },
-  "aceite-barba-maxcare-pack12": { name: "Aceite de Barba (MaxCare) — Pack x12 (mayorista)", priceCLP: 96000 },
+  "cera-aqua-wax-blue-pack6": { name: "Cera Aqua Wax Blue (ROQVEL) — Pack x6", priceCLP: 35400 },
+  "cera-aqua-wax-blue-pack12": { name: "Cera Aqua Wax Blue (ROQVEL) — Pack x12 (mayorista)", priceCLP: 62400 },
+  "cera-aqua-wax-blue-pack24": { name: "Cera Aqua Wax Blue (ROQVEL) — Pack x24 (mayorista)", priceCLP: 112800 },
+
+  "cera-spider-wax-purple-pack6": { name: "Cera Spider Wax Purple (ROQVEL) — Pack x6", priceCLP: 35400 },
+  "cera-spider-wax-purple-pack12": { name: "Cera Spider Wax Purple (ROQVEL) — Pack x12 (mayorista)", priceCLP: 62400 },
+  "cera-spider-wax-purple-pack24": { name: "Cera Spider Wax Purple (ROQVEL) — Pack x24 (mayorista)", priceCLP: 112800 },
+
+  "cera-matte-wax-brown-pack6": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x6", priceCLP: 40800 },
+  "cera-matte-wax-brown-pack12": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x12 (mayorista)", priceCLP: 72000 },
+  "cera-matte-wax-brown-pack24": { name: "Cera Matte Wax Brown (ROQVEL) — Pack x24 (mayorista)", priceCLP: 120000 },
+
+  "cera-cream-wax-fiber-effect-pack6": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x6", priceCLP: 35400 },
+  "cera-cream-wax-fiber-effect-pack12": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x12 (mayorista)", priceCLP: 62400 },
+  "cera-cream-wax-fiber-effect-pack24": { name: "Cera Cream Wax Fiber Effect (ROQVEL) — Pack x24 (mayorista)", priceCLP: 112800 },
+
+  "cera-matte-pomade-green-pack6": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x6", priceCLP: 40800 },
+  "cera-matte-pomade-green-pack12": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x12 (mayorista)", priceCLP: 72000 },
+  "cera-matte-pomade-green-pack24": { name: "Cera Matte Pomade Green (ROQVEL) — Pack x24 (mayorista)", priceCLP: 120000 },
+
+  "aceite-barba-maxcare-pack6": { name: "Aceite de Barba (MaxCare) — Pack x6", priceCLP: 36000 },
+  "aceite-barba-maxcare-pack12": { name: "Aceite de Barba (MaxCare) — Pack x12 (mayorista)", priceCLP: 60000 },
+  "aceite-barba-maxcare-pack24": { name: "Aceite de Barba (MaxCare) — Pack x24 (mayorista)", priceCLP: 108000 },
 };
 
 const MAX_QTY_PER_ITEM = 20;
