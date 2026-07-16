@@ -292,18 +292,22 @@
       var visualHTML = p.productUrl
         ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
         : '<div class="shop-card-visual">' + visualInner + '</div>';
-      var nameHTML = p.productUrl
-        ? '<a class="shop-card-title-link" href="' + escHTML(p.productUrl) + '">' + escHTML(p.name) + '</a>'
-        : escHTML(p.name);
+      var infoTop =
+        '<p class="shop-price">' + escHTML(p.price) + '</p>' +
+        '<h3>' + escHTML(p.name) + '</h3>' +
+        '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>';
+      // Todo el bloque precio/nombre/línea es un solo link (además de la
+      // foto) para que en mobile no dependa de acertarle justo al título.
+      var infoTopHTML = p.productUrl
+        ? '<a class="shop-card-link" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + infoTop + '</a>'
+        : infoTop;
       return (
         '<article class="card shop-card embla__slide" data-category="' + escHTML(p.category) + '">' +
           '<button class="shop-fav" type="button" aria-label="Agregar a favoritos" data-fav="' + escHTML(p.name) + '">' +
             '<svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>' +
           visualHTML +
           '<div class="shop-card-info">' +
-            '<p class="shop-price">' + escHTML(p.price) + '</p>' +
-            '<h3>' + nameHTML + '</h3>' +
-            '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>' +
+            infoTopHTML +
             '<details class="shop-detail"><summary>Ver detalle</summary><dl>' +
               '<div><dt>Composición</dt><dd>' + escHTML(p.composicion) + '</dd></div>' +
               '<div><dt>Modo de uso</dt><dd>' + escHTML(p.modoUso) + '</dd></div>' +

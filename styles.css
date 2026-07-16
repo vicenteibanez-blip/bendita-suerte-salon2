@@ -320,6 +320,10 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 }
 .shop-card-visual .icon { width: 52px; height: 52px; stroke-width: 1.3; }
 .shop-card-info { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
+/* Envuelve precio+nombre+línea en un solo link (además de la foto) para
+   que en mobile baste con tocar cualquier parte de esa info para abrir
+   la página del producto, sin depender de acertarle al título. */
+.shop-card-link { display: block; }
 .shop-price { font-weight: 700; font-size: 1.05rem; color: var(--ink); }
 .shop-card-info h3 { font-size: 1rem; font-family: var(--sans); font-weight: 600; margin-top: .2rem; }
 .shop-line { color: var(--ink-mute); font-size: .84rem; margin-top: .15rem; }
