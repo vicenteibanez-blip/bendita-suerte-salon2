@@ -432,7 +432,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 /* --- Reviews carousel --- */
 .reviews-carousel-wrap { position: relative; }
 .reviews-carousel {
-  display: flex; align-items: flex-start; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  display: flex; align-items: stretch; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
   padding-bottom: .5rem; scrollbar-width: none; -ms-overflow-style: none;
 }
 .reviews-carousel::-webkit-scrollbar { display: none; }
