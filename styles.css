@@ -293,12 +293,11 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .team-info .ig:hover { color: var(--accent-ink); }
 .team-card .btn { margin: 1.1rem 1.4rem 0; width: calc(100% - 2.8rem); }
 
-/* --- Shop tabs row (category filter + "Ver más") ---
+/* --- Shop tabs row (category filter) ---
    El filter-bar es una sola fila que se desliza horizontalmente cuando
    no caben todas las categorías (en vez de saltar de línea en desorden),
    con un fundido a la derecha que insinúa que hay más para deslizar. */
 .shop-tabs-row { display: flex; align-items: center; gap: .9rem; margin-bottom: 2.2rem; }
-.shop-tabs-row .card-link { flex: none; white-space: nowrap; }
 
 .filter-bar {
   display: flex; flex-wrap: nowrap; flex: 1 1 auto; min-width: 0; gap: .6rem;
