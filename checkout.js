@@ -14,6 +14,25 @@
 
   function ready(fn) { document.readyState !== "loading" ? fn() : document.addEventListener("DOMContentLoaded", fn); }
 
+  // Valida un RUT chileno (formato + dígito verificador, módulo 11).
+  // Acepta con o sin puntos/guion: "12.345.678-9", "12345678-9", "123456789".
+  function isValidRUT(input) {
+    var clean = String(input || "").replace(/[.\s]/g, "").toUpperCase();
+    var match = clean.match(/^(\d{1,8})-?([0-9K])$/);
+    if (!match) return false;
+    var body = match[1];
+    var dv = match[2];
+    var sum = 0;
+    var mul = 2;
+    for (var i = body.length - 1; i >= 0; i--) {
+      sum += parseInt(body[i], 10) * mul;
+      mul = mul === 7 ? 2 : mul + 1;
+    }
+    var res = 11 - (sum % 11);
+    var expected = res === 11 ? "0" : res === 10 ? "K" : String(res);
+    return dv === expected;
+  }
+
   ready(function () {
     var cartCheckoutBtn = $("#cart-checkout-btn");
     var overlay = $("#checkout-overlay");
@@ -21,6 +40,11 @@
     var closeBtn = $("#checkout-close");
     var form = $("#checkout-form");
     var addressWrap = $("#checkout-address");
+    var rutInput = $("#checkout-rut");
+    var facturaToggle = $("#checkout-factura-toggle");
+    var facturaWrap = $("#checkout-factura");
+    var rutEmpresaInput = $("#checkout-rut-empresa");
+    var razonSocialInput = $("#checkout-razon-social");
     var totalEl = $("#checkout-total");
     var errorEl = $("#checkout-error");
     var submitBtn = $("#checkout-submit");
@@ -40,19 +64,28 @@
       // así que el total a pagar aquí es siempre solo el subtotal de productos.
       var subtotal = window.BSCart.getSubtotal();
       if (totalEl) totalEl.textContent = window.BSCart.formatCLP(subtotal);
-      addressWrap.hidden = getDeliveryType() !== "despacho";
+      var isDespacho = getDeliveryType() === "despacho";
+      addressWrap.hidden = !isDespacho;
       var addressInputs = addressWrap.querySelectorAll("input");
       addressInputs.forEach(function (input) {
-        if (input.name === "direccion" || input.name === "comuna") {
-          input.required = getDeliveryType() === "despacho";
+        if (input.name === "direccion" || input.name === "comuna" || input.name === "rut") {
+          input.required = isDespacho;
         }
       });
+    }
+
+    function updateFactura() {
+      var wantsFactura = !!(facturaToggle && facturaToggle.checked);
+      facturaWrap.hidden = !wantsFactura;
+      if (rutEmpresaInput) rutEmpresaInput.required = wantsFactura;
+      if (razonSocialInput) razonSocialInput.required = wantsFactura;
     }
 
     function openModal() {
       if (window.BSCart.getCart().length === 0) return;
       window.BSCart.closeDrawer();
       updateTotals();
+      updateFactura();
       hideError();
       overlay.hidden = false;
       modal.classList.add("is-open");
@@ -89,6 +122,7 @@
     form.querySelectorAll('input[name="entrega"]').forEach(function (radio) {
       radio.addEventListener("change", updateTotals);
     });
+    if (facturaToggle) facturaToggle.addEventListener("change", updateFactura);
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -107,6 +141,21 @@
 
       var fd = new FormData(form);
       var deliveryType = fd.get("entrega");
+      var wantsFactura = !!fd.get("factura");
+      var rut = (fd.get("rut") || "").trim();
+      var rutEmpresa = (fd.get("rutEmpresa") || "").trim();
+
+      if (deliveryType === "despacho" && !isValidRUT(rut)) {
+        showError("El RUT ingresado no es válido. Revísalo e inténtalo de nuevo.");
+        if (rutInput) rutInput.focus();
+        return;
+      }
+      if (wantsFactura && !isValidRUT(rutEmpresa)) {
+        showError("El RUT de la empresa no es válido. Revísalo e inténtalo de nuevo.");
+        if (rutEmpresaInput) rutEmpresaInput.focus();
+        return;
+      }
+
       var payload = {
         items: cart.map(function (it) { return { id: it.id, name: it.name, qty: it.qty }; }),
         customer: {
@@ -119,6 +168,12 @@
           direccion: deliveryType === "despacho" ? (fd.get("direccion") || "").trim() : "",
           comuna: deliveryType === "despacho" ? (fd.get("comuna") || "").trim() : "",
           referencia: deliveryType === "despacho" ? (fd.get("referencia") || "").trim() : "",
+          rut: deliveryType === "despacho" ? rut : "",
+        },
+        factura: {
+          requiere: wantsFactura,
+          rutEmpresa: wantsFactura ? rutEmpresa : "",
+          razonSocial: wantsFactura ? (fd.get("razonSocial") || "").trim() : "",
         },
       };
 

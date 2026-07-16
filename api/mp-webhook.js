@@ -117,8 +117,17 @@ module.exports = async function handler(req, res) {
 
     const entregaHTML = metadata.entrega === "despacho"
       ? "Despacho a domicilio (envío por pagar) — " + escapeHTML(metadata.direccion) + ", " + escapeHTML(metadata.comuna) +
-        (metadata.referencia ? " (" + escapeHTML(metadata.referencia) + ")" : "")
+        (metadata.referencia ? " (" + escapeHTML(metadata.referencia) + ")" : "") +
+        (metadata.rut ? "<br>RUT del comprador (para el envío): " + escapeHTML(metadata.rut) : "")
       : "Retiro en local — " + escapeHTML(SHOP_ADDRESS);
+
+    const facturaHTML = metadata.factura === "si"
+      ? "<p style=\"background:#fdf6e3;border:1px solid #e0c266;border-radius:8px;padding:.7em 1em\">" +
+        "<strong>⚠️ Pidió factura</strong>" +
+        "<br>RUT empresa: " + escapeHTML(metadata.rut_empresa || "-") +
+        "<br>Razón social: " + escapeHTML(metadata.razon_social || "-") +
+        "</p>"
+      : "";
 
     const ownerHTML =
       "<h2>Nueva venta aprobada 🍀</h2>" +
@@ -127,6 +136,7 @@ module.exports = async function handler(req, res) {
         "<br>Email: " + escapeHTML(payer.email || "-") +
         "<br>Teléfono: " + escapeHTML((payer.phone && payer.phone.number) || "-") + "</p>" +
       "<p><strong>Entrega:</strong> " + entregaHTML + "</p>" +
+      facturaHTML +
       "<p><strong>Productos:</strong></p><ul>" + itemsHTML + "</ul>" +
       "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";
 
@@ -143,12 +153,18 @@ module.exports = async function handler(req, res) {
         ? "<p>El envío se hace efectivo dentro de <strong>3 días hábiles</strong>, por courier (Starken o Bluexpress, según disponibilidad). <strong>El costo del envío se paga aparte, directo al courier</strong> cuando te llega el pedido — no fue incluido en este pago. El código de seguimiento te llegará a este correo apenas esté disponible.</p>"
         : "";
 
+      const facturaCustomerHTML = metadata.factura === "si"
+        ? "<p><strong>Factura:</strong> emitida a " + escapeHTML(metadata.razon_social || "-") +
+          " (RUT " + escapeHTML(metadata.rut_empresa || "-") + ")</p>"
+        : "";
+
       const customerHTML =
         "<h2>¡Gracias por tu compra! 🍀</h2>" +
         "<p>Confirmamos que recibimos tu pago en <strong>Bendita Suerte Salón</strong>.</p>" +
         "<p><strong>Tu pedido:</strong></p><ul>" + itemsHTML + "</ul>" +
         "<p><strong>Total pagado:</strong> " + formatCLP(payment.transaction_amount) + "</p>" +
         "<p><strong>Entrega:</strong> " + entregaHTML + "</p>" +
+        facturaCustomerHTML +
         shippingNoteHTML +
         "<p>Cualquier duda, escríbenos al " + escapeHTML(SHOP_PHONE) + ".</p>" +
         "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";

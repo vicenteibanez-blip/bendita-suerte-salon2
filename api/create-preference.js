@@ -99,6 +99,26 @@ const PRODUCTS = {
 const MAX_QTY_PER_ITEM = 20;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Valida un RUT chileno (formato + dígito verificador, módulo 11).
+// Nunca confiamos en la validación del navegador: se puede saltar con
+// devtools, así que la revisamos de nuevo acá antes de cobrar.
+function isValidRUT(input) {
+  const clean = String(input || "").replace(/[.\s]/g, "").toUpperCase();
+  const match = clean.match(/^(\d{1,8})-?([0-9K])$/);
+  if (!match) return false;
+  const body = match[1];
+  const dv = match[2];
+  let sum = 0;
+  let mul = 2;
+  for (let i = body.length - 1; i >= 0; i--) {
+    sum += parseInt(body[i], 10) * mul;
+    mul = mul === 7 ? 2 : mul + 1;
+  }
+  const res = 11 - (sum % 11);
+  const expected = res === 11 ? "0" : res === 10 ? "K" : String(res);
+  return dv === expected;
+}
+
 function baseUrl(req) {
   const proto = req.headers["x-forwarded-proto"] || "https";
   const host = req.headers["x-forwarded-host"] || req.headers.host;
@@ -129,6 +149,7 @@ module.exports = async function handler(req, res) {
   const cartItems = Array.isArray(body.items) ? body.items : [];
   const customer = body.customer || {};
   const delivery = body.delivery || {};
+  const factura = body.factura || {};
 
   if (cartItems.length === 0) {
     res.status(400).json({ error: "El carrito está vacío." });
@@ -179,12 +200,37 @@ module.exports = async function handler(req, res) {
   // El envío a domicilio es "por pagar": el comprador solo paga el producto
   // aquí (nunca se agrega un costo de despacho a la orden de MercadoPago).
   // El flete se paga aparte, directo al courier, cuando le llega el pedido.
+  // El courier exige un RUT asociado al envío, por eso es obligatorio acá
+  // (pero no para retiro en local).
   const deliveryType = delivery.type === "despacho" ? "despacho" : "retiro";
+  let rut = "";
   if (deliveryType === "despacho") {
     const direccion = String(delivery.direccion || "").trim();
     const comuna = String(delivery.comuna || "").trim();
+    rut = String(delivery.rut || "").trim();
     if (!direccion || !comuna) {
       res.status(400).json({ error: "Falta la dirección o la comuna para el despacho." });
+      return;
+    }
+    if (!isValidRUT(rut)) {
+      res.status(400).json({ error: "El RUT ingresado para el envío no es válido." });
+      return;
+    }
+  }
+
+  // --- Validar datos de factura (opcional, independiente del tipo de entrega) ---
+  const wantsFactura = Boolean(factura.requiere);
+  let rutEmpresa = "";
+  let razonSocial = "";
+  if (wantsFactura) {
+    rutEmpresa = String(factura.rutEmpresa || "").trim();
+    razonSocial = String(factura.razonSocial || "").trim();
+    if (!isValidRUT(rutEmpresa)) {
+      res.status(400).json({ error: "El RUT de la empresa para la factura no es válido." });
+      return;
+    }
+    if (!razonSocial || razonSocial.length > 160) {
+      res.status(400).json({ error: "Falta la razón social para la factura." });
       return;
     }
   }
@@ -213,6 +259,10 @@ module.exports = async function handler(req, res) {
       direccion: delivery.direccion || "",
       comuna: delivery.comuna || "",
       referencia: delivery.referencia || "",
+      rut: rut,
+      factura: wantsFactura ? "si" : "no",
+      rut_empresa: rutEmpresa,
+      razon_social: razonSocial,
     },
   };
 

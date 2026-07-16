@@ -37,7 +37,7 @@
 <!-- Hero image priority -->
 <link rel="preload" as="image" href="assets/img/hero.webp?v=20260703" fetchpriority="high" />
 
-<link rel="stylesheet" href="styles.css?v=20260740" />
+<link rel="stylesheet" href="styles.css?v=20260742" />
 
 <!-- JSON-LD — Schema.org BarberShop -->
 <script type="application/ld+json">
@@ -1141,8 +1141,28 @@
           <input type="text" name="comuna" autocomplete="address-level2" />
         </label>
         <label class="checkout-field">
+          <span>RUT (necesario para el envío)</span>
+          <input type="text" name="rut" id="checkout-rut" placeholder="12.345.678-9" autocomplete="off" />
+        </label>
+        <label class="checkout-field">
           <span>Referencia (opcional)</span>
           <input type="text" name="referencia" />
+        </label>
+      </div>
+
+      <label class="checkout-radio" id="checkout-factura-row">
+        <input type="checkbox" name="factura" id="checkout-factura-toggle" />
+        <span>Necesito factura (compra para mi empresa)</span>
+      </label>
+
+      <div class="checkout-factura" id="checkout-factura" hidden>
+        <label class="checkout-field">
+          <span>RUT de la empresa</span>
+          <input type="text" name="rutEmpresa" id="checkout-rut-empresa" placeholder="76.123.456-7" autocomplete="off" />
+        </label>
+        <label class="checkout-field">
+          <span>Razón social</span>
+          <input type="text" name="razonSocial" id="checkout-razon-social" placeholder="Nombre legal de la empresa" autocomplete="organization" />
         </label>
       </div>
 
@@ -1169,7 +1189,7 @@
 <script defer src="lib/embla-carousel-autoplay.umd.js"></script>
 <script defer src="lib/manifest.js?v=20260741"></script>
 <script defer src="cart.js?v=20260733"></script>
-<script defer src="checkout.js?v=20260733"></script>
+<script defer src="checkout.js?v=20260742"></script>
 <script defer src="main.js?v=20260734"></script>
 </body>
 </html>

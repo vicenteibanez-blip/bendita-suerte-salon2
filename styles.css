@@ -788,6 +788,8 @@ body.cart-open-lock { overflow: hidden; }
 .checkout-radio input { width: 18px; height: 18px; accent-color: var(--accent-strong); flex: none; }
 
 .checkout-address { margin-top: .2rem; }
+.checkout-factura { margin-top: .8rem; }
+#checkout-factura-row { margin-top: .4rem; }
 .checkout-shipping-note {
   font-size: .82rem; color: var(--ink-mute); background: var(--accent-tint); border-radius: var(--radius-sm);
   padding: .7rem .9rem; margin-bottom: 1rem; line-height: 1.5;
