@@ -288,7 +288,9 @@
       var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
       var cartId = p.id || cartLabel;
       var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
-      var visualInner = '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
+      var visualInner = p.photo
+        ? '<img src="' + escHTML(p.photo) + '" alt="" loading="lazy" />'
+        : '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
       var visualHTML = p.productUrl
         ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
         : '<div class="shop-card-visual">' + visualInner + '</div>';

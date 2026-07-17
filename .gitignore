@@ -5,6 +5,11 @@
 .DS_Store
 Thumbs.db
 
+# Fotos originales sin optimizar (pesan ~87MB) — las versiones ya
+# comprimidas y redimensionadas que usa el sitio viven en
+# assets/img/products/. No subir las originales al repo.
+Fotos productos/
+
 # Local environment secrets (never commit real tokens/keys)
 .env
 .env.local

@@ -331,6 +331,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   background: linear-gradient(150deg, var(--accent-tint), var(--bg-3)); color: var(--accent-ink);
 }
 .shop-card-visual .icon { width: 52px; height: 52px; stroke-width: 1.3; }
+.shop-card-visual img { width: 100%; height: 100%; object-fit: cover; }
 .shop-card-info { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
 /* Envuelve precio+nombre+línea en un solo link (además de la foto) para
    que en mobile baste con tocar cualquier parte de esa info para abrir
