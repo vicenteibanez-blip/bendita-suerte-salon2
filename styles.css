@@ -273,6 +273,16 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .service-row-price { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; color: var(--accent-ink); white-space: nowrap; }
 .service-row .btn { flex: none; }
 
+/* Bajo 1024px, el ancho disponible no siempre alcanza para icono + info +
+   duración/precio + botón en una sola línea: dependiendo del largo del
+   título o la duración, el botón terminaba a veces abajo y a veces al
+   lado del precio. Se fuerza que duración/precio ocupen su propia línea
+   completa para que el botón quede siempre debajo, en la misma posición
+   en todas las tarjetas. */
+@media (max-width: 1023px) {
+  .service-row-meta { flex: 1 1 100%; }
+}
+
 .team-card { overflow: hidden; text-align: center; padding-bottom: 1.6rem; }
 .team-avatar {
   aspect-ratio: 4/5; width: 100%; position: relative; overflow: hidden;
@@ -421,6 +431,22 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .rating-badge .value { font-family: var(--serif); font-size: 1.5rem; font-weight: 700; }
 .rating-badge .count { color: var(--ink-mute); font-size: .88rem; }
 .rating-note { font-size: .78rem; color: var(--ink-mute); margin-top: .6rem; }
+
+/* En mobile el texto "N reseñas en Google y Setmore" no cabe junto a las
+   estrellas y el badge crecía en altura mientras mantenía border-radius:999px
+   (forma píldora); con esa altura extra el radio quedaba tan grande que la
+   curva de las esquinas terminaba montándose sobre los íconos de estrella.
+   Se pasa a dos líneas limpias (estrellas arriba, texto abajo) con un radio
+   normal que no se deforma sin importar cuánto crezca el texto. */
+@media (max-width: 640px) {
+  .rating-badge {
+    flex-wrap: wrap;
+    row-gap: .4rem;
+    border-radius: var(--radius);
+    padding: .9rem 1.2rem;
+  }
+  .rating-badge > div:last-child { flex: 1 1 100%; }
+}
 
 .review-card { padding: 1.4rem 1.5rem; display: flex; flex-direction: column; gap: .6rem; }
 .review-card .stars { display: flex; gap: 2px; color: var(--gold); }
