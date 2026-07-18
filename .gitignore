@@ -10,6 +10,10 @@ Thumbs.db
 # assets/img/products/. No subir las originales al repo.
 Fotos productos/
 
+# Fotos originales de los barberos (una pesa 6.6MB) — las versiones
+# recortadas y optimizadas viven en assets/img/team/.
+Barberos/
+
 # Local environment secrets (never commit real tokens/keys)
 .env
 .env.local

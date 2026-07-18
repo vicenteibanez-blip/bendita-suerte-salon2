@@ -285,6 +285,8 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   font-size: .68rem; font-weight: 600; letter-spacing: .04em; color: var(--accent-ink);
   background: rgba(255,255,255,.85); padding: .3rem .55rem; border-radius: 8px; text-align: right; line-height: 1.2;
 }
+.team-avatar--photo::after { content: none; }
+.team-avatar--photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .team-info { padding: 1.2rem 1.4rem 0; }
 .team-info h3 { font-size: 1.15rem; }
 .team-info .role { color: var(--accent-ink); font-size: .86rem; font-weight: 600; margin-top: .25rem; }
