@@ -14,6 +14,10 @@ Fotos productos/
 # recortadas y optimizadas viven en assets/img/team/.
 Barberos/
 
+# Fotos originales para la galería/feed (pesan varios MB cada una) —
+# las versiones optimizadas viven en assets/img/gallery/.
+Fotos para el feed/
+
 # Local environment secrets (never commit real tokens/keys)
 .env
 .env.local
