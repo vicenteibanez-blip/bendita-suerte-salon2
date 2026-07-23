@@ -14,6 +14,11 @@
 
   function ready(fn) { document.readyState !== "loading" ? fn() : document.addEventListener("DOMContentLoaded", fn); }
 
+  function getCookie(name) {
+    var match = document.cookie.match(new RegExp("(?:^|; )" + name + "=([^;]*)"));
+    return match ? decodeURIComponent(match[1]) : "";
+  }
+
   // Valida un RUT chileno (formato + dígito verificador, módulo 11).
   // Acepta con o sin puntos/guion: "12.345.678-9", "12345678-9", "123456789".
   function isValidRUT(input) {
@@ -185,6 +190,12 @@
           rutEmpresa: wantsFactura ? rutEmpresa : "",
           razonSocial: wantsFactura ? (fd.get("razonSocial") || "").trim() : "",
         },
+        // _fbp/_fbc son las cookies que pone el Pixel de Meta en el navegador.
+        // Se mandan al servidor para que, cuando se confirme el pago, el
+        // webhook pueda enviar el evento de Compra a la API de Conversiones
+        // "firmado" igual que lo haría el navegador — así Meta lo asocia
+        // bien al clic de anuncio que originó la visita.
+        meta: { fbp: getCookie("_fbp"), fbc: getCookie("_fbc") },
       };
 
       submitBtn.disabled = true;

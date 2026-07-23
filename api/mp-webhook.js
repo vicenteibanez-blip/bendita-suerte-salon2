@@ -20,7 +20,13 @@
      RESEND_FROM_EMAIL          (opcional; ej. "Bendita Suerte <avisos@tudominio.cl>".
                                   Si no la configuras, se usa el remitente de
                                   prueba de Resend: onboarding@resend.dev)
+     META_CAPI_ACCESS_TOKEN     (token de la API de Conversiones de Meta —
+                                  ver api/_meta-capi.js. Si no está, el envío
+                                  a Meta simplemente se omite, sin afectar el
+                                  resto del webhook)
    ============================================================= */
+
+const { sendMetaCapiEvent } = require("./_meta-capi");
 
 const NOTIFY_EMAIL = "benditasuerte.salon@gmail.com";
 
@@ -97,6 +103,34 @@ module.exports = async function handler(req, res) {
       return;
     }
 
+    const payer = payment.payer || {};
+    const items = (payment.additional_info && payment.additional_info.items) || [];
+    const metadata = payment.metadata || {};
+
+    // Meta Pixel (API de Conversiones): mismo event_id que usa el Pixel del
+    // navegador en exito.html (el payment_id de MercadoPago), para que Meta
+    // reconozca que es el mismo evento de Compra y no lo cuente dos veces.
+    // No depende de que el correo esté configurado: si esto falla, no debe
+    // frenar el resto del webhook (sendMetaCapiEvent nunca lanza errores).
+    const proto = req.headers["x-forwarded-proto"] || "https";
+    const host = req.headers["x-forwarded-host"] || req.headers.host;
+    await sendMetaCapiEvent({
+      eventName: "Purchase",
+      eventId: String(payment.id),
+      eventSourceUrl: proto + "://" + host + "/exito.html",
+      email: payer.email,
+      phone: payer.phone && payer.phone.number,
+      fbp: metadata.fbp,
+      fbc: metadata.fbc,
+      customData: {
+        currency: "CLP",
+        value: payment.transaction_amount,
+        content_ids: items.map(function (it) { return it.id; }).filter(Boolean),
+        contents: items.map(function (it) { return { id: it.id, quantity: it.quantity }; }).filter(function (it) { return it.id; }),
+        num_items: items.reduce(function (sum, it) { return sum + (Number(it.quantity) || 0); }, 0),
+      },
+    });
+
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
       console.error("mp-webhook: falta RESEND_API_KEY, no se pudo avisar la venta");
@@ -105,9 +139,6 @@ module.exports = async function handler(req, res) {
     }
 
     const fromEmail = process.env.RESEND_FROM_EMAIL || "Bendita Suerte Salón <onboarding@resend.dev>";
-    const payer = payment.payer || {};
-    const items = (payment.additional_info && payment.additional_info.items) || [];
-    const metadata = payment.metadata || {};
 
     const itemsHTML = items.length
       ? items.map(function (it) {

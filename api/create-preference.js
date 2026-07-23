@@ -149,6 +149,7 @@ module.exports = async function handler(req, res) {
   const customer = body.customer || {};
   const delivery = body.delivery || {};
   const factura = body.factura || {};
+  const meta = body.meta || {};
 
   if (cartItems.length === 0) {
     res.status(400).json({ error: "El carrito está vacío." });
@@ -171,6 +172,7 @@ module.exports = async function handler(req, res) {
     }
     subtotal += product.priceCLP * qty;
     mpItems.push({
+      id: raw.id,
       title: product.name,
       quantity: qty,
       unit_price: product.priceCLP,
@@ -262,6 +264,11 @@ module.exports = async function handler(req, res) {
       factura: wantsFactura ? "si" : "no",
       rut_empresa: rutEmpresa,
       razon_social: razonSocial,
+      // Cookies del Pixel de Meta (_fbp/_fbc), guardadas acá para que el
+      // webhook de pago pueda mandar el evento de Compra a la API de
+      // Conversiones "firmado" igual que el navegador.
+      fbp: String(meta.fbp || "").slice(0, 200),
+      fbc: String(meta.fbc || "").slice(0, 200),
     },
   };
 
