@@ -82,7 +82,8 @@
     }
 
     function openModal() {
-      if (window.BSCart.getCart().length === 0) return;
+      var cart = window.BSCart.getCart();
+      if (cart.length === 0) return;
       window.BSCart.closeDrawer();
       updateTotals();
       updateFactura();
@@ -91,6 +92,15 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.body.classList.add("cart-open-lock");
+      if (window.fbq) {
+        window.fbq("track", "InitiateCheckout", {
+          content_ids: cart.map(function (it) { return it.id; }),
+          contents: cart.map(function (it) { return { id: it.id, quantity: it.qty }; }),
+          num_items: cart.reduce(function (sum, it) { return sum + it.qty; }, 0),
+          value: window.BSCart.getSubtotal(cart),
+          currency: "CLP",
+        });
+      }
     }
 
     function closeModal() {

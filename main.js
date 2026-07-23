@@ -84,6 +84,18 @@
     });
   }
 
+  /* ---------- Meta Pixel: Lead al hacer clic en cualquier "Reservar" ----------
+     Delegado en el documento porque hay varios botones/links a Setmore
+     repartidos por la página (hero, servicios, equipo, botón flotante). */
+  function initLeadTracking() {
+    if (!window.fbq) return;
+    document.addEventListener("click", function (e) {
+      var a = e.target.closest('a[href*="setmore.com"]');
+      if (!a) return;
+      window.fbq("track", "Lead", { content_name: "Reservar cita" });
+    });
+  }
+
   /* ---------- Reveal on scroll ---------- */
   function initReveals() {
     var items = $$(".reveal");
@@ -401,6 +413,7 @@
   /* ---------- Boot ---------- */
   function boot() {
     safe(bindBrand, "bindBrand");
+    safe(initLeadTracking, "initLeadTracking");
     safe(initNav, "initNav");
     safe(initSmoothScroll, "initSmoothScroll");
     safe(initReveals, "initReveals");

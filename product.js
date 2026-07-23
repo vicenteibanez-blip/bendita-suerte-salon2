@@ -121,10 +121,27 @@
     });
   }
 
+  /* ---------- Meta Pixel: ViewContent ----------
+     Se lee el botón "Comprar ahora" porque siempre trae el id/nombre/
+     precio del producto (o del tier x1) ya puestos en el HTML. */
+  function trackViewContent() {
+    if (!window.fbq) return;
+    var btn = $("[data-buy-now]");
+    if (!btn) return;
+    window.fbq("track", "ViewContent", {
+      content_ids: [btn.getAttribute("data-id")],
+      content_name: btn.getAttribute("data-name"),
+      content_type: "product",
+      value: Number(btn.getAttribute("data-price")) || 0,
+      currency: "CLP",
+    });
+  }
+
   ready(function () {
     initTierSelector();
     initGallery();
     initStickyBuyBar();
     initRelatedCarousel();
+    trackViewContent();
   });
 })();

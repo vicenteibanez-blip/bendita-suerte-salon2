@@ -65,6 +65,15 @@
       cart.push({ id: id, name: name, price: Number(price) || 0, qty: 1 });
     }
     saveCart(cart);
+    if (window.fbq) {
+      window.fbq("track", "AddToCart", {
+        content_ids: [id],
+        content_name: name,
+        content_type: "product",
+        value: Number(price) || 0,
+        currency: "CLP",
+      });
+    }
     // No abrimos el panel automáticamente: así el cliente puede seguir agregando
     // varios productos seguidos sin que el overlay del carrito le bloquee los
     // clics sobre el resto de las tarjetas. Solo animamos el contador (badge)

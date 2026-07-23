@@ -19,6 +19,23 @@
   .payment-result-page .ref { font-size: .82rem; color: var(--ink-mute); margin-top: 1.5rem; }
   .payment-result-page .actions { margin-top: 2rem; display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; }
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2102602733654553');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -39,6 +56,28 @@
   (function () {
     function ready(fn) { document.readyState !== "loading" ? fn() : document.addEventListener("DOMContentLoaded", fn); }
     ready(function () {
+      // Meta Pixel: Purchase. Se lee el carrito ANTES de vaciarlo para saber
+      // qué se compró. El payment_id de MercadoPago se usa como event_id:
+      // así, cuando más adelante se agregue la API de Conversiones del lado
+      // del servidor (mismo evento disparado desde el webhook de pago), Meta
+      // puede reconocer que es el mismo evento y no contarlo dos veces.
+      try {
+        var rawCart = localStorage.getItem("bs_cart");
+        var cart = rawCart ? JSON.parse(rawCart) : [];
+        if (window.fbq && cart.length) {
+          var params = new URLSearchParams(window.location.search);
+          var eventId = params.get("payment_id") || params.get("collection_id") || undefined;
+          var value = cart.reduce(function (sum, it) { return sum + (Number(it.price) || 0) * (Number(it.qty) || 0); }, 0);
+          window.fbq("track", "Purchase", {
+            content_ids: cart.map(function (it) { return it.id; }),
+            contents: cart.map(function (it) { return { id: it.id, quantity: it.qty }; }),
+            num_items: cart.reduce(function (sum, it) { return sum + (Number(it.qty) || 0); }, 0),
+            value: value,
+            currency: "CLP",
+          }, eventId ? { eventID: eventId } : undefined);
+        }
+      } catch (e) { /* privacy mode o carrito corrupto: no bloqueamos la página por esto */ }
+
       // El pago fue exitoso: vaciamos el carrito guardado localmente.
       try { localStorage.removeItem("bs_cart"); } catch (e) { /* privacy mode: ignore */ }
 
