@@ -97,8 +97,8 @@
       modal.classList.add("is-open");
       modal.setAttribute("aria-hidden", "false");
       document.body.classList.add("cart-open-lock");
-      if (window.fbq) {
-        window.fbq("track", "InitiateCheckout", {
+      if (window.BSMetaTrack) {
+        window.BSMetaTrack.fire("InitiateCheckout", {
           content_ids: cart.map(function (it) { return it.id; }),
           contents: cart.map(function (it) { return { id: it.id, quantity: it.qty }; }),
           num_items: cart.reduce(function (sum, it) { return sum + it.qty; }, 0),

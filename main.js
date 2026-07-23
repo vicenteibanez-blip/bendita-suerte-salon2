@@ -88,11 +88,11 @@
      Delegado en el documento porque hay varios botones/links a Setmore
      repartidos por la página (hero, servicios, equipo, botón flotante). */
   function initLeadTracking() {
-    if (!window.fbq) return;
+    if (!window.BSMetaTrack) return;
     document.addEventListener("click", function (e) {
       var a = e.target.closest('a[href*="setmore.com"]');
       if (!a) return;
-      window.fbq("track", "Lead", { content_name: "Reservar cita" });
+      window.BSMetaTrack.fire("Lead", { content_name: "Reservar cita" });
     });
   }
 

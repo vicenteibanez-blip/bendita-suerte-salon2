@@ -65,8 +65,8 @@
       cart.push({ id: id, name: name, price: Number(price) || 0, qty: 1 });
     }
     saveCart(cart);
-    if (window.fbq) {
-      window.fbq("track", "AddToCart", {
+    if (window.BSMetaTrack) {
+      window.BSMetaTrack.fire("AddToCart", {
         content_ids: [id],
         content_name: name,
         content_type: "product",

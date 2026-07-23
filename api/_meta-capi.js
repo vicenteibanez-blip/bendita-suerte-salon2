@@ -53,6 +53,12 @@ async function sendMetaCapiEvent(options) {
   }
   if (options.fbp) userData.fbp = options.fbp;
   if (options.fbc) userData.fbc = options.fbc;
+  // IP/user-agent del visitante: solo existen cuando el evento llega desde
+  // una petición real del navegador (api/track-event.js). El webhook de
+  // pago no los tiene (es un aviso servidor-a-servidor de MercadoPago), por
+  // eso ahí se compensa con email/teléfono en su lugar.
+  if (options.clientIpAddress) userData.client_ip_address = options.clientIpAddress;
+  if (options.clientUserAgent) userData.client_user_agent = options.clientUserAgent;
 
   const event = {
     event_name: options.eventName,
