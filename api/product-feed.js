@@ -15,9 +15,18 @@
    de lib/manifest.js que ya se muestran en el sitio, así que el
    catálogo de Meta se actualiza solo cuando cambies un precio o
    agregues un producto ahí.
+
+   Incluye los packs por mayor (x6/x12/x24, definidos como entradas
+   hidden:true en manifest.js) como variantes del mismo producto,
+   usando item_group_id — así, si alguien compra un pack, el evento
+   de Compra queda bien representado en el catálogo (misma foto y
+   página, precio y cantidad reales) en vez de perderse porque el
+   SKU del pack no existía como producto de catálogo.
    ============================================================= */
 
 const BRAND = require("../lib/manifest.js");
+
+const PACK_RE = /-pack(\d+)$/;
 
 function csvField(value) {
   const s = String(value == null ? "" : value);
@@ -35,27 +44,28 @@ function baseUrl(req) {
 
 module.exports = async function handler(req, res) {
   const origin = baseUrl(req);
-  const products = (BRAND.products || []).filter(function (p) {
-    // Solo productos reales del catálogo: con foto (Meta exige image_link
-    // y una imagen rota hace que rechace el producto) y con página propia.
-    // Quedan afuera los packs por mayor (hidden:true, sin foto/página
-    // propia) — esos son SKUs internos del checkout, no productos de
-    // catálogo para mostrar en anuncios.
-    return !p.hidden && p.photo && p.productUrl;
+  const allProducts = BRAND.products || [];
+
+  // Productos "reales" del catálogo: con foto (Meta exige image_link y
+  // rechaza imágenes rotas) y con página propia. Los packs por mayor
+  // "cuelgan" de estos como variantes — si el producto base no tiene
+  // foto (ej. Cera Matte Wax Brown), sus packs tampoco entran acá.
+  const catalogable = {};
+  allProducts.forEach(function (p) {
+    if (!p.hidden && p.photo && p.productUrl) catalogable[p.id] = p;
   });
 
-  const header = ["id", "title", "description", "availability", "condition", "price", "link", "image_link", "brand"];
+  const header = ["id", "item_group_id", "title", "description", "availability", "condition", "price", "link", "image_link", "brand"];
   const rows = [header.join(",")];
 
-  products.forEach(function (p) {
-    const title = p.sub ? p.name + " (" + p.brand + ") — " + p.sub : p.name + " (" + p.brand + ")";
-    const description = p.composicion || p.sub || p.name;
+  function pushRow(p, base, title, description) {
     const price = Number(p.priceCLP || 0).toFixed(2) + " CLP";
-    const link = origin + "/" + p.productUrl;
-    const imageLink = origin + "/" + p.photo;
+    const link = origin + "/" + base.productUrl;
+    const imageLink = origin + "/" + base.photo;
 
     rows.push([
       csvField(p.id),
+      csvField(base.id), // item_group_id: agrupa unidad + packs como el mismo producto
       csvField(title),
       csvField(description),
       csvField("in stock"),
@@ -63,8 +73,30 @@ module.exports = async function handler(req, res) {
       csvField(price),
       csvField(link),
       csvField(imageLink),
-      csvField(p.brand || ""),
+      csvField(p.brand || base.brand || ""),
     ].join(","));
+  }
+
+  // 1) La unidad individual de cada producto.
+  Object.keys(catalogable).forEach(function (id) {
+    const p = catalogable[id];
+    const title = p.sub ? p.name + " (" + p.brand + ") — " + p.sub : p.name + " (" + p.brand + ")";
+    const description = p.composicion || p.sub || p.name;
+    pushRow(p, p, title, description);
+  });
+
+  // 2) Los packs por mayor de cada producto (mismo item_group_id que su base).
+  allProducts.forEach(function (p) {
+    if (!p.hidden) return;
+    const match = p.id.match(PACK_RE);
+    if (!match) return;
+    const baseId = p.id.slice(0, -match[0].length);
+    const base = catalogable[baseId];
+    if (!base) return;
+    const qty = match[1];
+    const description = (base.composicion || base.sub || base.name) +
+      " Disponible en pack de " + qty + " unidades para peluquerías y barberías (con factura).";
+    pushRow(p, base, p.name, description);
   });
 
   res.setHeader("Content-Type", "text/csv; charset=utf-8");
