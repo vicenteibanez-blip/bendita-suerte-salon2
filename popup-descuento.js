@@ -2,7 +2,11 @@
    BENDITA SUERTE SALÓN — popup-descuento.js
    -------------------------------------------------------------
    Popup de captura de email: 10% OFF en la primera compra de
-   PRODUCTOS (no aplica a servicios/reservas de hora).
+   PRODUCTOS.
+
+   Por decisión explícita del dueño del sitio, este popup aparece
+   en CADA carga de página (no se guarda "ya lo vio" ni se suprime
+   por 30 días) — a propósito no hay ninguna lógica de supresión acá.
 
    Cómo se integra: este archivo construye su propio HTML e inyecta
    el modal directo en <body> — la página solo necesita cargar este
@@ -10,20 +14,11 @@
    por página queda en 2 líneas, sin duplicar un bloque de HTML
    grande en cada archivo (a diferencia del modal de checkout, que
    sí vive hardcodeado en cada página).
-
-   Para pruebas/QA — resetear el popup sin esperar 30 días:
-     localStorage.removeItem("bs_popup_dismissed_at");
-     localStorage.removeItem("bs_popup_email");
-   o simplemente, desde la consola del navegador:
-     BSPopupDescuento.reset();
    ============================================================= */
 (function () {
   "use strict";
 
-  var STORAGE_DISMISSED_KEY = "bs_popup_dismissed_at";
-  var STORAGE_EMAIL_KEY = "bs_popup_email";
-  var SUPPRESS_DAYS = 30;
-  var SUPPRESS_MS = SUPPRESS_DAYS * 24 * 60 * 60 * 1000;
+  var STORAGE_EMAIL_KEY = "bs_popup_email"; // solo respaldo del último email capturado, no controla si se muestra
   var SHOW_DELAY_MS = 4000; // entre 3 y 5 segundos, pedido explícito
   var DISCOUNT_CODE = "BIENVENIDA10";
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -95,42 +90,11 @@
     });
   }
 
-  function isSuppressed() {
-    try {
-      var raw = localStorage.getItem(STORAGE_DISMISSED_KEY);
-      if (!raw) return false;
-      var dismissedAt = Number(raw);
-      if (!dismissedAt) return false;
-      return Date.now() - dismissedAt < SUPPRESS_MS;
-    } catch (e) {
-      return false; // sin acceso a localStorage (modo privado estricto): mostrar igual
-    }
-  }
-
-  function markSuppressed() {
-    try { localStorage.setItem(STORAGE_DISMISSED_KEY, String(Date.now())); } catch (e) { /* ignore */ }
-  }
-
-  // Helper de QA — se define ACÁ (fuera del bloque que depende de
-  // isSuppressed()) a propósito: si solo existiera cuando el popup se
-  // inyecta, nunca estaría disponible justo cuando hace falta, que es
-  // cuando el popup está suprimido y quieres volver a verlo.
-  window.BSPopupDescuento = {
-    reset: function () {
-      try {
-        localStorage.removeItem(STORAGE_DISMISSED_KEY);
-        localStorage.removeItem(STORAGE_EMAIL_KEY);
-      } catch (e) { /* ignore */ }
-      console.log("[BSPopupDescuento] localStorage limpio. Recarga la página para ver el popup de nuevo.");
-    },
-  };
-
   function ready(fn) {
     document.readyState !== "loading" ? fn() : document.addEventListener("DOMContentLoaded", fn);
   }
 
   ready(function () {
-    if (isSuppressed()) return;
     if (!document.body) return;
 
     document.body.insertAdjacentHTML("beforeend", HTML);
@@ -180,7 +144,7 @@
     function onKeydown(e) {
       if (e.key === "Escape") {
         e.preventDefault();
-        closePopup({ suppress: true });
+        closePopup();
       } else {
         trapFocus(e);
       }
@@ -206,23 +170,21 @@
       document.addEventListener("keydown", onKeydown);
     }
 
-    function closePopup(opts) {
-      opts = opts || {};
+    function closePopup() {
       overlay.classList.remove("is-open");
       document.body.classList.remove("popup-open-lock");
       document.removeEventListener("keydown", onKeydown);
-      if (opts.suppress) markSuppressed();
       window.setTimeout(function () {
         overlay.hidden = true;
         if (lastFocusedEl && typeof lastFocusedEl.focus === "function") lastFocusedEl.focus();
       }, 300); // debe coincidir con la duración de la transición en el CSS
     }
 
-    closeBtn.addEventListener("click", function () { closePopup({ suppress: true }); });
-    dismissBtn.addEventListener("click", function () { closePopup({ suppress: true }); });
-    successCloseBtn.addEventListener("click", function () { closePopup({ suppress: true }); });
+    closeBtn.addEventListener("click", closePopup);
+    dismissBtn.addEventListener("click", closePopup);
+    successCloseBtn.addEventListener("click", closePopup);
     overlay.addEventListener("click", function (e) {
-      if (e.target === overlay) closePopup({ suppress: true });
+      if (e.target === overlay) closePopup();
     });
 
     form.addEventListener("submit", function (e) {
@@ -242,7 +204,6 @@
 
       submitPopupEmail(email)
         .then(function () {
-          markSuppressed(); // dejó su email: no volver a mostrarlo por 30 días
           stepForm.hidden = true;
           stepSuccess.hidden = false;
           successCloseBtn.focus();
