@@ -37,7 +37,7 @@
     + '        <div id="bs-popup-step-form">'
     + '          <p class="bs-popup-kicker">¡Tu primera vez no se repite!</p>'
     + '          <h2 id="bs-popup-title" class="bs-popup-title">Empieza hoy con<br><span>10% OFF</span></h2>'
-    + '          <p id="bs-popup-desc" class="bs-popup-condition">Válido solo en tu primera compra de <strong>productos</strong> (no aplica a servicios ni reservas de hora).</p>'
+    + '          <p id="bs-popup-desc" class="bs-popup-condition">Válido solo en tu primera compra de <strong>productos</strong>.</p>'
     + '          <form id="bs-popup-form" class="bs-popup-form" novalidate>'
     + '            <div class="bs-popup-field">'
     + '              <label class="sr-only" for="bs-popup-email">Tu email</label>'
