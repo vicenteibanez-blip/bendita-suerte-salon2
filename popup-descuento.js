@@ -4,9 +4,14 @@
    Popup de captura de email: 10% OFF en la primera compra de
    PRODUCTOS.
 
-   Por decisión explícita del dueño del sitio, este popup aparece
-   en CADA carga de página (no se guarda "ya lo vio" ni se suprime
-   por 30 días) — a propósito no hay ninguna lógica de supresión acá.
+   Por decisión explícita del dueño del sitio, este popup aparece UNA
+   VEZ por sesión de navegación: sale la primera vez que se abre el
+   sitio, pero si la persona navega a otra página (ej. entra a un
+   producto) no vuelve a aparecer. Se usa sessionStorage (no
+   localStorage) a propósito: sessionStorage vive mientras la pestaña
+   sigue abierta y se borra sola al cerrarla, así que si la persona
+   cierra la pestaña y vuelve a entrar más tarde, es "una apertura
+   nueva" y el popup vuelve a salir — no hay supresión de 30 días.
 
    Cómo se integra: este archivo construye su propio HTML e inyecta
    el modal directo en <body> — la página solo necesita cargar este
@@ -19,6 +24,7 @@
   "use strict";
 
   var STORAGE_EMAIL_KEY = "bs_popup_email"; // solo respaldo del último email capturado, no controla si se muestra
+  var SESSION_SHOWN_KEY = "bs_popup_shown"; // sessionStorage: 1 aparición por pestaña/sesión
   var SHOW_DELAY_MS = 4000; // entre 3 y 5 segundos, pedido explícito
   var DISCOUNT_CODE = "BIENVENIDA10";
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -38,10 +44,6 @@
     + '              <label class="sr-only" for="bs-popup-email">Tu email</label>'
     + '              <input type="email" id="bs-popup-email" name="email" placeholder="Tu email" autocomplete="email" required />'
     + '            </div>'
-    + '            <label class="bs-popup-checkbox" for="bs-popup-consent">'
-    + '              <input type="checkbox" id="bs-popup-consent" name="consent" />'
-    + '              <span>Acepto recibir promociones y novedades por email.</span>'
-    + '            </label>'
     + '            <p class="bs-popup-social">+85 personas aprovecharon este descuento el último mes ¿Qué esperas?</p>'
     + '            <button type="submit" class="bs-popup-submit" id="bs-popup-submit" disabled>'
     + '              <span class="bs-popup-submit-text">¡Quiero mi 10% OFF!</span>'
@@ -97,6 +99,18 @@
   ready(function () {
     if (!document.body) return;
 
+    // Una sola aparición por sesión de navegación (ver comentario arriba
+    // del archivo). Se marca ACÁ, antes de programar el setTimeout, para
+    // que quede reservada la única aparición de esta sesión aunque la
+    // persona navegue a otra página antes de que se cumplan los 4s.
+    try {
+      if (sessionStorage.getItem(SESSION_SHOWN_KEY)) return;
+      sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
+    } catch (e) {
+      // Sin acceso a sessionStorage (modo privado estricto): mostrarlo
+      // igual, mejor eso que no mostrarlo nunca.
+    }
+
     document.body.insertAdjacentHTML("beforeend", HTML);
 
     var overlay = document.getElementById("bs-popup-overlay");
@@ -105,7 +119,6 @@
     var dismissBtn = document.getElementById("bs-popup-dismiss");
     var form = document.getElementById("bs-popup-form");
     var emailInput = document.getElementById("bs-popup-email");
-    var consentInput = document.getElementById("bs-popup-consent");
     var submitBtn = document.getElementById("bs-popup-submit");
     var errorEl = document.getElementById("bs-popup-error");
     var stepForm = document.getElementById("bs-popup-step-form");
@@ -115,14 +128,12 @@
     var lastFocusedEl = null;
 
     function updateSubmitState() {
-      var validEmail = EMAIL_RE.test(emailInput.value.trim());
-      submitBtn.disabled = !(validEmail && consentInput.checked);
+      submitBtn.disabled = !EMAIL_RE.test(emailInput.value.trim());
     }
     emailInput.addEventListener("input", function () {
       emailInput.classList.remove("is-invalid");
       updateSubmitState();
     });
-    consentInput.addEventListener("change", updateSubmitState);
 
     function trapFocus(e) {
       if (e.key !== "Tab") return;
@@ -195,7 +206,6 @@
         emailInput.focus();
         return;
       }
-      if (!consentInput.checked) return; // el botón ya debería estar deshabilitado, doble resguardo
 
       errorEl.hidden = true;
       submitBtn.disabled = true;

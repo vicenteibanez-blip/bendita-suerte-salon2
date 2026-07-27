@@ -131,25 +131,6 @@
 }
 .bs-popup-field input[type="email"].is-invalid { border-color: #e08a6b; }
 
-.bs-popup-checkbox {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.55rem;
-  text-align: left;
-  font-size: 0.78rem;
-  color: rgba(244, 237, 224, 0.8);
-  cursor: pointer;
-  padding-inline: 0.2rem;
-}
-.bs-popup-checkbox input {
-  margin-top: 0.15rem;
-  width: 16px;
-  height: 16px;
-  accent-color: var(--gold);
-  flex: none;
-  cursor: pointer;
-}
-
 .bs-popup-social {
   font-size: 0.78rem;
   color: rgba(244, 237, 224, 0.65);
