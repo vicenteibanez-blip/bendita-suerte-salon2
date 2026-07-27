@@ -704,7 +704,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 
 @media (min-width: 1280px) {
   .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; }
-  .team-grid { grid-template-columns: repeat(4, 1fr); }
+  .team-grid { grid-template-columns: repeat(3, 1fr); }
   .team-mascot { display: block; }
   .section-stamp { display: block; }
 }
