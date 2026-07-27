@@ -21,9 +21,15 @@
   transition: opacity 0.3s var(--ease-out);
 }
 .bs-popup-overlay.is-open { opacity: 1; }
-/* [hidden] ya lo maneja el atributo HTML nativo; la transición de
-   opacidad solo se ve al ABRIR porque partimos de display:flex +
-   opacity:0 y agregamos .is-open un frame después (ver JS). */
+/* BUG real que causaba "no puedo hacer click en nada después de cerrar
+   el popup": el atributo [hidden] del navegador aplica display:none con
+   la MISMA especificidad que la clase .bs-popup-overlay de acá arriba
+   (display:flex) — y como esta regla viene después en la cascada, le
+   ganaba a [hidden]. El overlay quedaba con opacity:0 (invisible) pero
+   seguía siendo position:fixed + inset:0 + flex, tapando toda la
+   página y comiéndose todos los clics. Esta regla fuerza que [hidden]
+   siempre gane, sin importar el orden de las reglas. */
+.bs-popup-overlay[hidden] { display: none; }
 
 .bs-popup {
   position: relative;
