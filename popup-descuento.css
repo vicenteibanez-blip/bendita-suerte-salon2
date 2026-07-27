@@ -1,0 +1,240 @@
+/* =============================================================
+   BENDITA SUERTE SALÓN — popup-descuento.css
+   -------------------------------------------------------------
+   Popup de captura de email (10% OFF primera compra de productos).
+   Usa las mismas variables de marca definidas en :root dentro de
+   styles.css (colores, tipografías, radios, easing) — este archivo
+   se carga DESPUÉS de styles.css en cada página, así que hereda
+   esas variables sin necesito redefinirlas.
+   ============================================================= */
+
+.bs-popup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 970;
+  background: rgba(8, 14, 9, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-out);
+}
+.bs-popup-overlay.is-open { opacity: 1; }
+/* [hidden] ya lo maneja el atributo HTML nativo; la transición de
+   opacidad solo se ve al ABRIR porque partimos de display:flex +
+   opacity:0 y agregamos .is-open un frame después (ver JS). */
+
+.bs-popup {
+  position: relative;
+  z-index: 971;
+  width: min(480px, 100%);
+  max-height: min(720px, 92vh);
+  overflow-y: auto;
+  border-radius: var(--radius);
+  overflow-x: hidden;
+  box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.6);
+  transform: translateY(12px) scale(0.98);
+  transition: transform 0.35s var(--ease-out);
+}
+.bs-popup-overlay.is-open .bs-popup { transform: translateY(0) scale(1); }
+
+.bs-popup-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  z-index: 3;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s var(--ease-out);
+}
+.bs-popup-close:hover { background: rgba(255, 255, 255, 0.28); }
+
+/* Imagen de fondo + overlay oscuro (55-65% pedido) para que el texto
+   blanco resalte, igual que la referencia de la tienda de hombres. */
+.bs-popup-media {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  padding: 2.6rem 1.8rem 2rem;
+}
+.bs-popup-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 18, 12, 0.6) 0%, rgba(10, 18, 12, 0.82) 55%, rgba(6, 12, 7, 0.94) 100%);
+}
+.bs-popup-content { position: relative; z-index: 1; color: var(--cream); text-align: center; }
+
+.bs-popup-kicker {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--gold);
+  margin-bottom: 0.4rem;
+}
+.bs-popup-title {
+  font-family: var(--sans);
+  font-weight: 800;
+  text-transform: uppercase;
+  font-size: clamp(1.7rem, 5vw, 2.1rem);
+  line-height: 1.15;
+  color: #fff;
+  margin-bottom: 0.7rem;
+}
+.bs-popup-title span { color: var(--gold); }
+
+.bs-popup-condition {
+  font-size: 0.86rem;
+  color: rgba(244, 237, 224, 0.85);
+  line-height: 1.5;
+  max-width: 34ch;
+  margin-inline: auto;
+  margin-bottom: 1.4rem;
+}
+.bs-popup-condition strong { color: var(--cream); }
+
+.bs-popup-form { display: flex; flex-direction: column; gap: 0.7rem; }
+
+.bs-popup-field input[type="email"] {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 0.95rem;
+  font-family: var(--sans);
+  outline: none;
+  transition: border-color 0.2s var(--ease-out), background 0.2s var(--ease-out);
+}
+.bs-popup-field input[type="email"]::placeholder { color: rgba(244, 237, 224, 0.6); }
+.bs-popup-field input[type="email"]:focus-visible {
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.14);
+}
+.bs-popup-field input[type="email"].is-invalid { border-color: #e08a6b; }
+
+.bs-popup-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  text-align: left;
+  font-size: 0.78rem;
+  color: rgba(244, 237, 224, 0.8);
+  cursor: pointer;
+  padding-inline: 0.2rem;
+}
+.bs-popup-checkbox input {
+  margin-top: 0.15rem;
+  width: 16px;
+  height: 16px;
+  accent-color: var(--gold);
+  flex: none;
+  cursor: pointer;
+}
+
+.bs-popup-social {
+  font-size: 0.78rem;
+  color: rgba(244, 237, 224, 0.65);
+  margin-top: 0.1rem;
+}
+
+.bs-popup-submit {
+  margin-top: 0.3rem;
+  width: 100%;
+  padding: 0.95rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  background: #fff;
+  color: var(--accent-deep);
+  font-weight: 700;
+  font-size: 0.98rem;
+  cursor: pointer;
+  transition: transform 0.15s var(--ease-out), opacity 0.2s var(--ease-out), background 0.2s var(--ease-out);
+}
+.bs-popup-submit:not(:disabled):hover { transform: translateY(-1px); background: var(--gold); }
+.bs-popup-submit:disabled { opacity: 0.45; cursor: not-allowed; }
+.bs-popup-submit.is-loading { opacity: 0.75; cursor: wait; }
+
+.bs-popup-error {
+  font-size: 0.8rem;
+  color: #ffb4a0;
+  margin-top: -0.2rem;
+}
+
+.bs-popup-dismiss {
+  display: block;
+  margin: 1.1rem auto 0;
+  background: none;
+  border: none;
+  color: rgba(244, 237, 224, 0.65);
+  font-size: 0.78rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+  padding: 0.3rem;
+}
+.bs-popup-dismiss:hover { color: rgba(244, 237, 224, 0.9); }
+
+/* ---------- Estado de éxito ---------- */
+.bs-popup-success { text-align: center; }
+.bs-popup-success-title {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.bs-popup-success p { font-size: 0.9rem; color: rgba(244, 237, 224, 0.85); }
+.bs-popup-code {
+  font-family: var(--sans);
+  font-weight: 800;
+  font-size: 1.6rem;
+  letter-spacing: 0.08em;
+  color: var(--gold);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1.5px dashed rgba(201, 162, 74, 0.6);
+  border-radius: var(--radius-sm);
+  padding: 0.6rem 1rem;
+  margin: 0.8rem 0;
+}
+.bs-popup-success-note { font-size: 0.78rem !important; max-width: 32ch; margin-inline: auto; }
+.bs-popup-success-close {
+  margin-top: 1.2rem;
+  width: 100%;
+  padding: 0.85rem 1.2rem;
+  border-radius: 999px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s var(--ease-out);
+}
+.bs-popup-success-close:hover { background: rgba(255, 255, 255, 0.1); }
+
+/* ---------- Bloqueo de scroll del fondo mientras el popup está abierto ---------- */
+body.popup-open-lock { overflow: hidden; }
+
+/* ---------- Mobile: casi pantalla completa con márgenes chicos ---------- */
+@media (max-width: 560px) {
+  .bs-popup-overlay { padding: 0.6rem; }
+  .bs-popup { width: 100%; max-height: 94vh; }
+  .bs-popup-media { padding: 2.2rem 1.3rem 1.6rem; }
+}
+
+/* ---------- Accesibilidad: sin animaciones para quien las desactivó ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .bs-popup-overlay, .bs-popup { transition: none; }
+}

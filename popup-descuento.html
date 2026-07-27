@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Demo — Popup 10% OFF · Bendita Suerte Salón</title>
+<meta name="robots" content="noindex, nofollow" />
+<!--
+  Página de PREVIEW/QA para el popup de descuento — no forma parte del
+  sitio publicado. Sirve para:
+    1) Ver el popup aislado, sin esperar a que cargue todo index.html.
+    2) Documentar exactamente qué archivos hay que incluir en una página
+       real: styles.css (variables de marca) + popup-descuento.css +
+       popup-descuento.js.
+  La integración real en el sitio son las mismas 2 líneas (link + script)
+  agregadas directo en el <head>/antes de </body> de cada página — ver
+  el resumen de integración que se entregó junto con este archivo.
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="popup-descuento.css" />
+<style>
+  /* Solo para esta página de demo: un fondo simple para ver el overlay */
+  body { min-height: 100vh; display: flex; align-items: center; justify-content: center; background: var(--bg-2); font-family: var(--sans); color: var(--ink); text-align: center; padding: 2rem; }
+  .demo-note { max-width: 32rem; }
+  .demo-note code { background: var(--bg-3); padding: .15rem .4rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+  <div class="demo-note">
+    <h1 style="font-family:var(--serif)">Demo del popup de descuento</h1>
+    <p style="margin-top:1rem">El popup debería aparecer solo entre 3 y 5 segundos después de cargar esta página.</p>
+    <p style="margin-top:1rem">Para volver a verlo sin esperar 30 días, abre la consola del navegador y ejecuta:<br><code>BSPopupDescuento.reset()</code><br>y recarga la página.</p>
+  </div>
+
+  <script defer src="popup-descuento.js"></script>
+</body>
+</html>
