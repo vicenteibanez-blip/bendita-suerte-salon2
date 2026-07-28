@@ -50,7 +50,7 @@
     + '          <p class="bs-popup-success-title">¡Listo! 🍀</p>'
     + '          <p>Tu código de descuento es:</p>'
     + '          <p class="bs-popup-code">' + DISCOUNT_CODE + '</p>'
-    + '          <p class="bs-popup-success-note">También te lo enviamos a tu correo. Válido solo en tu primera compra de productos.</p>'
+    + '          <p class="bs-popup-success-note">Válido solo en tu primera compra de productos.</p>'
     + '          <button type="button" class="bs-popup-success-close" id="bs-popup-success-close">Seguir navegando</button>'
     + '        </div>'
     + '      </div>'
