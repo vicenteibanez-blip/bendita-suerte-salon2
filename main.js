@@ -411,32 +411,86 @@
   }
 
   /* ---------- Carril de videos testimoniales (home) ----------
-     Mismo patrón de scroll nativo que el carril de "Completa tu
-     rutina" en las fichas de producto: los botones prev/next solo
-     empujan el scroll, sin librería externa. Al hacer clic en una
-     tarjeta, se reemplaza el poster/botón de play por el <video>
-     real y se reproduce. */
+     Carrusel "coverflow" tipo Sir Fausto: Embla centra siempre una
+     tarjeta (align:"center", loop:true) y en cada evento "scroll" se
+     recalcula qué tan lejos del centro del viewport está cada
+     tarjeta, para achicarla proporcionalmente vía --video-scale (ver
+     .video-card en styles.css). Mismo patrón de loop-clone que
+     initProductCarousel, para que el arrastre infinito no "salte" al
+     llegar al borde con solo 5 tarjetas.
+     Si se hace clic en una tarjeta que no está al centro, primero se
+     centra (scrollTo) en vez de reproducir directo — así el foco
+     siempre queda en el video del medio, como pidió el dueño. */
   function initVideoCarousel() {
-    var track = $("[data-video-carousel]");
-    if (!track) return;
-    var prev = $("[data-video-prev]");
-    var next = $("[data-video-next]");
-    var step = function () {
-      var card = $(".video-card", track);
-      return card ? card.getBoundingClientRect().width + 16 : 210;
-    };
-    if (prev) prev.addEventListener("click", function () { track.scrollBy({ left: -step(), behavior: "smooth" }); });
-    if (next) next.addEventListener("click", function () { track.scrollBy({ left: step(), behavior: "smooth" }); });
+    var wrap = $("[data-video-carousel]");
+    var viewport = $("[data-video-viewport]", wrap);
+    var container = $("[data-video-container]", wrap);
+    if (!wrap || !viewport || !container) return;
 
-    $$("[data-video-play]", track).forEach(function (btn) {
+    var prevBtn = $("[data-video-prev]", wrap);
+    var nextBtn = $("[data-video-next]", wrap);
+    var hasEmbla = typeof window.EmblaCarousel === "function";
+    var emblaApi = null;
+
+    function ensureLoopClone() {
+      var oldClone = container.querySelector(":scope > [data-loop-clone]");
+      if (oldClone) oldClone.remove();
+      var realSlides = $$(".video-card", container);
+      if (realSlides.length < 2) return;
+      var cloneWrap = document.createElement("div");
+      cloneWrap.setAttribute("data-loop-clone", "");
+      cloneWrap.setAttribute("aria-hidden", "true");
+      cloneWrap.setAttribute("inert", "");
+      cloneWrap.className = "embla__loop-clone";
+      realSlides.forEach(function (slide) { cloneWrap.appendChild(slide.cloneNode(true)); });
+      container.appendChild(cloneWrap);
+    }
+
+    function updateScale() {
+      var vpRect = viewport.getBoundingClientRect();
+      var centerX = vpRect.left + vpRect.width / 2;
+      $$(".video-card", wrap).forEach(function (slide) {
+        var r = slide.getBoundingClientRect();
+        var dist = Math.abs((r.left + r.width / 2) - centerX);
+        var norm = Math.min(dist / (vpRect.width / 2 || 1), 1);
+        var scale = 1 - norm * 0.24;
+        slide.style.setProperty("--video-scale", scale.toFixed(3));
+        slide.classList.toggle("is-center", norm < 0.2);
+      });
+    }
+
+    function reInit() {
+      if (!hasEmbla) return;
+      if (emblaApi) emblaApi.destroy();
+      ensureLoopClone();
+      emblaApi = window.EmblaCarousel(viewport, { loop: true, align: "center", containScroll: false, dragFree: false });
+      viewport.classList.add("is-embla-active");
+      wrap.classList.add("is-embla-ready");
+      emblaApi.on("scroll", updateScale);
+      emblaApi.on("reInit", updateScale);
+      updateScale();
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollPrev(); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollNext(); });
+
+    $$("[data-video-play]", wrap).forEach(function (btn) {
       btn.addEventListener("click", function () {
         var cardEl = btn.closest(".video-card");
+        if (!cardEl) return;
+        if (emblaApi && !cardEl.classList.contains("is-center")) {
+          var idx = emblaApi.slideNodes().indexOf(cardEl);
+          if (idx > -1) { emblaApi.scrollTo(idx); return; }
+        }
         var videoEl = $(".video-card-el", cardEl);
-        if (!cardEl || !videoEl) return;
+        if (!videoEl) return;
         cardEl.classList.add("is-playing");
         videoEl.play().catch(function () { /* autoplay bloqueado: el usuario ya tiene los controles nativos */ });
       });
     });
+
+    reInit();
+    window.addEventListener("resize", updateScale, { passive: true });
   }
 
   /* ---------- Boot ---------- */
