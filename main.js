@@ -411,21 +411,19 @@
   }
 
   /* ---------- Carril de videos testimoniales (home) ----------
-     "Coverflow" propio, sin librería externa (se abandonó Embla acá
-     después de varios bugs de timing: su medición interna no siempre
-     terminaba de asentarse antes de que este código leyera
-     posiciones, dejando una tarjeta con tamaño real distinto a las
-     demás hasta que algo externo forzaba un reacomodo).
+     "Coverflow" circular propio, sin librería externa. Cada tarjeta
+     es position:absolute (centrada con left:50% + transform) y
+     render() le calcula a cada una su posición según la DISTANCIA
+     CIRCULAR más corta al índice activo (circularDistance) — con 5
+     tarjetas eso da un rango -2..2, sin necesitar clones de DOM: el
+     loop es "gratis" por aritmética modular, así que al pasar del
+     último al primer elemento no hay salto ni tarjeta repetida.
 
-     Acá no hay drag ni scroll real: activeIndex indica cuál de las 5
-     tarjetas está "activa", y render() traslada la pista
-     (.video-coverflow-track) con transform: translateX() calculado a
-     mano a partir del ancho real de UNA tarjeta (medido una sola vez,
-     de forma síncrona — sin depender de que ninguna librería termine
-     de inicializar en un tick posterior). Todas las tarjetas
-     comparten el mismo flex-basis y aspect-ratio en CSS; lo único que
-     cambia entre la activa y las demás es transform:scale()+opacity,
-     nunca el tamaño real de la caja. */
+     El ancho/alto de referencia para posicionar (cardWidth/Height)
+     sale de offsetWidth/offsetHeight — nunca de getBoundingClientRect,
+     que arrastra el scale ya aplicado y rompía el cálculo si la
+     tarjeta de referencia no era la activa en ese momento (bug de la
+     versión anterior). */
   function initVideoCarousel() {
     var wrap = $("[data-video-carousel]");
     var viewport = $("[data-video-viewport]", wrap);
@@ -435,44 +433,69 @@
     var prevBtn = $("[data-video-prev]", wrap);
     var nextBtn = $("[data-video-next]", wrap);
     var cards = $$(".video-card", track);
-    if (!cards.length) return;
+    var total = cards.length;
+    if (!total) return;
 
     var activeIndex = 0;
-    var mid = (cards.length - 1) / 2; // índice que queda centrado por justify-content:center sin traslado
+
+    function circularDistance(i) {
+      var half = Math.floor(total / 2);
+      var d = ((i - activeIndex) % total + total) % total;
+      if (d > half) d -= total;
+      return d;
+    }
+
+    // Desktop (>=1024px): 5 posiciones visibles (centro + 2 a cada
+    // lado, las externas con velo blanco). Tablet (>=768px): 3
+    // posiciones (centro + 1 a cada lado). Mobile: solo asoma un
+    // borde angosto (10-15% del ancho) de las tarjetas vecinas.
+    function breakpointConfig() {
+      var w = window.innerWidth;
+      if (w >= 1024) {
+        return { maxDist: 2, innerScale: .82, innerOpacity: .88, outerScale: .67, outerOpacity: .45, innerOffsetRatio: .62, outerOffsetRatio: 1.08 };
+      }
+      if (w >= 768) {
+        return { maxDist: 1, innerScale: .82, innerOpacity: .88, outerScale: .67, outerOpacity: .45, innerOffsetRatio: .68, outerOffsetRatio: 1.08 };
+      }
+      return { maxDist: 1, innerScale: .85, innerOpacity: .45, outerScale: .67, outerOpacity: .45, innerOffsetRatio: 1.15, outerOffsetRatio: 1.08 };
+    }
 
     function render() {
-      // offsetWidth, no getBoundingClientRect(): esta última incluye el
-      // transform:scale() ya aplicado, así que si cards[0] no es la
-      // activa en este momento, devolvía el ancho YA achicado y todo el
-      // cálculo de traslado quedaba corto — offsetWidth es el ancho real
-      // de la caja (flex-basis), el mismo para las 5 sin importar la
-      // escala visual que tengan en este instante.
+      var cfg = breakpointConfig();
       var cardWidth = cards[0].offsetWidth;
-      var gap = parseFloat(getComputedStyle(track).gap) || 0;
-      var step = cardWidth + gap;
-      track.style.transform = "translateX(" + ((mid - activeIndex) * step).toFixed(1) + "px)";
+      var cardHeight = cards[0].offsetHeight;
+      track.style.height = cardHeight + "px";
 
       cards.forEach(function (card, i) {
-        var dist = Math.abs(i - activeIndex);
-        var isActive = i === activeIndex;
-        card.classList.toggle("is-active", isActive);
-        if (!isActive) {
-          var scale = Math.max(0.82 - (dist - 1) * 0.08, 0.62);
-          var op = Math.max(0.55 - (dist - 1) * 0.15, 0.28);
-          card.style.transform = "scale(" + scale.toFixed(2) + ")";
-          card.style.opacity = op.toFixed(2);
-        } else {
-          card.style.transform = "";
-          card.style.opacity = "";
-        }
-      });
+        var dist = circularDistance(i);
+        var adist = Math.abs(dist);
+        var isActive = dist === 0;
+        var isInner = adist === 1;
+        var isOuter = adist >= 2;
+        var visible = adist <= cfg.maxDist;
 
-      if (prevBtn) prevBtn.disabled = activeIndex === 0;
-      if (nextBtn) nextBtn.disabled = activeIndex === cards.length - 1;
+        card.classList.toggle("is-active", isActive);
+        card.classList.toggle("is-inner", isInner);
+        card.classList.toggle("is-outer", isOuter);
+
+        var scale, opacity, offsetRatio;
+        if (isActive) {
+          scale = 1; opacity = 1; offsetRatio = 0;
+        } else if (isInner) {
+          scale = cfg.innerScale; opacity = cfg.innerOpacity; offsetRatio = cfg.innerOffsetRatio;
+        } else {
+          scale = cfg.outerScale; opacity = cfg.outerOpacity; offsetRatio = cfg.outerOffsetRatio + (adist - 2) * 0.4;
+        }
+
+        var offsetPx = dist === 0 ? 0 : (dist / adist) * cardWidth * offsetRatio;
+        card.style.transform = "translate(-50%, -50%) translateX(" + offsetPx.toFixed(1) + "px) scale(" + scale.toFixed(2) + ")";
+        card.style.opacity = (visible || isActive) ? opacity.toFixed(2) : "0";
+        card.style.pointerEvents = (visible || isActive) ? "" : "none";
+      });
     }
 
     function goTo(index) {
-      activeIndex = Math.max(0, Math.min(cards.length - 1, index));
+      activeIndex = ((index % total) + total) % total; // módulo: loop circular real, sin clamping
       render();
     }
 
@@ -491,6 +514,19 @@
       cardEl.classList.add("is-playing");
       videoEl.play().catch(function () { /* autoplay bloqueado: el usuario ya tiene los controles nativos */ });
     });
+
+    // Swipe táctil — necesario en mobile, donde no hay drag de mouse.
+    var touchStartX = null;
+    viewport.addEventListener("touchstart", function (e) {
+      touchStartX = e.touches[0].clientX;
+    }, { passive: true });
+    viewport.addEventListener("touchend", function (e) {
+      if (touchStartX == null) return;
+      var dx = e.changedTouches[0].clientX - touchStartX;
+      touchStartX = null;
+      if (Math.abs(dx) < 40) return; // umbral mínimo, para no confundir un tap con un swipe
+      goTo(activeIndex + (dx < 0 ? 1 : -1));
+    }, { passive: true });
 
     render();
     window.addEventListener("resize", render, { passive: true });

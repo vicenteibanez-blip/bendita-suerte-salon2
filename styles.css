@@ -498,26 +498,25 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 }
 .carousel-nav button:hover { background: var(--accent-tint); transform: translateY(-2px); }
 
-/* --- Carril de videos testimoniales (home, debajo del feed de
-   productos) — "coverflow" propio, sin librería externa: la pista
-   (.video-coverflow-track) se traslada con transform: translateX()
-   calculado en main.js a partir del ancho real de una tarjeta (medido
-   una sola vez por render, sin depender de que ninguna librería
-   externa termine de "asentarse" — así se evita el bug anterior de
-   una tarjeta con tamaño real distinto). El único elemento cuyo
-   width/height cambia soy yo mismo explícitamente en las 5 tarjetas,
-   TODAS con el mismo flex-basis y aspect-ratio; lo único que varía
-   entre la activa y las demás es transform:scale() + opacity. */
-.video-coverflow { position: relative; }
+/* --- Carril de videos testimoniales — fusionado dentro de la sección
+   Productos (mismo fondo section--tint, mismo container). "Coverflow"
+   circular propio, sin librería externa: cada tarjeta es
+   position:absolute, centrada con left:50% + transform, y main.js le
+   calcula a cada una transform (translateX + scale) y opacity según
+   su distancia CIRCULAR al índice activo (con loop real vía módulo,
+   nunca clones de DOM). El ancho/alto base de las 5 tarjetas es
+   idéntico vía CSS (width + aspect-ratio) — lo único que cambia entre
+   posiciones es transform/opacity/el velo, nunca el tamaño real. */
+.video-coverflow-wrap { padding-top: 2rem; }
+.video-coverflow { position: relative; max-width: 1040px; margin: 0 auto; }
 .video-coverflow-viewport { overflow: hidden; }
-.video-coverflow-track { display: flex; align-items: center; justify-content: center; gap: 1.5rem; transition: transform .4s var(--ease-out); }
+.video-coverflow-track { position: relative; } /* alto lo fija main.js según el alto real de una tarjeta */
 .video-coverflow-arrow {
   position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%;
   background: var(--paper); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 24px -12px rgba(0,0,0,.35); z-index: 5; transition: background .3s var(--ease-out), opacity .3s var(--ease-out);
+  box-shadow: 0 10px 24px -12px rgba(0,0,0,.35); z-index: 6; transition: background .3s var(--ease-out);
 }
 .video-coverflow-arrow:hover { background: var(--accent-tint); }
-.video-coverflow-arrow:disabled { opacity: .35; cursor: default; pointer-events: none; }
 .video-coverflow-prev { left: -6px; }
 .video-coverflow-next { right: -6px; }
 @media (min-width: 720px) {
@@ -525,12 +524,20 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   .video-coverflow-next { right: -23px; }
 }
 .video-card {
-  position: relative; flex: 0 0 min(66vw, 260px); aspect-ratio: 9 / 16;
+  position: absolute; top: 50%; left: 50%; width: min(62vw, 190px); aspect-ratio: 9 / 16;
   border-radius: var(--radius); overflow: hidden; background: #10241a;
-  transform: scale(.82); opacity: .55;
-  transition: transform .4s var(--ease-out), opacity .4s var(--ease-out); z-index: 1;
+  transition: transform .4s var(--ease-out), opacity .4s var(--ease-out);
 }
-.video-card.is-active { transform: scale(1); opacity: 1; z-index: 2; box-shadow: 0 28px 60px -20px rgba(0,0,0,.55); }
+@media (min-width: 768px) { .video-card { width: 210px; } }
+@media (min-width: 1024px) { .video-card { width: 220px; } }
+.video-card.is-active { z-index: 3; box-shadow: 0 28px 60px -20px rgba(0,0,0,.55); }
+.video-card.is-inner { z-index: 2; }
+.video-card.is-outer { z-index: 1; }
+.video-card-veil {
+  position: absolute; inset: 0; background: rgba(255,255,255,.5); z-index: 3;
+  opacity: 0; transition: opacity .4s var(--ease-out); pointer-events: none;
+}
+.video-card.is-outer .video-card-veil { opacity: 1; }
 .video-card-play { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: pointer; background: none; }
 .video-card-play img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .video-card-play::after {
@@ -545,7 +552,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 }
 .video-card-play:hover .video-card-play-icon { transform: translate(-50%, -50%) scale(1.08); }
 .video-card-play-icon .icon { width: 20px; height: 20px; margin-left: 2px; }
-.video-card-info { position: absolute; left: 0; right: 0; bottom: 0; padding: .8rem .8rem .9rem; z-index: 2; pointer-events: none; }
+.video-card-info { position: absolute; left: 0; right: 0; bottom: 0; padding: .8rem .8rem .9rem; z-index: 4; pointer-events: none; }
 .video-card-info > * { pointer-events: auto; }
 .video-card-name { color: #fff; font-weight: 700; font-size: .85rem; line-height: 1.25; }
 .video-card-link { color: rgba(255,255,255,.82); font-size: .74rem; text-decoration: underline; text-underline-offset: 2px; }
@@ -743,7 +750,6 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   .embla__slide { width: 260px; }
   .embla.is-embla-ready .embla__prev,
   .embla.is-embla-ready .embla__next { display: flex; }
-  .video-card { flex-basis: 300px; }
 }
 
 @media (min-width: 960px) {
@@ -757,7 +763,6 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   .reviews-grid { grid-template-columns: repeat(3, 1fr); }
   .location-grid { grid-template-columns: 1fr .8fr; }
   .reviews-top { flex-direction: row; align-items: center; justify-content: space-between; }
-  .video-card { flex-basis: 380px; }
 }
 
 @media (min-width: 1280px) {

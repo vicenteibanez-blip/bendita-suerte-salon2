@@ -36,7 +36,7 @@
 <!-- Hero image priority -->
 <link rel="preload" as="image" href="assets/img/hero.webp?v=20260703" fetchpriority="high" />
 
-<link rel="stylesheet" href="styles.css?v=20260763" />
+<link rel="stylesheet" href="styles.css?v=20260764" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
 
 <!-- JSON-LD — Schema.org BarberShop -->
@@ -615,25 +615,18 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
         <button class="embla__next" type="button" data-embla-next aria-label="Producto siguiente"><svg class="icon" aria-hidden="true"><use href="#icon-chevron"/></svg></button>
       </div>
     </div>
-  </section>
 
-  <!-- ============================================================
-       VIDEOS TESTIMONIALES
-       -------------------------------------------------------------
-       Tarjetas listas para el video real: cada .video-card tiene un
-       <video data-video-el> con <source data-src="assets/video/...">
-       apuntando al archivo que falta subir. Mientras no exista ese
-       archivo, el botón de play simplemente no encuentra el video
-       (no rompe nada) — apenas se suba el .mp4 con ese nombre exacto,
-       la tarjeta funciona sola, sin tocar más código.
-       ============================================================ -->
-  <section class="section" id="videos-testimonios">
-    <div class="container">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Míranos en acción</span>
-        <h2 class="section-title reveal reveal-delay-1">Te mostramos cada producto en video</h2>
-        <p class="section-sub reveal reveal-delay-2">Videos cortos donde probamos y aplicamos cada cera, aceite y polvo — para que veas exactamente cómo se usan antes de comprar.</p>
-      </div>
+    <!-- ============================================================
+         VIDEOS TESTIMONIALES — fusionado en la misma sección que
+         Productos (mismo fondo, mismo container), para que no se
+         sienta como un bloque aparte. Cada .video-card tiene un
+         <video data-video-el> con <source data-src="assets/video/...">
+         apuntando al archivo que falta subir. Mientras no exista ese
+         archivo, el botón de play simplemente no encuentra el video
+         (no rompe nada) — apenas se suba el .mp4 con ese nombre
+         exacto, la tarjeta funciona sola, sin tocar más código.
+         ============================================================ -->
+    <div class="container video-coverflow-wrap" id="videos-testimonios">
       <div class="video-coverflow" data-video-carousel>
         <button class="video-coverflow-arrow video-coverflow-prev" type="button" data-video-prev aria-label="Video anterior">
           <svg class="icon" style="transform:rotate(180deg)" aria-hidden="true"><use href="#icon-chevron"/></svg>
@@ -649,6 +642,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <video class="video-card-el" data-video-el playsinline controls preload="none" poster="assets/img/products/cera-matte-wax-brown-1.webp">
               <source data-src="assets/video/testimonio-cera-matte-wax-brown.mp4" src="assets/video/testimonio-cera-matte-wax-brown.mp4" type="video/mp4" />
             </video>
+            <div class="video-card-veil" aria-hidden="true"></div>
             <div class="video-card-info">
               <p class="video-card-name">Bendita Suerte Salón</p>
               <a class="video-card-link" href="producto-cera-matte-wax-brown.html">Cera Matte Wax Brown</a>
@@ -663,6 +657,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <video class="video-card-el" data-video-el playsinline controls preload="none" poster="assets/img/products/cera-aqua-wax-orange-1.webp">
               <source data-src="assets/video/testimonio-cera-aqua-wax-orange.mp4" src="assets/video/testimonio-cera-aqua-wax-orange.mp4" type="video/mp4" />
             </video>
+            <div class="video-card-veil" aria-hidden="true"></div>
             <div class="video-card-info">
               <p class="video-card-name">Bendita Suerte Salón</p>
               <a class="video-card-link" href="producto-cera-aqua-wax-orange.html">Cera Aqua Wax Orange</a>
@@ -677,6 +672,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <video class="video-card-el" data-video-el playsinline controls preload="none" poster="assets/img/products/polvo-textura-09-1.webp">
               <source data-src="assets/video/testimonio-polvo-textura-09.mp4" src="assets/video/testimonio-polvo-textura-09.mp4" type="video/mp4" />
             </video>
+            <div class="video-card-veil" aria-hidden="true"></div>
             <div class="video-card-info">
               <p class="video-card-name">Bendita Suerte Salón</p>
               <a class="video-card-link" href="producto-polvo-textura-09.html">Polvo de Textura '09</a>
@@ -691,6 +687,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <video class="video-card-el" data-video-el playsinline controls preload="none" poster="assets/img/products/aceite-barba-maxcare-1.webp">
               <source data-src="assets/video/testimonio-aceite-barba-maxcare.mp4" src="assets/video/testimonio-aceite-barba-maxcare.mp4" type="video/mp4" />
             </video>
+            <div class="video-card-veil" aria-hidden="true"></div>
             <div class="video-card-info">
               <p class="video-card-name">Bendita Suerte Salón</p>
               <a class="video-card-link" href="producto-aceite-barba-maxcare.html">Aceite de Barba</a>
@@ -705,6 +702,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <video class="video-card-el" data-video-el playsinline controls preload="none" poster="assets/img/products/curl-cream-rolda-1.webp">
               <source data-src="assets/video/testimonio-curl-cream-rolda.mp4" src="assets/video/testimonio-curl-cream-rolda.mp4" type="video/mp4" />
             </video>
+            <div class="video-card-veil" aria-hidden="true"></div>
             <div class="video-card-info">
               <p class="video-card-name">Bendita Suerte Salón</p>
               <a class="video-card-link" href="producto-curl-cream-rolda.html">Curl Cream</a>
@@ -1306,7 +1304,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
 <script defer src="meta-events.js?v=1"></script>
 <script defer src="cart.js?v=20260753"></script>
 <script defer src="checkout.js?v=20260754"></script>
-<script defer src="main.js?v=20260759"></script>
+<script defer src="main.js?v=20260760"></script>
 <script defer src="popup-descuento.js?v=8"></script>
 </body>
 </html>
