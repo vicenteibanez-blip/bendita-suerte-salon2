@@ -4,9 +4,15 @@
    Popup de captura de email: 10% OFF en la primera compra de
    PRODUCTOS.
 
-   Por decisión explícita del dueño del sitio, este popup aparece en
-   CADA carga de página (no solo la primera vez que se entra al sitio),
-   sin ningún tipo de supresión — ni por sesión ni por 30 días.
+   Por decisión explícita del dueño del sitio, el popup funciona como
+   un "enganche de entrada": aparece cuando alguien recién entra al
+   sitio (primer link/anuncio) y cada vez que esa persona recarga la
+   página (F5) — pero NO vuelve a aparecer solo por navegar de un
+   producto a otro dentro del mismo sitio, para no ser invasivo con
+   quien ya está mirando el catálogo. Se logra combinando sessionStorage
+   (1 aparición por pestaña, sobrevive a la navegación interna) con la
+   Navigation Timing API para detectar específicamente un F5 e ignorar
+   esa marca de sesión en ese caso puntual.
 
    Cómo se integra: este archivo construye su propio HTML e inyecta
    el modal directo en <body> — la página solo necesita cargar este
@@ -19,9 +25,23 @@
   "use strict";
 
   var STORAGE_EMAIL_KEY = "bs_popup_email"; // solo respaldo del último email capturado, no controla si se muestra
+  var SESSION_SHOWN_KEY = "bs_popup_shown"; // sessionStorage: marca "ya se mostró en esta pestaña"
   var SHOW_DELAY_MS = 4000; // entre 3 y 5 segundos, pedido explícito
   var DISCOUNT_CODE = "BENDITASUERTE";
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Detecta específicamente un F5/recarga (a diferencia de navegar a otra
+  // página haciendo clic en un link, que es tipo "navigate"). Con esto el
+  // popup puede volver a aparecer en un F5 aunque ya se haya mostrado antes
+  // en esta pestaña, sin volver a aparecer solo por moverse entre productos.
+  function isReload() {
+    try {
+      var entries = performance.getEntriesByType && performance.getEntriesByType("navigation");
+      if (entries && entries.length) return entries[0].type === "reload";
+      if (performance.navigation) return performance.navigation.type === 1; // TYPE_RELOAD (API antigua)
+    } catch (e) { /* sin soporte: se asume que no es un reload */ }
+    return false;
+  }
 
   var HTML = ""
     + '<div class="bs-popup-overlay" id="bs-popup-overlay" hidden>'
@@ -82,6 +102,22 @@
 
   ready(function () {
     if (!document.body) return;
+
+    // "Enganche de entrada": se muestra al entrar por primera vez a esta
+    // pestaña, y de nuevo en cada F5 — pero no solo por navegar a otra
+    // página del sitio (ver comentario arriba del archivo).
+    var shouldShow = true;
+    try {
+      if (!isReload() && sessionStorage.getItem(SESSION_SHOWN_KEY)) {
+        shouldShow = false;
+      } else {
+        sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
+      }
+    } catch (e) {
+      // Sin acceso a sessionStorage (modo privado estricto): mostrarlo
+      // igual, mejor eso que no mostrarlo nunca.
+    }
+    if (!shouldShow) return;
 
     document.body.insertAdjacentHTML("beforeend", HTML);
 

@@ -31,8 +31,8 @@
 <body>
   <div class="demo-note">
     <h1 style="font-family:var(--serif)">Demo del popup de descuento</h1>
-    <p style="margin-top:1rem">El popup debería aparecer entre 3 y 5 segundos después de cargar esta página — y en CADA carga/recarga, sin ningún tipo de supresión (ni por sesión ni por 30 días).</p>
-    <p style="margin-top:1rem">Solo recarga la página (F5) para volver a verlo.</p>
+    <p style="margin-top:1rem">El popup debería aparecer entre 3 y 5 segundos después de cargar esta página. Es un "enganche de entrada": se muestra al entrar la primera vez y de nuevo en cada F5 (recarga real) — pero NO vuelve a salir solo por navegar a otra página del sitio en la misma pestaña.</p>
+    <p style="margin-top:1rem">Para probarlo: recarga con F5 y debería volver a salir. Para simular "navegar a otro producto" sin que salga, ejecuta en la consola <code>sessionStorage.setItem('bs_popup_shown','1')</code> y luego navega con un link normal (no F5) — no debería aparecer.</p>
   </div>
 
   <script defer src="popup-descuento.js"></script>
