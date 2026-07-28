@@ -64,31 +64,21 @@
     + '  </div>'
     + '</div>';
 
-  // ---------- Envío del email — acá se conecta el servicio real ----------
-  // TODO(integración pendiente): hoy no hay backend conectado. Reemplazar
-  // el cuerpo de esta función por la llamada real, por ejemplo:
-  //   - Mailchimp / Brevo: fetch a su API REST con la API key en un
-  //     endpoint propio (nunca la key en el frontend).
-  //   - Un endpoint propio tipo /api/popup-subscribe (mismo patrón que
-  //     ya usa el sitio en api/create-preference.js) que guarde el email
-  //     donde corresponda (planilla, base de datos, ESP).
-  //   - Google Sheets vía un webhook (ej. Apps Script publicado como Web App).
-  // Debe devolver una Promise: resolve() si se guardó bien, reject(err) si
-  // falló, para que el popup muestre el estado de error y deje reintentar.
+  // ---------- Envío del email — conectado a api/popup-subscribe.js ----------
+  // Ese endpoint guarda el email en la lista de Brevo (BREVO_API_KEY vive
+  // solo en el servidor, nunca acá). Acá igual dejamos una copia de
+  // respaldo en localStorage por si falla la red o el backend.
   function submitPopupEmail(email) {
-    return new Promise(function (resolve) {
-      // Simula la latencia de una llamada real para que se note el estado
-      // de carga del botón. Por ahora esto SIEMPRE resuelve OK porque solo
-      // guarda en localStorage — cuando se conecte el servicio real, este
-      // setTimeout se reemplaza por el fetch() de verdad (que si puede
-      // rechazar la Promise, y el bloque .catch() de abajo ya está listo
-      // para mostrarlo).
-      setTimeout(function () {
-        try {
-          localStorage.setItem(STORAGE_EMAIL_KEY, email);
-        } catch (e) { /* modo privado / storage lleno: no es crítico */ }
-        resolve();
-      }, 700);
+    try {
+      localStorage.setItem(STORAGE_EMAIL_KEY, email);
+    } catch (e) { /* modo privado / storage lleno: no es crítico */ }
+
+    return fetch("/api/popup-subscribe", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email }),
+    }).then(function (res) {
+      if (!res.ok) throw new Error("popup-subscribe respondió " + res.status);
     });
   }
 
