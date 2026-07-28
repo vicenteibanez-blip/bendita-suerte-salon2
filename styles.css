@@ -469,7 +469,7 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   font-weight: 600; font-size: .9rem;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.who-name .verified-badge { width: 14px; height: 14px; margin-left: .25rem; vertical-align: -2px; flex: none; }
+.who-name .verified-badge { display: inline-block; width: 14px; height: 14px; margin-left: .25rem; vertical-align: -2px; flex: none; }
 .review-card .who-date { font-size: .78rem; color: var(--ink-mute); }
 .review-placeholder-note {
   border: 1.5px dashed var(--line); border-radius: var(--radius-sm); padding: 1.1rem 1.3rem;
