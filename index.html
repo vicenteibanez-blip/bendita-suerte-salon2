@@ -36,7 +36,7 @@
 <!-- Hero image priority -->
 <link rel="preload" as="image" href="assets/img/hero.webp?v=20260703" fetchpriority="high" />
 
-<link rel="stylesheet" href="styles.css?v=20260756" />
+<link rel="stylesheet" href="styles.css?v=20260757" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
 
 <!-- JSON-LD — Schema.org BarberShop -->
@@ -1159,7 +1159,24 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
         </label>
       </div>
 
+      <div class="checkout-coupon">
+        <span class="checkout-coupon-label">Código de descuento (opcional)</span>
+        <div class="checkout-coupon-row">
+          <input type="text" name="coupon" id="checkout-coupon" placeholder="Ej: BENDITASUERTE" autocomplete="off" />
+          <button type="button" class="btn btn-ghost btn-sm" id="checkout-coupon-apply">Aplicar</button>
+        </div>
+        <p class="checkout-coupon-msg" id="checkout-coupon-msg" hidden></p>
+      </div>
+
       <div class="checkout-total-row">
+        <span>Subtotal</span>
+        <span id="checkout-subtotal">$0</span>
+      </div>
+      <div class="checkout-total-row checkout-discount-row" id="checkout-discount-row" hidden>
+        <span>Descuento (10%)</span>
+        <span id="checkout-discount">-$0</span>
+      </div>
+      <div class="checkout-total-row checkout-total-final">
         <span>Total a pagar</span>
         <span id="checkout-total">$0</span>
       </div>
@@ -1183,8 +1200,8 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
 <script defer src="lib/manifest.js?v=20260757"></script>
 <script defer src="meta-events.js?v=1"></script>
 <script defer src="cart.js?v=20260753"></script>
-<script defer src="checkout.js?v=20260753"></script>
+<script defer src="checkout.js?v=20260754"></script>
 <script defer src="main.js?v=20260753"></script>
-<script defer src="popup-descuento.js?v=5"></script>
+<script defer src="popup-descuento.js?v=6"></script>
 </body>
 </html>

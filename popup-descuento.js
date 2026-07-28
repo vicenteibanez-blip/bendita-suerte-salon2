@@ -4,14 +4,9 @@
    Popup de captura de email: 10% OFF en la primera compra de
    PRODUCTOS.
 
-   Por decisión explícita del dueño del sitio, este popup aparece UNA
-   VEZ por sesión de navegación: sale la primera vez que se abre el
-   sitio, pero si la persona navega a otra página (ej. entra a un
-   producto) no vuelve a aparecer. Se usa sessionStorage (no
-   localStorage) a propósito: sessionStorage vive mientras la pestaña
-   sigue abierta y se borra sola al cerrarla, así que si la persona
-   cierra la pestaña y vuelve a entrar más tarde, es "una apertura
-   nueva" y el popup vuelve a salir — no hay supresión de 30 días.
+   Por decisión explícita del dueño del sitio, este popup aparece en
+   CADA carga de página (no solo la primera vez que se entra al sitio),
+   sin ningún tipo de supresión — ni por sesión ni por 30 días.
 
    Cómo se integra: este archivo construye su propio HTML e inyecta
    el modal directo en <body> — la página solo necesita cargar este
@@ -24,9 +19,8 @@
   "use strict";
 
   var STORAGE_EMAIL_KEY = "bs_popup_email"; // solo respaldo del último email capturado, no controla si se muestra
-  var SESSION_SHOWN_KEY = "bs_popup_shown"; // sessionStorage: 1 aparición por pestaña/sesión
   var SHOW_DELAY_MS = 4000; // entre 3 y 5 segundos, pedido explícito
-  var DISCOUNT_CODE = "BIENVENIDA10";
+  var DISCOUNT_CODE = "BENDITASUERTE";
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   var HTML = ""
@@ -88,18 +82,6 @@
 
   ready(function () {
     if (!document.body) return;
-
-    // Una sola aparición por sesión de navegación (ver comentario arriba
-    // del archivo). Se marca ACÁ, antes de programar el setTimeout, para
-    // que quede reservada la única aparición de esta sesión aunque la
-    // persona navegue a otra página antes de que se cumplan los 4s.
-    try {
-      if (sessionStorage.getItem(SESSION_SHOWN_KEY)) return;
-      sessionStorage.setItem(SESSION_SHOWN_KEY, "1");
-    } catch (e) {
-      // Sin acceso a sessionStorage (modo privado estricto): mostrarlo
-      // igual, mejor eso que no mostrarlo nunca.
-    }
 
     document.body.insertAdjacentHTML("beforeend", HTML);
 

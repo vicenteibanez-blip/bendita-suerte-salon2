@@ -98,6 +98,13 @@ const PRODUCTS = {
 const MAX_QTY_PER_ITEM = 20;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Cupón de descuento del popup de captura de email (10% OFF, solo
+// productos — nunca aplica a servicios/reservas, que ni pasan por acá).
+// Nunca se confía en el descuento que calcule el navegador: acá se
+// recalcula el precio de cada ítem desde cero con este mismo código.
+const COUPON_CODE = "BENDITASUERTE";
+const COUPON_DISCOUNT_PCT = 0.10;
+
 // Valida un RUT chileno (formato + dígito verificador, módulo 11).
 // Nunca confiamos en la validación del navegador: se puede saltar con
 // devtools, así que la revisamos de nuevo acá antes de cobrar.
@@ -178,6 +185,17 @@ module.exports = async function handler(req, res) {
       unit_price: product.priceCLP,
       currency_id: "CLP",
     });
+  }
+
+  // --- Cupón de descuento (10%, aplica a todo el carrito de productos) ---
+  const couponInput = String(body.coupon || "").trim().toUpperCase();
+  const couponApplied = couponInput.length > 0 && couponInput === COUPON_CODE;
+  if (couponApplied) {
+    for (const item of mpItems) {
+      // Se redondea por unidad (no hay decimales en CLP) para que el total
+      // que ve el cliente en el carrito coincida con lo que se cobra acá.
+      item.unit_price = Math.round(item.unit_price * (1 - COUPON_DISCOUNT_PCT));
+    }
   }
 
   // --- Validar datos del cliente ---
@@ -264,6 +282,7 @@ module.exports = async function handler(req, res) {
       factura: wantsFactura ? "si" : "no",
       rut_empresa: rutEmpresa,
       razon_social: razonSocial,
+      cupon: couponApplied ? COUPON_CODE : "",
       // Cookies del Pixel de Meta (_fbp/_fbc), guardadas acá para que el
       // webhook de pago pueda mandar el evento de Compra a la API de
       // Conversiones "firmado" igual que el navegador.

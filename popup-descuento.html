@@ -31,8 +31,8 @@
 <body>
   <div class="demo-note">
     <h1 style="font-family:var(--serif)">Demo del popup de descuento</h1>
-    <p style="margin-top:1rem">El popup debería aparecer entre 3 y 5 segundos después de cargar esta página — pero solo UNA VEZ por sesión de navegación (usa sessionStorage).</p>
-    <p style="margin-top:1rem">Para volver a verlo, recarga la página con la pestaña realmente cerrada y vuelta a abrir (recargar con F5 no alcanza, porque sessionStorage sobrevive a un F5). Para forzarlo sin cerrar la pestaña, ejecuta en la consola:<br><code>sessionStorage.removeItem('bs_popup_shown')</code><br>y recarga.</p>
+    <p style="margin-top:1rem">El popup debería aparecer entre 3 y 5 segundos después de cargar esta página — y en CADA carga/recarga, sin ningún tipo de supresión (ni por sesión ni por 30 días).</p>
+    <p style="margin-top:1rem">Solo recarga la página (F5) para volver a verlo.</p>
   </div>
 
   <script defer src="popup-descuento.js"></script>

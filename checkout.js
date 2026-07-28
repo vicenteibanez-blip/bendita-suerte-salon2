@@ -38,6 +38,12 @@
     return dv === expected;
   }
 
+  // Debe coincidir EXACTO con COUPON_CODE/COUPON_DISCOUNT_PCT en
+  // api/create-preference.js — esto de acá es solo para mostrar el total
+  // correcto en pantalla; el cobro real siempre lo recalcula el servidor.
+  var COUPON_CODE = "BENDITASUERTE";
+  var COUPON_DISCOUNT_PCT = 0.10;
+
   ready(function () {
     var cartCheckoutBtn = $("#cart-checkout-btn");
     var overlay = $("#checkout-overlay");
@@ -50,6 +56,12 @@
     var facturaWrap = $("#checkout-factura");
     var rutEmpresaInput = $("#checkout-rut-empresa");
     var razonSocialInput = $("#checkout-razon-social");
+    var couponInput = $("#checkout-coupon");
+    var couponApplyBtn = $("#checkout-coupon-apply");
+    var couponMsg = $("#checkout-coupon-msg");
+    var subtotalEl = $("#checkout-subtotal");
+    var discountRow = $("#checkout-discount-row");
+    var discountEl = $("#checkout-discount");
     var totalEl = $("#checkout-total");
     var errorEl = $("#checkout-error");
     var submitBtn = $("#checkout-submit");
@@ -58,6 +70,8 @@
 
     var brand = window.__BRAND__ || {};
     var apiEndpoint = (brand.mercadopago && brand.mercadopago.apiEndpoint) || "/api/create-preference";
+
+    var appliedCoupon = null; // null o COUPON_CODE
 
     function getDeliveryType() {
       var checked = form.querySelector('input[name="entrega"]:checked');
@@ -68,7 +82,12 @@
       // El envío a domicilio es "por pagar" (se paga aparte al courier),
       // así que el total a pagar aquí es siempre solo el subtotal de productos.
       var subtotal = window.BSCart.getSubtotal();
-      if (totalEl) totalEl.textContent = window.BSCart.formatCLP(subtotal);
+      var discount = appliedCoupon ? Math.round(subtotal * COUPON_DISCOUNT_PCT) : 0;
+      var total = subtotal - discount;
+      if (subtotalEl) subtotalEl.textContent = window.BSCart.formatCLP(subtotal);
+      if (discountRow) discountRow.hidden = !appliedCoupon;
+      if (discountEl) discountEl.textContent = "-" + window.BSCart.formatCLP(discount);
+      if (totalEl) totalEl.textContent = window.BSCart.formatCLP(total);
       var isDespacho = getDeliveryType() === "despacho";
       addressWrap.hidden = !isDespacho;
       var addressInputs = addressWrap.querySelectorAll("input");
@@ -77,6 +96,27 @@
           input.required = isDespacho;
         }
       });
+    }
+
+    function applyCoupon() {
+      if (!couponInput) return;
+      var code = couponInput.value.trim().toUpperCase();
+      if (!couponMsg) { updateTotals(); return; }
+      if (!code) {
+        appliedCoupon = null;
+        couponMsg.hidden = true;
+      } else if (code === COUPON_CODE) {
+        appliedCoupon = COUPON_CODE;
+        couponMsg.textContent = "¡Código aplicado! 10% de descuento en productos.";
+        couponMsg.className = "checkout-coupon-msg is-valid";
+        couponMsg.hidden = false;
+      } else {
+        appliedCoupon = null;
+        couponMsg.textContent = "Ese código no es válido.";
+        couponMsg.className = "checkout-coupon-msg is-invalid";
+        couponMsg.hidden = false;
+      }
+      updateTotals();
     }
 
     function updateFactura() {
@@ -138,6 +178,16 @@
       radio.addEventListener("change", updateTotals);
     });
     if (facturaToggle) facturaToggle.addEventListener("change", updateFactura);
+    if (couponApplyBtn) couponApplyBtn.addEventListener("click", applyCoupon);
+    if (couponInput) {
+      couponInput.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") { e.preventDefault(); applyCoupon(); }
+      });
+      // Si borra el código después de aplicarlo, se saca el descuento solo.
+      couponInput.addEventListener("input", function () {
+        if (appliedCoupon && !couponInput.value.trim()) applyCoupon();
+      });
+    }
 
     form.addEventListener("submit", function (e) {
       e.preventDefault();
@@ -190,6 +240,9 @@
           rutEmpresa: wantsFactura ? rutEmpresa : "",
           razonSocial: wantsFactura ? (fd.get("razonSocial") || "").trim() : "",
         },
+        // El servidor vuelve a validar este código y recalcula el descuento
+        // desde cero — nunca se confía en el total que se ve acá en pantalla.
+        coupon: appliedCoupon || "",
         // _fbp/_fbc son las cookies que pone el Pixel de Meta en el navegador.
         // Se mandan al servidor para que, cuando se confirme el pago, el
         // webhook pueda enviar el evento de Compra a la API de Conversiones

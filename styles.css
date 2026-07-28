@@ -829,6 +829,23 @@ body.cart-open-lock { overflow: hidden; }
   font-size: .88rem; margin-bottom: 1rem;
 }
 
+.checkout-coupon { margin: 1.2rem 0; }
+.checkout-coupon-label { display: block; font-size: .85rem; font-weight: 600; margin-bottom: .35rem; color: var(--ink-soft); }
+.checkout-coupon-row { display: flex; gap: .5rem; }
+.checkout-coupon-row input {
+  flex: 1 1 auto; min-width: 0; padding: .75rem .9rem; border-radius: var(--radius-sm); border: 1px solid var(--line);
+  font-family: var(--sans); font-size: .95rem; color: var(--ink); background: var(--bg-2); text-transform: uppercase;
+}
+.checkout-coupon-row input::placeholder { text-transform: none; }
+.checkout-coupon-row input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.checkout-coupon-row .btn { flex: none; }
+.checkout-coupon-msg { font-size: .82rem; margin-top: .5rem; font-weight: 600; }
+.checkout-coupon-msg.is-valid { color: var(--accent-ink); }
+.checkout-coupon-msg.is-invalid { color: #a12d2d; }
+
+.checkout-discount-row { color: var(--accent-ink); }
+.checkout-total-final { font-size: 1.15rem; padding-top: .8rem; border-top: 1px solid var(--line); }
+
 @media (max-width: 640px) {
   .cart-drawer { width: 100vw; }
 }

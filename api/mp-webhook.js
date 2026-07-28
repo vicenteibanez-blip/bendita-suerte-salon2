@@ -160,6 +160,10 @@ module.exports = async function handler(req, res) {
         "</p>"
       : "";
 
+    const cuponHTML = metadata.cupon
+      ? "<p><strong>Cupón usado:</strong> " + escapeHTML(metadata.cupon) + " (10% OFF)</p>"
+      : "";
+
     const ownerHTML =
       "<h2>Nueva venta aprobada 🍀</h2>" +
       "<p><strong>Monto total:</strong> " + formatCLP(payment.transaction_amount) + "</p>" +
@@ -168,6 +172,7 @@ module.exports = async function handler(req, res) {
         "<br>Teléfono: " + escapeHTML((payer.phone && payer.phone.number) || "-") + "</p>" +
       "<p><strong>Entrega:</strong> " + entregaHTML + "</p>" +
       facturaHTML +
+      cuponHTML +
       "<p><strong>Productos:</strong></p><ul>" + itemsHTML + "</ul>" +
       "<p style=\"color:#777;font-size:.85em\">N° de operación MercadoPago: " + escapeHTML(payment.id) + "</p>";
 
