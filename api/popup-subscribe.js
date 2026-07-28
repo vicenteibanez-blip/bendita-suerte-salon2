@@ -62,10 +62,7 @@ module.exports = async function handler(req, res) {
     if (!brevoRes.ok) {
       const errText = await brevoRes.text();
       console.error("popup-subscribe: Brevo rechazó el contacto:", errText);
-      // DEBUG TEMPORAL: se manda el detalle de Brevo en la respuesta para
-      // diagnosticar más rápido por qué está fallando. Sacar este campo
-      // "detail" apenas quede funcionando — no debe quedar en producción.
-      res.status(502).json({ error: "No se pudo guardar el email en este momento.", detail: errText, brevoStatus: brevoRes.status });
+      res.status(502).json({ error: "No se pudo guardar el email en este momento." });
       return;
     }
 
