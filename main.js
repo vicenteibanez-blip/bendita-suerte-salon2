@@ -488,6 +488,14 @@
       wrap.classList.add("is-embla-ready");
       emblaApi.on("scroll", updateScale);
       emblaApi.on("reInit", updateScale);
+      // "init" es el evento que Embla dispara cuando termina de asentar
+      // el layout de este armado inicial (recién agregamos 10 clones al
+      // deck en buildSlideDeck arriba) — llamar updateScale() a mano acá
+      // mismo, antes de que Embla termine de acomodar todo, leía
+      // posiciones viejas/a medio mover y dejaba una tarjeta mal ubicada
+      // hasta que otra cosa (como el popup bloqueando el scroll) forzaba
+      // un reacomodo que de casualidad la corregía.
+      emblaApi.on("init", updateScale);
       updateScale();
     }
 
