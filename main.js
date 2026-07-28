@@ -411,133 +411,89 @@
   }
 
   /* ---------- Carril de videos testimoniales (home) ----------
-     Carrusel "coverflow" tipo Sir Fausto: Embla centra siempre una
-     tarjeta (align:"center", loop:true) y en cada evento "scroll" se
-     recalcula qué tan lejos del centro del viewport está cada
-     tarjeta, para achicarla y apagarla proporcionalmente según su
-     distancia al centro (--video-scale/--video-fade, ver .video-card
-     en styles.css) — así el foco visual queda siempre en la del medio.
+     "Coverflow" propio, sin librería externa (se abandonó Embla acá
+     después de varios bugs de timing: su medición interna no siempre
+     terminaba de asentarse antes de que este código leyera
+     posiciones, dejando una tarjeta con tamaño real distinto a las
+     demás hasta que algo externo forzaba un reacomodo).
 
-     A diferencia de initProductCarousel (que solo hace loop al
-     arrastrar hasta el borde), acá se necesita el "peek" de la
-     tarjeta anterior Y siguiente asomando DESDE LA PRIMERA CARGA, sin
-     haber arrastrado nada todavía. El loop automático de Embla no
-     alcanza a mostrar eso al inicio (recién "envuelve" un clon
-     cuando el usuario arrastra más allá del borde), así que acá se
-     arma el mazo completo a mano: un set de clones ANTES de las 5
-     tarjetas reales y otro DESPUÉS, arrancando centrado en la primera
-     tarjeta real — así siempre hay contenido real u otro clon
-     idéntico a ambos lados, sin depender del wrap automático. Los
-     clones quedan aria-hidden (para no duplicar contenido a lectores
-     de pantalla) pero SÍ interactivos — a diferencia del carril de
-     productos, acá cualquier clon puede terminar centrado con el
-     arrastre libre, y su botón de play tiene que funcionar igual. */
+     Acá no hay drag ni scroll real: activeIndex indica cuál de las 5
+     tarjetas está "activa", y render() traslada la pista
+     (.video-coverflow-track) con transform: translateX() calculado a
+     mano a partir del ancho real de UNA tarjeta (medido una sola vez,
+     de forma síncrona — sin depender de que ninguna librería termine
+     de inicializar en un tick posterior). Todas las tarjetas
+     comparten el mismo flex-basis y aspect-ratio en CSS; lo único que
+     cambia entre la activa y las demás es transform:scale()+opacity,
+     nunca el tamaño real de la caja. */
   function initVideoCarousel() {
     var wrap = $("[data-video-carousel]");
     var viewport = $("[data-video-viewport]", wrap);
-    var container = $("[data-video-container]", wrap);
-    if (!wrap || !viewport || !container) return;
+    var track = $("[data-video-container]", wrap);
+    if (!wrap || !viewport || !track) return;
 
     var prevBtn = $("[data-video-prev]", wrap);
     var nextBtn = $("[data-video-next]", wrap);
-    var hasEmbla = typeof window.EmblaCarousel === "function";
-    var emblaApi = null;
+    var cards = $$(".video-card", track);
+    if (!cards.length) return;
 
-    function buildSlideDeck() {
-      $$("[data-loop-clone]", container).forEach(function (el) { el.remove(); });
-      var realSlides = $$(".video-card:not([data-loop-clone])", container);
-      if (realSlides.length < 2) return 0;
-      var beforeFrag = document.createDocumentFragment();
-      var afterFrag = document.createDocumentFragment();
-      realSlides.forEach(function (slide) {
-        var before = slide.cloneNode(true);
-        before.setAttribute("data-loop-clone", "");
-        before.setAttribute("aria-hidden", "true");
-        beforeFrag.appendChild(before);
-        var after = slide.cloneNode(true);
-        after.setAttribute("data-loop-clone", "");
-        after.setAttribute("aria-hidden", "true");
-        afterFrag.appendChild(after);
+    var activeIndex = 0;
+    var mid = (cards.length - 1) / 2; // índice que queda centrado por justify-content:center sin traslado
+
+    function render() {
+      // offsetWidth, no getBoundingClientRect(): esta última incluye el
+      // transform:scale() ya aplicado, así que si cards[0] no es la
+      // activa en este momento, devolvía el ancho YA achicado y todo el
+      // cálculo de traslado quedaba corto — offsetWidth es el ancho real
+      // de la caja (flex-basis), el mismo para las 5 sin importar la
+      // escala visual que tengan en este instante.
+      var cardWidth = cards[0].offsetWidth;
+      var gap = parseFloat(getComputedStyle(track).gap) || 0;
+      var step = cardWidth + gap;
+      track.style.transform = "translateX(" + ((mid - activeIndex) * step).toFixed(1) + "px)";
+
+      cards.forEach(function (card, i) {
+        var dist = Math.abs(i - activeIndex);
+        var isActive = i === activeIndex;
+        card.classList.toggle("is-active", isActive);
+        if (!isActive) {
+          var scale = Math.max(0.82 - (dist - 1) * 0.08, 0.62);
+          var op = Math.max(0.55 - (dist - 1) * 0.15, 0.28);
+          card.style.transform = "scale(" + scale.toFixed(2) + ")";
+          card.style.opacity = op.toFixed(2);
+        } else {
+          card.style.transform = "";
+          card.style.opacity = "";
+        }
       });
-      container.insertBefore(beforeFrag, container.firstChild);
-      container.appendChild(afterFrag);
-      return realSlides.length; // índice de la primera tarjeta real (después del set de clones "antes")
+
+      if (prevBtn) prevBtn.disabled = activeIndex === 0;
+      if (nextBtn) nextBtn.disabled = activeIndex === cards.length - 1;
     }
 
-    function updateScale() {
-      var vpRect = viewport.getBoundingClientRect();
-      var centerX = vpRect.left + vpRect.width / 2;
-      $$(".video-card", wrap).forEach(function (slide) {
-        var r = slide.getBoundingClientRect();
-        var dist = Math.abs((r.left + r.width / 2) - centerX);
-        var norm = Math.min(dist / (vpRect.width / 2 || 1), 1);
-        var scale = 1 - norm * 0.32;
-        var fade = Math.max(1 - norm * 0.75, 0.32);
-        slide.style.setProperty("--video-scale", scale.toFixed(3));
-        slide.style.opacity = fade.toFixed(3);
-        slide.classList.toggle("is-center", norm < 0.15);
-      });
+    function goTo(index) {
+      activeIndex = Math.max(0, Math.min(cards.length - 1, index));
+      render();
     }
 
-    function reInit() {
-      if (!hasEmbla) return;
-      if (emblaApi) emblaApi.destroy();
-      var startIndex = buildSlideDeck();
-      emblaApi = window.EmblaCarousel(viewport, { loop: true, align: "center", containScroll: false, dragFree: false, startIndex: startIndex });
-      viewport.classList.add("is-embla-active");
-      wrap.classList.add("is-embla-ready");
-      emblaApi.on("scroll", updateScale);
-      emblaApi.on("reInit", updateScale);
-      // "init" es el evento que Embla dispara cuando termina de asentar
-      // el layout de este armado inicial (recién agregamos 10 clones al
-      // deck en buildSlideDeck arriba) — llamar updateScale() a mano acá
-      // mismo, antes de que Embla termine de acomodar todo, leía
-      // posiciones viejas/a medio mover y dejaba una tarjeta mal ubicada
-      // hasta que otra cosa (como el popup bloqueando el scroll) forzaba
-      // un reacomodo que de casualidad la corregía.
-      emblaApi.on("init", updateScale);
-      updateScale();
-    }
+    if (prevBtn) prevBtn.addEventListener("click", function () { goTo(activeIndex - 1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { goTo(activeIndex + 1); });
 
-    if (prevBtn) prevBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollPrev(); });
-    if (nextBtn) nextBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollNext(); });
-
-    // Delegado en "wrap" (no en cada botón individual): los clones se
-    // arman recién en buildSlideDeck(), después de que esto se
-    // ejecutaría si fuera un forEach normal — con delegación funciona
-    // igual para las tarjetas reales y para cualquier clon.
     wrap.addEventListener("click", function (e) {
       var btn = e.target.closest("[data-video-play]");
-      if (!btn || !wrap.contains(btn)) return;
+      if (!btn) return;
       var cardEl = btn.closest(".video-card");
       if (!cardEl) return;
-      if (emblaApi && !cardEl.classList.contains("is-center")) {
-        var idx = emblaApi.slideNodes().indexOf(cardEl);
-        if (idx > -1) { emblaApi.scrollTo(idx); return; }
-      }
+      var idx = cards.indexOf(cardEl);
+      if (idx !== activeIndex) { goTo(idx); return; }
       var videoEl = $(".video-card-el", cardEl);
       if (!videoEl) return;
       cardEl.classList.add("is-playing");
       videoEl.play().catch(function () { /* autoplay bloqueado: el usuario ya tiene los controles nativos */ });
     });
 
-    reInit();
-    window.addEventListener("resize", updateScale, { passive: true });
-
-    // Red de seguridad: si esto corre antes de que la fuente web o el
-    // layout terminen de asentarse, las medidas iniciales de Embla
-    // pueden quedar mal (se veía una tarjeta recortada/rara hasta que
-    // algo más adelante — como el popup de descuento bloqueando el
-    // scroll — forzaba un resize que lo arreglaba solo). Se vuelve a
-    // medir todo un par de veces más, sin esperar a que pase otra cosa.
-    function resettle() {
-      if (emblaApi) emblaApi.reInit();
-      updateScale();
-    }
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(resettle);
-    window.addEventListener("load", resettle);
-    setTimeout(resettle, 400);
-    setTimeout(resettle, 1200);
+    render();
+    window.addEventListener("resize", render, { passive: true });
   }
 
   /* ---------- Boot ---------- */
