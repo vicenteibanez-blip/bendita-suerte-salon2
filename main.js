@@ -515,6 +515,21 @@
 
     reInit();
     window.addEventListener("resize", updateScale, { passive: true });
+
+    // Red de seguridad: si esto corre antes de que la fuente web o el
+    // layout terminen de asentarse, las medidas iniciales de Embla
+    // pueden quedar mal (se veía una tarjeta recortada/rara hasta que
+    // algo más adelante — como el popup de descuento bloqueando el
+    // scroll — forzaba un resize que lo arreglaba solo). Se vuelve a
+    // medir todo un par de veces más, sin esperar a que pase otra cosa.
+    function resettle() {
+      if (emblaApi) emblaApi.reInit();
+      updateScale();
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(resettle);
+    window.addEventListener("load", resettle);
+    setTimeout(resettle, 400);
+    setTimeout(resettle, 1200);
   }
 
   /* ---------- Boot ---------- */
