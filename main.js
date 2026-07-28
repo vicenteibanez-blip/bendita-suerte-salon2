@@ -410,6 +410,35 @@
     reInit();
   }
 
+  /* ---------- Carril de videos testimoniales (home) ----------
+     Mismo patrón de scroll nativo que el carril de "Completa tu
+     rutina" en las fichas de producto: los botones prev/next solo
+     empujan el scroll, sin librería externa. Al hacer clic en una
+     tarjeta, se reemplaza el poster/botón de play por el <video>
+     real y se reproduce. */
+  function initVideoCarousel() {
+    var track = $("[data-video-carousel]");
+    if (!track) return;
+    var prev = $("[data-video-prev]");
+    var next = $("[data-video-next]");
+    var step = function () {
+      var card = $(".video-card", track);
+      return card ? card.getBoundingClientRect().width + 16 : 210;
+    };
+    if (prev) prev.addEventListener("click", function () { track.scrollBy({ left: -step(), behavior: "smooth" }); });
+    if (next) next.addEventListener("click", function () { track.scrollBy({ left: step(), behavior: "smooth" }); });
+
+    $$("[data-video-play]", track).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        var cardEl = btn.closest(".video-card");
+        var videoEl = $(".video-card-el", cardEl);
+        if (!cardEl || !videoEl) return;
+        cardEl.classList.add("is-playing");
+        videoEl.play().catch(function () { /* autoplay bloqueado: el usuario ya tiene los controles nativos */ });
+      });
+    });
+  }
+
   /* ---------- Boot ---------- */
   function boot() {
     safe(bindBrand, "bindBrand");
@@ -424,6 +453,7 @@
     safe(initYear, "initYear");
     safe(initFloatingReserve, "initFloatingReserve");
     safe(initProductCarousel, "initProductCarousel");
+    safe(initVideoCarousel, "initVideoCarousel");
     document.documentElement.classList.add("is-ready");
   }
 

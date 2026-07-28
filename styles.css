@@ -498,6 +498,45 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 }
 .carousel-nav button:hover { background: var(--accent-tint); transform: translateY(-2px); }
 
+/* --- Carril de videos testimoniales (home, debajo del feed de
+   productos) — mismo patrón de scroll nativo que .related-grid, con
+   tarjetas verticales estilo "historia" (imagen del producto como
+   poster + botón de play; al hacer clic se reemplaza por el <video>
+   real). --- */
+.video-carousel-wrap { position: relative; }
+.video-carousel {
+  display: flex; gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding-bottom: .5rem; scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+  mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
+}
+.video-carousel::-webkit-scrollbar { display: none; }
+.video-card {
+  position: relative; flex: 0 0 min(58vw, 210px); aspect-ratio: 9 / 16;
+  border-radius: var(--radius); overflow: hidden; scroll-snap-align: start; background: #10241a;
+}
+.video-card-play { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; padding: 0; cursor: pointer; background: none; }
+.video-card-play img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.video-card-play::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.7) 0%, rgba(0,0,0,.05) 42%, rgba(0,0,0,0) 62%);
+}
+.video-card-play-icon {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 54px; height: 54px; border-radius: 50%; background: rgba(255,255,255,.94);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-ink);
+  box-shadow: 0 10px 24px rgba(0,0,0,.3); transition: transform .3s var(--ease-out);
+}
+.video-card-play:hover .video-card-play-icon { transform: translate(-50%, -50%) scale(1.08); }
+.video-card-play-icon .icon { width: 20px; height: 20px; margin-left: 2px; }
+.video-card-info { position: absolute; left: 0; right: 0; bottom: 0; padding: .8rem .8rem .9rem; z-index: 2; pointer-events: none; }
+.video-card-info > * { pointer-events: auto; }
+.video-card-name { color: #fff; font-weight: 700; font-size: .85rem; line-height: 1.25; }
+.video-card-link { color: rgba(255,255,255,.82); font-size: .74rem; text-decoration: underline; text-underline-offset: 2px; }
+.video-card-el { display: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #000; }
+.video-card.is-playing .video-card-play { display: none; }
+.video-card.is-playing .video-card-el { display: block; }
+
 /* --- Parking note --- */
 .parking-note {
   display: inline-flex; align-items: center; gap: .55rem; font-size: .92rem; color: var(--accent-ink);
