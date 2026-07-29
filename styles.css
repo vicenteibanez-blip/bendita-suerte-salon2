@@ -509,14 +509,14 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
    posiciones es transform/opacity/el velo, nunca el tamaño real. */
 .video-coverflow-wrap { padding-top: 2rem; }
 .video-coverflow { position: relative; max-width: 1040px; margin: 0 auto; }
-.video-coverflow-viewport { overflow: hidden; }
+.video-coverflow-viewport { overflow: hidden; cursor: grab; }
+.video-coverflow-viewport.is-dragging { cursor: grabbing; }
 .video-coverflow-track { position: relative; } /* alto lo fija main.js según el alto real de una tarjeta */
-.video-coverflow-arrow {
-  position: absolute; top: 50%; transform: translateY(-50%); width: 46px; height: 46px; border-radius: 50%;
-  background: var(--paper); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 24px -12px rgba(0,0,0,.35); z-index: 6; transition: background .3s var(--ease-out);
-}
-.video-coverflow-arrow:hover { background: var(--accent-tint); }
+/* Flechas ocultas a pedido — se deja el botón y su listener intactos
+   (prevBtn/nextBtn, goTo()) por si se quieren mostrar de nuevo más
+   adelante; la navegación ahora vive en clic sobre tarjeta lateral +
+   arrastre (mouse/touch) + flechas de teclado. */
+.video-coverflow-arrow { display: none; }
 .video-coverflow-prev { left: -6px; }
 .video-coverflow-next { right: -6px; }
 @media (min-width: 720px) {

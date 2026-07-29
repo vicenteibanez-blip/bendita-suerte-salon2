@@ -502,7 +502,53 @@
     if (prevBtn) prevBtn.addEventListener("click", function () { goTo(activeIndex - 1); });
     if (nextBtn) nextBtn.addEventListener("click", function () { goTo(activeIndex + 1); });
 
+    // Sin flechas visibles, la navegación en desktop depende de poder
+    // arrastrar con el mouse. Si el arrastre superó el umbral hay que
+    // suprimir el click que el navegador dispara justo después del
+    // mouseup — si no, un drag terminaría también "clickeando" la
+    // tarjeta que quedó bajo el cursor.
+    var suppressClick = false;
+    var mouseStartX = null;
+    var mouseDragged = false;
+
+    function onMouseMove(e) {
+      if (mouseStartX == null) return;
+      if (Math.abs(e.clientX - mouseStartX) > 5) {
+        mouseDragged = true;
+        viewport.classList.add("is-dragging");
+      }
+    }
+    function onMouseUp(e) {
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      viewport.classList.remove("is-dragging");
+      if (mouseStartX == null) return;
+      var dx = e.clientX - mouseStartX;
+      mouseStartX = null;
+      if (mouseDragged) {
+        suppressClick = true;
+        if (Math.abs(dx) >= 40) goTo(activeIndex + (dx < 0 ? 1 : -1));
+      }
+      mouseDragged = false;
+    }
+    viewport.addEventListener("mousedown", function (e) {
+      if (e.button !== 0) return; // solo clic izquierdo
+      mouseStartX = e.clientX;
+      mouseDragged = false;
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    });
+
+    // Flechas de teclado — accesibilidad extra ahora que no hay
+    // botones de flecha visibles para navegar sin mouse ni touch.
+    wrap.tabIndex = 0;
+    wrap.addEventListener("keydown", function (e) {
+      if (e.key === "ArrowLeft") { e.preventDefault(); goTo(activeIndex - 1); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); goTo(activeIndex + 1); }
+    });
+
     wrap.addEventListener("click", function (e) {
+      if (suppressClick) { suppressClick = false; return; }
       var btn = e.target.closest("[data-video-play]");
       if (!btn) return;
       var cardEl = btn.closest(".video-card");
