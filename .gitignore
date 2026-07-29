@@ -18,6 +18,11 @@ Barberos/
 # las versiones optimizadas viven en assets/img/gallery/.
 Fotos para el feed/
 
+# Videos originales para el carrusel de testimonios (carpeta de
+# trabajo del dueño) — las copias ya renombradas/listas para el sitio
+# viven en assets/video/.
+VIDEOS DE PRODUCTO CARRUSEL/
+
 # Local environment secrets (never commit real tokens/keys)
 .env
 .env.local
