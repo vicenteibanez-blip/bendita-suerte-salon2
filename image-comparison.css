@@ -18,7 +18,7 @@
 
 .image-comparison {
   --pos: 50%;
-  max-width: 340px;
+  max-width: 260px;
   width: 100%;
   margin: 0 auto clamp(2rem, 4vw, 3rem);
   position: relative;
@@ -26,7 +26,7 @@
   border-radius: var(--radius);
   background: var(--paper);
   box-shadow: 0 26px 48px -28px rgba(20, 43, 27, .35);
-  height: 400px;
+  height: 320px;
   opacity: 0;
   transform: translateY(24px);
   filter: blur(8px);
