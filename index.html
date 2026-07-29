@@ -38,6 +38,7 @@
 
 <link rel="stylesheet" href="styles.css?v=20260766" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
+<link rel="stylesheet" href="image-comparison.css?v=1" />
 
 <!-- JSON-LD — Schema.org BarberShop -->
 <script type="application/ld+json">
@@ -845,6 +846,23 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
        ============================================================ -->
   <section class="section" id="servicios">
     <div class="container">
+
+      <!-- Comparador antes/después — ver image-comparison.css/.js -->
+      <div class="image-comparison" data-image-comparison>
+        <img class="image-comparison__img image-comparison__img--before" src="antes.png.png" alt="Corte de cabello antes del servicio" loading="lazy" decoding="async" />
+        <img class="image-comparison__img image-comparison__img--after" src="despues.png.png" alt="Corte de cabello después del servicio, degradado y textura definida" loading="lazy" decoding="async" fetchpriority="high" />
+        <div class="image-comparison__line" data-ic-line aria-hidden="true"></div>
+        <span class="image-comparison__label image-comparison__label--before" aria-hidden="true">Antes</span>
+        <span class="image-comparison__label image-comparison__label--after" aria-hidden="true">Después</span>
+        <button type="button" class="image-comparison__handle" data-ic-handle
+          role="slider" aria-label="Comparar antes y después del corte"
+          aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-orientation="horizontal" tabindex="0">
+          <svg class="image-comparison__handle-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M8 8l-4 4 4 4M16 8l4 4-4 4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      </div>
+
       <div class="section-head section-head--center">
         <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Servicios</span>
         <h2 class="section-title reveal reveal-delay-1">Lo que hacemos mejor</h2>
@@ -1321,5 +1339,6 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
 <script defer src="checkout.js?v=20260754"></script>
 <script defer src="main.js?v=20260761"></script>
 <script defer src="popup-descuento.js?v=8"></script>
+<script defer src="image-comparison.js?v=1"></script>
 </body>
 </html>

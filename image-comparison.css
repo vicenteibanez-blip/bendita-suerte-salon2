@@ -1,0 +1,153 @@
+/* =============================================================
+   BENDITA SUERTE SALÓN — image-comparison.css
+   -------------------------------------------------------------
+   Comparador interactivo antes/después, integrado dentro de la
+   sección Servicios (ver index.html). Reutiliza tokens ya
+   definidos en styles.css (--gold, --radius, --ease-out) en vez
+   de inventar paleta o easing propios, para que no se note como
+   un bloque pegado encima del diseño existente.
+
+   object-fit: contain (no cover) — antes.png/despues.png son
+   fotos retrato (928×1152, mucho más altas que anchas). Con
+   cover en un contenedor panorámico de hasta 700px de alto, el
+   recorte caía a la altura de la mandíbula/nariz, no solo en el
+   cuello — así que se decidió mostrar la foto completa, centrada,
+   con margen blanco a los costados en vez de cortar cabeza o
+   rostro (confirmado con el dueño del sitio antes de implementar).
+   ============================================================= */
+
+.image-comparison {
+  --pos: 50%;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  background: var(--paper);
+  box-shadow: 0 26px 48px -28px rgba(20, 43, 27, .35);
+  height: 450px;
+  opacity: 0;
+  transform: translateY(24px);
+  filter: blur(8px);
+  transition: opacity .8s var(--ease-out), transform .8s var(--ease-out), filter .8s var(--ease-out);
+}
+.image-comparison.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+@media (min-width: 600px) {
+  .image-comparison { height: 600px; }
+}
+@media (min-width: 1024px) {
+  .image-comparison { height: 700px; }
+}
+
+.image-comparison__img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  background: var(--paper);
+  pointer-events: none;
+  user-select: none;
+}
+/* "después" va encima y se recorta desde la izquierda a medida que
+   se arrastra, dejando ver "antes" (debajo, siempre completa) en
+   la porción descubierta — misma variable --pos que la línea y el
+   botón, nunca un cálculo aparte que se pueda desincronizar. */
+.image-comparison__img--after {
+  clip-path: inset(0 0 0 var(--pos));
+}
+
+.image-comparison__line {
+  position: absolute;
+  top: 0;
+  left: var(--pos);
+  width: 2px;
+  height: 100%;
+  background: var(--gold);
+  transform: translateX(-50%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.image-comparison__handle {
+  position: absolute;
+  top: 50%;
+  left: var(--pos);
+  transform: translate(-50%, -50%);
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: var(--gold);
+  border: 2px solid rgba(255, 255, 255, .9);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  touch-action: none;
+  z-index: 3;
+  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.image-comparison__handle:hover { transform: translate(-50%, -50%) scale(1.08); }
+.image-comparison__handle.is-dragging { cursor: grabbing; }
+.image-comparison__handle:focus-visible {
+  outline: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, .25), 0 0 0 4px rgba(201, 162, 74, .45);
+}
+/* Área de toque real siempre >=44px aunque el círculo visual sea
+   más chico en mobile (ver breakpoints abajo) — el ::before
+   transparente extiende la zona clickeable sin agrandar el dibujo. */
+.image-comparison__handle::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+}
+.image-comparison__handle-icon { width: 22px; height: 22px; color: #fff; pointer-events: none; }
+
+.image-comparison__label {
+  position: absolute;
+  top: 1rem;
+  padding: .4rem .9rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, .55);
+  color: #fff;
+  font-family: var(--sans);
+  font-size: .72rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  z-index: 2;
+  pointer-events: none;
+}
+.image-comparison__label--before { left: 1rem; }
+.image-comparison__label--after { right: 1rem; }
+
+@media (min-width: 600px) and (max-width: 1023px) {
+  .image-comparison__handle { width: 56px; height: 56px; }
+  .image-comparison__handle-icon { width: 18px; height: 18px; }
+}
+@media (max-width: 599px) {
+  .image-comparison__handle { width: 44px; height: 44px; }
+  .image-comparison__handle-icon { width: 16px; height: 16px; }
+  .image-comparison__label { font-size: .64rem; padding: .3rem .7rem; top: .7rem; }
+  .image-comparison__label--before { left: .7rem; }
+  .image-comparison__label--after { right: .7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .image-comparison {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+  .image-comparison__handle { transition: none; }
+}
