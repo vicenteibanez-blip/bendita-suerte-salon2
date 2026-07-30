@@ -3,16 +3,17 @@
    -------------------------------------------------------------
    Punto único para instrumentar eventos de negocio (view_item,
    add_to_cart, begin_checkout, purchase, reservar_click, contacto
-   WhatsApp/teléfono). Cada evento se manda por DOS caminos a la vez:
-
-   1) dataLayer.push({event:..., ecommerce:...}) — formato que espera
-      Google Tag Manager. Hoy no hay tags configurados en GTM para
-      leer esto (eso se arma desde la consola de GTM, no desde
-      código), pero el dataLayer queda listo para cuando se agreguen.
-   2) gtag('event', ...) directo — como gtag.js YA está cargado y
-      configurado (ver <head>), esto hace que GA4 y las conversiones
-      de Google Ads reciban los eventos DESDE HOY, sin depender de
-      que alguien configure GTM primero.
+   WhatsApp/teléfono). Cada evento se manda UNA sola vez, solo al
+   dataLayer (dataLayer.push({event:..., ...})) — formato que lee
+   Google Tag Manager. GTM ya está configurado con tags de GA4/Ads
+   para estos eventos, así que este archivo NUNCA debe llamar a
+   gtag('event', ...) directo para ellos: hacerlo los manda dos veces
+   (una vía GTM, otra vía la etiqueta de Google directa que también
+   está en el <head>) — eso fue justamente el bug de eventos
+   duplicados detectado en Tag Assistant. Si en algún momento se saca
+   GTM del sitio, hay que revertir este archivo a llamar gtag()
+   directo de nuevo; mientras GTM esté instalado, dataLayer.push es
+   la ÚNICA fuente de verdad para estos eventos.
 
    El "ecommerce: null" antes de cada push de comercio electrónico
    es el patrón oficial de Google para que GTM no arrastre/mezcle
@@ -31,13 +32,11 @@
   function pushEcommerce(eventName, params) {
     window.dataLayer.push({ ecommerce: null });
     window.dataLayer.push(Object.assign({ event: eventName }, { ecommerce: params }));
-    if (hasGtag()) window.gtag("event", eventName, params);
   }
 
   // Eventos simples sin estructura de ecommerce (reservar_click, contacto_whatsapp, contacto_telefono).
   function pushEvent(eventName, params) {
     window.dataLayer.push(Object.assign({ event: eventName }, params || {}));
-    if (hasGtag()) window.gtag("event", eventName, params || {});
   }
 
   // Conversión de Google Ads. sendTo = "AW-XXXXXXXXX/ETIQUETA".
@@ -95,9 +94,9 @@
       var reservarLink = e.target.closest('a[href*="setmore.com"]');
       if (reservarLink) {
         pushEvent("reservar_click", { link_url: reservarLink.href });
-        // Placeholder — reemplazar por el AW-XXXXXXXXX/ETIQUETA real de
-        // la conversión "Reserva" (ver resumen final de IDs pendientes).
-        reportAdsConversion("REEMPLAZAR_AW_RESERVA");
+        // La conversión de Ads "Reserva" se dispara desde un tag en GTM
+        // (trigger: evento personalizado "reservar_click"), no desde acá
+        // — así queda un solo camino, sin riesgo de duplicarla.
         return;
       }
       var waLink = e.target.closest('[data-bind-href="whatsapp"]');

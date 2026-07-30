@@ -65,7 +65,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
   gtag("js", new Date());
   gtag("config", "G-MQG1EN59QN");
 </script>
-<script defer src="analytics.js?v=1"></script>
+<script defer src="analytics.js?v=2"></script>
 <link rel="stylesheet" href="cookie-consent.css?v=2" />
 </head>
 <body>
@@ -128,21 +128,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               if (ec) window.BSAnalytics.setEnhancedConversionData(ec.email, ec.telefono);
             } catch (e2) { /* sin datos de contacto: la conversión igual se manda, solo sin mejora */ }
 
+            // Un solo push al dataLayer. La conversión de Ads "Compra" ya
+            // está resuelta por separado, importada directo desde GA4 (se
+            // configuró así en Ads: Conversiones → Compra → sugerencia
+            // automática del evento "purchase") — no hace falta (ni
+            // conviene) además reportarla acá con gtag('event','conversion',
+            // ...), porque duplicaría la conversión en vez de sumar datos.
             window.BSAnalytics.pushEcommerce("purchase", {
               transaction_id: eventId || "sin-referencia-" + Date.now(),
               currency: "CLP",
               value: value,
               items: cart.map(function (it) { return { item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }; }),
-            });
-
-            // Conversión de Google Ads — "REEMPLAZAR_AW_COMPRA" es un
-            // placeholder: reportAdsConversion no manda nada mientras no
-            // se reemplace por el AW-XXXXXXXXX/ETIQUETA real (ver resumen
-            // final de IDs pendientes).
-            window.BSAnalytics.reportAdsConversion("REEMPLAZAR_AW_COMPRA", {
-              value: value,
-              currency: "CLP",
-              transaction_id: eventId || "sin-referencia-" + Date.now(),
             });
           }
         }
