@@ -146,6 +146,13 @@
           currency: "CLP",
         });
       }
+      if (window.BSAnalytics) {
+        window.BSAnalytics.pushEcommerce("begin_checkout", {
+          currency: "CLP",
+          value: window.BSCart.getSubtotal(cart),
+          items: cart.map(function (it) { return { item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }; }),
+        });
+      }
     }
 
     function closeModal() {
@@ -250,6 +257,15 @@
         // bien al clic de anuncio que originó la visita.
         meta: { fbp: getCookie("_fbp"), fbc: getCookie("_fbc") },
       };
+
+      // Se guarda temporalmente para las Conversiones Mejoradas de Google
+      // Ads: en exito.html (página de compra confirmada) se usa este email/
+      // teléfono para gtag('set','user_data',...) y luego se borra, igual
+      // que se hace con el carrito — el checkout mismo nunca reporta la
+      // conversión de compra (eso pasa recién si el pago se aprueba).
+      try {
+        localStorage.setItem("bs_ec_data", JSON.stringify(payload.customer));
+      } catch (e) { /* privacy mode: sin conversiones mejoradas para esta compra */ }
 
       submitBtn.disabled = true;
       submitBtn.textContent = "Redirigiendo a MercadoPago…";

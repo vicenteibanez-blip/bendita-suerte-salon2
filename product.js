@@ -137,11 +137,33 @@
     });
   }
 
+  /* ---------- GA4: view_item ----------
+     Mismo patrón que trackViewContent (Meta): lee el botón "Comprar
+     ahora" porque initTierSelector ya le dejó puestos el id/nombre/
+     precio del tier seleccionado por defecto (x1). */
+  function trackViewItem() {
+    if (!window.BSAnalytics) return;
+    var btn = $("[data-buy-now]");
+    if (!btn) return;
+    var price = Number(btn.getAttribute("data-price")) || 0;
+    window.BSAnalytics.pushEcommerce("view_item", {
+      currency: "CLP",
+      value: price,
+      items: [{
+        item_id: btn.getAttribute("data-id"),
+        item_name: btn.getAttribute("data-name"),
+        price: price,
+        quantity: 1,
+      }],
+    });
+  }
+
   ready(function () {
     initTierSelector();
     initGallery();
     initStickyBuyBar();
     initRelatedCarousel();
     trackViewContent();
+    trackViewItem();
   });
 })();

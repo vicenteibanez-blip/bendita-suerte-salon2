@@ -74,6 +74,13 @@
         currency: "CLP",
       });
     }
+    if (window.BSAnalytics) {
+      window.BSAnalytics.pushEcommerce("add_to_cart", {
+        currency: "CLP",
+        value: Number(price) || 0,
+        items: [{ item_id: id, item_name: name, price: Number(price) || 0, quantity: 1 }],
+      });
+    }
     // No abrimos el panel automáticamente: así el cliente puede seguir agregando
     // varios productos seguidos sin que el overlay del carrito le bloquee los
     // clics sobre el resto de las tarjetas. Solo animamos el contador (badge)

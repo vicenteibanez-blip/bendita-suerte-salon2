@@ -3,6 +3,28 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- Google Consent Mode v2 (estado por defecto — antes de cualquier
+     tag de Google, incluido GTM/gtag.js). El banner de cookies
+     (cookie-consent.js) llama gtag('consent','update',...) cuando el
+     usuario decide, actualizando este estado inicial. -->
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'ad_user_data': 'denied',
+  'ad_personalization': 'denied',
+  'analytics_storage': 'denied',
+  'wait_for_update': 500
+});
+</script>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-W54RTVVH');</script>
+<!-- End Google Tag Manager -->
 <title>¡Compra exitosa! · Bendita Suerte Salón</title>
 <meta name="robots" content="noindex, follow" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,8 +65,14 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
   gtag("js", new Date());
   gtag("config", "G-MQG1EN59QN");
 </script>
+<script defer src="analytics.js?v=1"></script>
+<link rel="stylesheet" href="cookie-consent.css?v=1" />
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W54RTVVH"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 <a class="skip-link" href="#main">Saltar al contenido</a>
 <main id="main" class="container payment-result-page">
   <div class="icon-wrap">
@@ -71,22 +99,59 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
       try {
         var rawCart = localStorage.getItem("bs_cart");
         var cart = rawCart ? JSON.parse(rawCart) : [];
-        if (window.fbq && cart.length) {
+        // La condición "cart.length" es lo que evita que el evento de
+        // Compra se dispare dos veces si el cliente recarga esta página:
+        // el carrito se vacía justo debajo, así que en la recarga
+        // cart.length ya es 0 y ni Meta ni Google reciben un segundo
+        // evento para la misma compra.
+        if (cart.length) {
           var params = new URLSearchParams(window.location.search);
           var eventId = params.get("payment_id") || params.get("collection_id") || undefined;
           var value = cart.reduce(function (sum, it) { return sum + (Number(it.price) || 0) * (Number(it.qty) || 0); }, 0);
-          window.fbq("track", "Purchase", {
-            content_ids: cart.map(function (it) { return it.id; }),
-            contents: cart.map(function (it) { return { id: it.id, quantity: it.qty }; }),
-            num_items: cart.reduce(function (sum, it) { return sum + (Number(it.qty) || 0); }, 0),
-            value: value,
-            currency: "CLP",
-          }, eventId ? { eventID: eventId } : undefined);
+
+          if (window.fbq) {
+            window.fbq("track", "Purchase", {
+              content_ids: cart.map(function (it) { return it.id; }),
+              contents: cart.map(function (it) { return { id: it.id, quantity: it.qty }; }),
+              num_items: cart.reduce(function (sum, it) { return sum + (Number(it.qty) || 0); }, 0),
+              value: value,
+              currency: "CLP",
+            }, eventId ? { eventID: eventId } : undefined);
+          }
+
+          if (window.BSAnalytics) {
+            // Conversiones mejoradas: se pasa el email/teléfono ANTES del
+            // evento de conversión para que Google lo asocie a esa compra.
+            try {
+              var rawEc = localStorage.getItem("bs_ec_data");
+              var ec = rawEc ? JSON.parse(rawEc) : null;
+              if (ec) window.BSAnalytics.setEnhancedConversionData(ec.email, ec.telefono);
+            } catch (e2) { /* sin datos de contacto: la conversión igual se manda, solo sin mejora */ }
+
+            window.BSAnalytics.pushEcommerce("purchase", {
+              transaction_id: eventId || "sin-referencia-" + Date.now(),
+              currency: "CLP",
+              value: value,
+              items: cart.map(function (it) { return { item_id: it.id, item_name: it.name, price: it.price, quantity: it.qty }; }),
+            });
+
+            // Conversión de Google Ads — "REEMPLAZAR_AW_COMPRA" es un
+            // placeholder: reportAdsConversion no manda nada mientras no
+            // se reemplace por el AW-XXXXXXXXX/ETIQUETA real (ver resumen
+            // final de IDs pendientes).
+            window.BSAnalytics.reportAdsConversion("REEMPLAZAR_AW_COMPRA", {
+              value: value,
+              currency: "CLP",
+              transaction_id: eventId || "sin-referencia-" + Date.now(),
+            });
+          }
         }
       } catch (e) { /* privacy mode o carrito corrupto: no bloqueamos la página por esto */ }
 
-      // El pago fue exitoso: vaciamos el carrito guardado localmente.
+      // El pago fue exitoso: vaciamos el carrito y los datos temporales de
+      // contacto guardados localmente.
       try { localStorage.removeItem("bs_cart"); } catch (e) { /* privacy mode: ignore */ }
+      try { localStorage.removeItem("bs_ec_data"); } catch (e) { /* privacy mode: ignore */ }
 
       // Vincular WhatsApp igual que en el resto del sitio (usa window.__BRAND__ de manifest.js).
       var data = window.__BRAND__;
@@ -103,5 +168,6 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
     });
   })();
 </script>
+<script defer src="cookie-consent.js?v=1"></script>
 </body>
 </html>

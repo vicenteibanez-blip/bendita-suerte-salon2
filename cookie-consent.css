@@ -1,0 +1,55 @@
+/* =============================================================
+   BENDITA SUERTE SALÓN — cookie-consent.css
+   -------------------------------------------------------------
+   Banner de consentimiento de cookies. Reutiliza tokens del sitio
+   (--paper, --ink, --radius, --ease-out) y las clases .btn ya
+   existentes en vez de inventar un estilo de botón nuevo.
+   ============================================================= */
+.cookie-consent {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 980;
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -12px 32px -18px rgba(0, 0, 0, .3);
+  padding: 1.1rem 1.3rem;
+  transform: translateY(110%);
+  transition: transform .5s var(--ease-out);
+}
+.cookie-consent.is-visible { transform: translateY(0); }
+
+.cookie-consent-inner {
+  max-width: var(--container);
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.cookie-consent-text {
+  flex: 1 1 320px;
+  font-size: .88rem;
+  line-height: 1.55;
+  color: var(--ink-mute);
+}
+.cookie-consent-text strong { color: var(--ink); }
+.cookie-consent-actions {
+  display: flex;
+  gap: .7rem;
+  flex-wrap: wrap;
+}
+.cookie-consent-actions .btn {
+  padding: .7rem 1.4rem;
+  font-size: .88rem;
+}
+
+@media (max-width: 599px) {
+  .cookie-consent { padding: 1rem; }
+  .cookie-consent-inner { flex-direction: column; align-items: stretch; }
+  .cookie-consent-actions { justify-content: stretch; }
+  .cookie-consent-actions .btn { flex: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cookie-consent { transition: none; }
+}
