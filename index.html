@@ -59,7 +59,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- Hero image priority -->
 <link rel="preload" as="image" href="assets/img/hero.webp?v=20260703" fetchpriority="high" />
 
-<link rel="stylesheet" href="styles.css?v=20260769" />
+<link rel="stylesheet" href="styles.css?v=20260770" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
 <link rel="stylesheet" href="image-comparison.css?v=4" />
 
@@ -205,7 +205,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
   gtag("js", new Date());
   gtag("config", "G-MQG1EN59QN");
 </script>
-<script defer src="analytics.js?v=2"></script>
+<script defer src="analytics.js?v=3"></script>
 <!-- Google Ads conversion — clic en "Cómo llegar". El link ya abre en
      pestaña nueva (target="_blank"), así que la pestaña actual nunca
      se destruye al hacer clic: no hace falta el patrón de
@@ -320,11 +320,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 
-<!-- Botón flotante de reserva — siempre accesible al hacer scroll -->
-<a class="btn btn-primary floating-reserve" id="floating-reserve" href="https://benditasuertesalon.setmore.com" target="_blank" rel="noopener" aria-label="Reservar cita ahora">
-  <img src="assets/img/mascota-redonda.webp" alt="" aria-hidden="true" width="60" height="63" />
-  Reservar
-</a>
+<!-- Botón flotante de WhatsApp — siempre accesible al hacer scroll.
+     Reemplaza al botón "Reservar" anterior: como sirve tanto para
+     reservar como para consultar productos, al tocarlo despliega un
+     mini-menú de 2 intenciones en vez de ir a un solo destino fijo. -->
+<div class="wa-float" id="wa-float">
+  <div class="wa-float-menu" id="wa-float-menu" role="menu">
+    <a class="wa-float-option" href="#" target="_blank" rel="noopener" role="menuitem" data-wa-tipo="reserva">Reservar una hora</a>
+    <a class="wa-float-option" href="#" target="_blank" rel="noopener" role="menuitem" data-wa-tipo="producto">Consultar por un producto</a>
+  </div>
+  <button type="button" class="wa-float-btn" id="wa-float-btn" aria-haspopup="true" aria-expanded="false" aria-controls="wa-float-menu" aria-label="Escribir por WhatsApp">
+    <svg class="icon" aria-hidden="true"><use href="#icon-whatsapp"/></svg>
+  </button>
+</div>
 
 <main id="main">
 
@@ -1461,7 +1469,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script defer src="meta-events.js?v=1"></script>
 <script defer src="cart.js?v=20260770"></script>
 <script defer src="checkout.js?v=20260770"></script>
-<script defer src="main.js?v=20260762"></script>
+<script defer src="main.js?v=20260763"></script>
 <script defer src="popup-descuento.js?v=8"></script>
 <script defer src="image-comparison.js?v=1"></script>
 <script defer src="cookie-consent.js?v=1"></script>

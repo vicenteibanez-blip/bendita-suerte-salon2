@@ -99,9 +99,15 @@
         // — así queda un solo camino, sin riesgo de duplicarla.
         return;
       }
-      var waLink = e.target.closest('[data-bind-href="whatsapp"]');
+      // [data-wa-tipo] son las 2 opciones del botón flotante de WhatsApp
+      // (reserva/producto) — mismo evento contacto_whatsapp, con el tipo
+      // como parámetro extra para poder comparar intención en Ads/GA4.
+      var waLink = e.target.closest('[data-bind-href="whatsapp"], [data-wa-tipo]');
       if (waLink) {
-        pushEvent("contacto_whatsapp", { link_url: waLink.href });
+        var waParams = { link_url: waLink.href };
+        var tipoConsulta = waLink.getAttribute("data-wa-tipo");
+        if (tipoConsulta) waParams.tipo_consulta = tipoConsulta;
+        pushEvent("contacto_whatsapp", waParams);
         return;
       }
       var telLink = e.target.closest('a[href^="tel:"]');

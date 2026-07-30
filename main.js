@@ -23,6 +23,13 @@
     var waBase = "https://wa.me/" + data.whatsappNumber + "?text=" + waText;
     $$('[data-bind-href="whatsapp"]').forEach(function (el) { el.setAttribute("href", waBase); });
 
+    // Botón flotante de WhatsApp: 2 mensajes distintos según la intención
+    // (reservar hora vs. consultar producto), mismo número que el resto del sitio.
+    var waReservaMsg = encodeURIComponent("Hola! Me gustaría agendar una hora 💈");
+    $$('[data-wa-tipo="reserva"]').forEach(function (el) { el.setAttribute("href", "https://wa.me/" + data.whatsappNumber + "?text=" + waReservaMsg); });
+    var waProductoMsg = encodeURIComponent("Hola! Quiero consultar por un producto 🧴");
+    $$('[data-wa-tipo="producto"]').forEach(function (el) { el.setAttribute("href", "https://wa.me/" + data.whatsappNumber + "?text=" + waProductoMsg); });
+
     // Per-product WhatsApp inquiry links: "Hola, quiero consultar por <producto>"
     $$("[data-product-whatsapp]").forEach(function (el) {
       var product = el.getAttribute("data-product-whatsapp");
@@ -242,18 +249,46 @@
     if (el) el.textContent = new Date().getFullYear();
   }
 
-  /* ---------- Floating reserve button — appears after scrolling past the hero ---------- */
-  function initFloatingReserve() {
-    var btn = $("#floating-reserve");
+  /* ---------- Floating WhatsApp button — appears after scrolling past
+     the hero (igual que el botón "Reservar" que reemplaza) y despliega
+     un mini-menú de 2 intenciones al tocarlo. ---------- */
+  function initWaFloat() {
+    var wrap = $("#wa-float");
+    var toggleBtn = $("#wa-float-btn");
     var hero = $("#inicio");
-    if (!btn || !hero) return;
+    if (!wrap || !toggleBtn || !hero) return;
+
     var onScroll = function () {
       var threshold = hero.offsetHeight * 0.7;
-      if (window.scrollY > threshold) btn.classList.add("is-visible");
-      else btn.classList.remove("is-visible");
+      if (window.scrollY > threshold) wrap.classList.add("is-visible");
+      else { wrap.classList.remove("is-visible"); closeMenu(); }
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+
+    function openMenu() {
+      wrap.classList.add("is-open");
+      toggleBtn.setAttribute("aria-expanded", "true");
+    }
+    function closeMenu() {
+      wrap.classList.remove("is-open");
+      toggleBtn.setAttribute("aria-expanded", "false");
+    }
+
+    toggleBtn.addEventListener("click", function () {
+      if (wrap.classList.contains("is-open")) closeMenu(); else openMenu();
+    });
+    document.addEventListener("click", function (e) {
+      if (!wrap.contains(e.target)) closeMenu();
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeMenu();
+    });
+    // Elegir una opción cierra el menú — el propio link ya abre WhatsApp
+    // en pestaña nueva (target="_blank"), no hace falta prevenir nada acá.
+    $$(".wa-float-option", wrap).forEach(function (opt) {
+      opt.addEventListener("click", closeMenu);
+    });
   }
 
   /* ---------- Favorite (heart) toggle — local only, persisted per browser ---------- */
@@ -584,7 +619,7 @@
     safe(initCountUp, "initCountUp");
     safe(initLightbox, "initLightbox");
     safe(initYear, "initYear");
-    safe(initFloatingReserve, "initFloatingReserve");
+    safe(initWaFloat, "initWaFloat");
     safe(initProductCarousel, "initProductCarousel");
     safe(initVideoCarousel, "initVideoCarousel");
     document.documentElement.classList.add("is-ready");

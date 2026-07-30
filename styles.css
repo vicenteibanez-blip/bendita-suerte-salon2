@@ -624,15 +624,72 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .about-strip .container { max-width: 760px; }
 .about-strip p { font-size: clamp(1.05rem, 1.8vw, 1.25rem); font-family: var(--serif); font-style: italic; line-height: 1.55; color: var(--ink-soft); }
 
-/* --- Floating reserve button --- */
-.floating-reserve {
-  position: fixed; z-index: 400; right: 1.3rem; bottom: 1.3rem;
+/* --- Floating WhatsApp button ---
+   Circular, fijo abajo a la derecha, con un pulso sutil en bucle
+   (vía ::before) para llamar la atención sin ser invasivo. Aparece
+   recién después de pasar el hero, igual que el botón anterior. */
+.wa-float {
+  position: fixed; z-index: 900; right: 1.3rem;
+  bottom: calc(1.3rem + env(safe-area-inset-bottom, 0px));
   opacity: 0; transform: translateY(16px) scale(.94); pointer-events: none;
   transition: opacity .4s var(--ease-out), transform .4s var(--ease-out);
-  box-shadow: 0 16px 32px -12px rgba(20,43,27,.5);
 }
-.floating-reserve.is-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-.floating-reserve img { width: 24px; height: 24px; border-radius: 50%; flex: none; }
+.wa-float.is-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+
+.wa-float-btn {
+  position: relative;
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: #25D366;
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 12px 28px -10px rgba(20, 43, 27, .55);
+  transition: transform .25s var(--ease-out), box-shadow .25s var(--ease-out);
+}
+.wa-float-btn .icon { width: 32px; height: 32px; position: relative; z-index: 1; }
+.wa-float-btn::before {
+  content: ""; position: absolute; inset: 0; border-radius: 50%;
+  background: #25D366; opacity: .55;
+  animation: wa-float-pulse 2.4s var(--ease-out) infinite;
+}
+@keyframes wa-float-pulse {
+  0% { transform: scale(1); opacity: .55; }
+  100% { transform: scale(1.55); opacity: 0; }
+}
+/* Hover en desktop (agranda), :active en touch (achica) — mismo botón, dos gestos. */
+@media (hover: hover) and (pointer: fine) {
+  .wa-float-btn:hover { transform: scale(1.08); box-shadow: 0 16px 34px -10px rgba(20, 43, 27, .6); }
+}
+.wa-float-btn:active { transform: scale(.92); }
+
+.wa-float-menu {
+  position: absolute; right: 0; bottom: calc(100% + .8rem);
+  display: flex; flex-direction: column; gap: .5rem;
+  width: max-content; max-width: min(78vw, 260px);
+  opacity: 0; transform: translateY(10px); pointer-events: none;
+  transition: opacity .25s var(--ease-out), transform .25s var(--ease-out);
+}
+.wa-float.is-open .wa-float-menu { opacity: 1; transform: translateY(0); pointer-events: auto; }
+.wa-float-option {
+  background: var(--paper); color: var(--ink);
+  border-radius: var(--radius-sm);
+  padding: .75rem 1rem;
+  font-size: .88rem; font-weight: 600;
+  box-shadow: 0 14px 30px -14px rgba(20, 43, 27, .4);
+  transition: transform .2s var(--ease-out), background .2s var(--ease-out);
+}
+.wa-float-option:hover { background: var(--accent-tint); transform: translateX(-2px); }
+
+@media (max-width: 599px) {
+  .wa-float { right: 1rem; bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); }
+  .wa-float-btn { width: 56px; height: 56px; }
+  .wa-float-btn .icon { width: 28px; height: 28px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wa-float, .wa-float-btn, .wa-float-menu, .wa-float-option { transition: none; }
+  .wa-float-btn::before { animation: none; display: none; }
+}
 
 /* --- Brand illustration accents --- */
 .hero-logo { width: clamp(170px, 26vw, 280px); height: auto; filter: brightness(0) invert(1); margin-bottom: 1.5rem; }
