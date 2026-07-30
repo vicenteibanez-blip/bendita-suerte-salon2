@@ -445,19 +445,13 @@
       return d;
     }
 
-    // Desktop (>=1024px): 5 posiciones visibles (centro + 2 a cada
-    // lado, las externas con velo blanco). Tablet (>=768px): 3
-    // posiciones (centro + 1 a cada lado). Mobile: solo asoma un
-    // borde angosto (10-15% del ancho) de las tarjetas vecinas.
+    // Mismas proporciones/jerarquía en los 3 breakpoints (centro + 2
+    // posiciones a cada lado, exteriores con velo blanco) — lo único
+    // que cambia entre desktop/tablet/mobile es el ancho en px de la
+    // tarjeta (definido en CSS, relativo al contenedor), nunca esta
+    // relación de escalas/opacidades/offsets.
     function breakpointConfig() {
-      var w = window.innerWidth;
-      if (w >= 1024) {
-        return { maxDist: 2, innerScale: .82, innerOpacity: .88, outerScale: .67, outerOpacity: .45, innerOffsetRatio: .62, outerOffsetRatio: 1.08 };
-      }
-      if (w >= 768) {
-        return { maxDist: 1, innerScale: .82, innerOpacity: .88, outerScale: .67, outerOpacity: .45, innerOffsetRatio: .68, outerOffsetRatio: 1.08 };
-      }
-      return { maxDist: 1, innerScale: .85, innerOpacity: .45, outerScale: .67, outerOpacity: .45, innerOffsetRatio: 1.15, outerOffsetRatio: 1.08 };
+      return { maxDist: 2, innerScale: .82, innerOpacity: .88, outerScale: .67, outerOpacity: .45, innerOffsetRatio: .62, outerOffsetRatio: 1.08 };
     }
 
     function render() {
