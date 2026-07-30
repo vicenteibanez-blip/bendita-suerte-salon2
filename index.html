@@ -107,6 +107,17 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
   gtag("js", new Date());
   gtag("config", "G-MQG1EN59QN");
 </script>
+<!-- Google Ads conversion — clic en "Cómo llegar". El link ya abre en
+     pestaña nueva (target="_blank"), así que la pestaña actual nunca
+     se destruye al hacer clic: no hace falta el patrón de
+     event_callback + window.location del snippet de Google (pensado
+     para links que navegan en la misma pestaña) — solo se reporta el
+     evento y la navegación nativa del link sigue su curso normal. -->
+<script>
+function gtag_report_conversion_como_llegar() {
+  gtag('event', 'conversion', {'send_to': 'AW-18026032207/nl9RCPP1-6AcEM_YvZND'});
+}
+</script>
 </head>
 <body>
 <a class="skip-link" href="#main">Saltar al contenido</a>
@@ -1070,7 +1081,7 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
             <p class="address-block">Av. Valle Del Sol 5556<br />Puente Alto, Santiago</p>
             <span class="parking-note"><svg class="icon" aria-hidden="true"><use href="#icon-parking"/></svg>Estacionamiento gratuito disponible</span>
             <br />
-            <a class="btn btn-primary" style="margin-top:1.4rem" href="https://www.google.com/maps/dir/?api=1&destination=-33.5571081,-70.5597532&destination_place_id=0x9662d1484d0c81e5:0xa7de1b11707bbf6a" target="_blank" rel="noopener">
+            <a class="btn btn-primary" style="margin-top:1.4rem" href="https://www.google.com/maps/dir/?api=1&destination=-33.5571081,-70.5597532&destination_place_id=0x9662d1484d0c81e5:0xa7de1b11707bbf6a" target="_blank" rel="noopener" onclick="gtag_report_conversion_como_llegar();">
               <svg class="icon" aria-hidden="true"><use href="#icon-pin"/></svg> Cómo llegar
             </a>
           </div>
