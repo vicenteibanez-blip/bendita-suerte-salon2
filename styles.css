@@ -632,9 +632,15 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   position: fixed; z-index: 900; right: 1.3rem;
   bottom: calc(1.3rem + env(safe-area-inset-bottom, 0px));
   opacity: 0; transform: translateY(16px) scale(.94); pointer-events: none;
-  transition: opacity .4s var(--ease-out), transform .4s var(--ease-out);
+  transition: opacity .4s var(--ease-out), transform .4s var(--ease-out), bottom .3s var(--ease-out);
 }
 .wa-float.is-visible { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+/* Páginas de producto en mobile: se levanta por encima de la barra
+   fija de compra (#sticky-buy-bar) mientras esté visible, para que
+   no se superpongan. */
+.wa-float.is-lifted {
+  bottom: calc(var(--wa-lift, 0px) + 1rem + env(safe-area-inset-bottom, 0px));
+}
 
 .wa-float-btn {
   position: relative;

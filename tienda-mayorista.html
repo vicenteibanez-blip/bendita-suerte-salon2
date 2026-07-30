@@ -51,7 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" />
 
-<link rel="stylesheet" href="styles.css?v=20260771" />
+<link rel="stylesheet" href="styles.css?v=20260772" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
 
 <!-- Meta Pixel Code -->
@@ -88,6 +88,23 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 <a class="skip-link" href="#main">Saltar al contenido</a>
+
+<!-- Botón flotante de WhatsApp — mismo componente que en el home
+     (ver main.js initWaFloat / styles.css .wa-float). En esta página
+     no hay hero que "pasar" primero, así que aparece directo; en
+     mobile se levanta por encima de la barra fija de compra cuando
+     esta está visible. -->
+<div class="wa-float" id="wa-float">
+  <div class="wa-float-menu" id="wa-float-menu" role="menu">
+    <a class="wa-float-option" href="#" target="_blank" rel="noopener" role="menuitem" data-wa-tipo="reserva">Reservar una hora</a>
+    <a class="wa-float-option" href="#" target="_blank" rel="noopener" role="menuitem" data-wa-tipo="producto">Consultar por un producto</a>
+  </div>
+  <button type="button" class="wa-float-btn" id="wa-float-btn" aria-haspopup="true" aria-expanded="false" aria-controls="wa-float-menu" aria-label="Escribir por WhatsApp">
+    <span class="wa-float-btn-img-wrap">
+      <img class="wa-float-btn-img" src="assets/img/whatsapp-logo.png?v=1" alt="" aria-hidden="true" width="300" height="300" />
+    </span>
+  </button>
+</div>
 
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
   <symbol id="icon-dot" viewBox="0 0 32 32" fill="currentColor" stroke="none"><circle cx="16" cy="16" r="7"/></symbol>
@@ -472,7 +489,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script defer src="meta-events.js?v=1"></script>
 <script defer src="cart.js?v=20260770"></script>
 <script defer src="checkout.js?v=20260770"></script>
-<script defer src="main.js?v=20260763"></script>
+<script defer src="main.js?v=20260764"></script>
 <script defer src="popup-descuento.js?v=8"></script>
 <script defer src="cookie-consent.js?v=1"></script>
 </body>

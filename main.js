@@ -249,22 +249,48 @@
     if (el) el.textContent = new Date().getFullYear();
   }
 
-  /* ---------- Floating WhatsApp button — appears after scrolling past
-     the hero (igual que el botón "Reservar" que reemplaza) y despliega
-     un mini-menú de 2 intenciones al tocarlo. ---------- */
+  /* ---------- Floating WhatsApp button ----------
+     En el home (con hero #inicio) aparece recién al pasar el hero,
+     igual que el botón "Reservar" que reemplaza. En páginas sin hero
+     (producto, mayorista) no hay nada que "pasar" primero, así que
+     se muestra directo. Despliega un mini-menú de 2 intenciones al
+     tocarlo.
+
+     En mobile, las páginas de producto tienen su propia barra fija
+     de compra (#sticky-buy-bar, ver product.js) que también vive
+     abajo de la pantalla — si ambas estuvieran a la misma altura se
+     superpondrían, así que este botón se "levanta" por encima de esa
+     barra mientras esté visible (MutationObserver sobre su clase
+     is-visible, para no depender del orden de los scroll listeners
+     de cada script). */
   function initWaFloat() {
     var wrap = $("#wa-float");
     var toggleBtn = $("#wa-float-btn");
     var hero = $("#inicio");
-    if (!wrap || !toggleBtn || !hero) return;
+    var stickyBar = $("#sticky-buy-bar");
+    if (!wrap || !toggleBtn) return;
 
-    var onScroll = function () {
-      var threshold = hero.offsetHeight * 0.7;
-      if (window.scrollY > threshold) wrap.classList.add("is-visible");
-      else { wrap.classList.remove("is-visible"); closeMenu(); }
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
+    if (hero) {
+      var onScroll = function () {
+        var threshold = hero.offsetHeight * 0.7;
+        if (window.scrollY > threshold) wrap.classList.add("is-visible");
+        else { wrap.classList.remove("is-visible"); closeMenu(); }
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+    } else {
+      wrap.classList.add("is-visible");
+    }
+
+    if (stickyBar) {
+      var syncLift = function () {
+        var lifted = stickyBar.classList.contains("is-visible");
+        wrap.classList.toggle("is-lifted", lifted);
+        if (lifted) wrap.style.setProperty("--wa-lift", stickyBar.offsetHeight + "px");
+      };
+      syncLift();
+      new MutationObserver(syncLift).observe(stickyBar, { attributes: true, attributeFilter: ["class"] });
+    }
 
     function openMenu() {
       wrap.classList.add("is-open");
