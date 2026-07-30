@@ -537,12 +537,12 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
    tarjetas laterales queden cortadas a una tira mínima. */
 .video-card {
   position: absolute; top: 50%; left: 50%;
-  width: clamp(125px, calc(42vw - 10.08px), 190px);
+  width: clamp(150px, calc(48vw - 11.52px), 215px);
   aspect-ratio: 9 / 16;
   border-radius: var(--radius); overflow: hidden; background: #10241a;
   transition: transform .4s var(--ease-out), opacity .4s var(--ease-out);
 }
-@media (min-width: 768px) { .video-card { width: calc(36vw - 17.28px); } }
+@media (min-width: 768px) { .video-card { width: min(37vw, 300px); } }
 @media (min-width: 1024px) { .video-card { width: 220px; } }
 .video-card.is-active { z-index: 3; box-shadow: 0 28px 60px -20px rgba(0,0,0,.55); }
 .video-card.is-inner { z-index: 2; }
@@ -586,11 +586,11 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
    vea más chico — solo se reduce el dibujo para que no domine una
    tarjeta angosta. */
 @media (max-width: 767px) {
-  .video-card-play-icon { width: 46px; height: 46px; }
-  .video-card-play-icon .icon { width: 18px; height: 18px; }
-  .video-card-name { font-size: .78rem; }
-  .video-card-tag { font-size: .66rem; }
-  .video-card-info { padding: .6rem .65rem .7rem; }
+  .video-card-play-icon { width: 50px; height: 50px; }
+  .video-card-play-icon .icon { width: 19px; height: 19px; }
+  .video-card-name { font-size: .82rem; }
+  .video-card-tag { font-size: .7rem; }
+  .video-card-info { padding: .65rem .7rem .75rem; }
 }
 
 /* --- Parking note --- */
