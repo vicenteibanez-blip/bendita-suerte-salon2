@@ -5,30 +5,30 @@
    (--paper, --ink, --radius, --ease-out) y las clases .btn ya
    existentes en vez de inventar un estilo de botón nuevo.
    ============================================================= */
+/* Tarjeta flotante (no barra de borde a borde) — ancla abajo a la
+   izquierda para no toparse con el botón flotante "Reservar" (abajo
+   a la derecha, ver .floating-reserve en styles.css). */
 .cookie-consent {
   position: fixed;
-  left: 0; right: 0; bottom: 0;
+  left: 1.1rem; right: 1.1rem; bottom: 1.1rem;
+  max-width: 420px;
   z-index: 980;
   background: var(--paper);
-  border-top: 1px solid var(--line);
-  box-shadow: 0 -12px 32px -18px rgba(0, 0, 0, .3);
-  padding: 1.1rem 1.3rem;
-  transform: translateY(110%);
+  border-radius: var(--radius);
+  box-shadow: 0 26px 48px -20px rgba(20, 43, 27, .35);
+  padding: 1.2rem 1.3rem;
+  transform: translateY(calc(100% + 1.5rem));
   transition: transform .5s var(--ease-out);
 }
 .cookie-consent.is-visible { transform: translateY(0); }
 
 .cookie-consent-inner {
-  max-width: var(--container);
-  margin-inline: auto;
   display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: .9rem;
 }
 .cookie-consent-text {
-  flex: 1 1 320px;
-  font-size: .88rem;
+  font-size: .84rem;
   line-height: 1.55;
   color: var(--ink-mute);
 }
@@ -36,18 +36,15 @@
 .cookie-consent-actions {
   display: flex;
   gap: .7rem;
-  flex-wrap: wrap;
 }
 .cookie-consent-actions .btn {
-  padding: .7rem 1.4rem;
-  font-size: .88rem;
+  flex: 1;
+  padding: .65rem 1.1rem;
+  font-size: .86rem;
 }
 
-@media (max-width: 599px) {
-  .cookie-consent { padding: 1rem; }
-  .cookie-consent-inner { flex-direction: column; align-items: stretch; }
-  .cookie-consent-actions { justify-content: stretch; }
-  .cookie-consent-actions .btn { flex: 1; }
+@media (max-width: 480px) {
+  .cookie-consent { left: .75rem; right: .75rem; bottom: .75rem; padding: 1.05rem 1.1rem; }
 }
 
 @media (prefers-reduced-motion: reduce) {
