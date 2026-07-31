@@ -1,0 +1,198 @@
+/* =============================================================
+   BENDITA SUERTE SALÓN — pdp-redesign.css
+   -------------------------------------------------------------
+   Rediseño de ficha de producto orientado a conversión B2B
+   (barberías comprando por volumen) sin perder al cliente detalle.
+   Archivo nuevo, aparte de styles.css, para no tocar ningún otro
+   archivo/página mientras se prueba en una sola ficha
+   (producto-cera-matte-pomade-green.html). Reutiliza los tokens de
+   marca ya definidos en styles.css (--accent-deep #142b1b, --gold,
+   --radius, --ease-out, --sans/--serif, etc.) — no se define ningún
+   color/tipografía nueva acá.
+   ============================================================= */
+
+/* ---------- Beneficios rápidos (arriba del todo, hero) ---------- */
+.pdp-quick-benefits {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .6rem;
+  margin: 1.1rem 0 0;
+}
+.pdp-quick-benefit {
+  display: flex; align-items: center; gap: .5rem;
+  font-size: .78rem; font-weight: 600; color: var(--ink-soft);
+  background: var(--bg-2); border: 1px solid var(--line);
+  border-radius: var(--radius-sm); padding: .55rem .7rem;
+}
+.pdp-quick-benefit .icon { width: 17px; height: 17px; color: var(--accent-strong); flex: none; }
+
+/* ---------- Selector mayorista B2B ---------- */
+.tier-card { position: relative; }
+.tier-persona {
+  display: block; font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+  text-transform: uppercase; color: var(--ink-mute); margin-bottom: .3rem;
+}
+.tier-compare { font-size: .74rem; color: var(--ink-mute); text-decoration: line-through; margin-top: .1rem; }
+.tier-invoice-badge {
+  display: inline-flex; align-items: center; gap: .3rem; margin-top: .5rem;
+  font-size: .68rem; font-weight: 600; color: var(--accent-ink);
+  background: var(--accent-tint); border-radius: 999px; padding: .25rem .55rem;
+}
+.tier-invoice-badge .icon { width: 12px; height: 12px; }
+/* Único tier con tratamiento visual destacado — a propósito, nunca
+   más de uno (ver Ley de Hick: demasiadas opciones "iguales" en
+   jerarquía paralizan la decisión en vez de ayudarla). */
+.tier-card--featured {
+  border-color: var(--accent-strong);
+  background: linear-gradient(165deg, var(--accent-tint), var(--paper));
+  box-shadow: 0 16px 32px -18px rgba(20,43,27,.35);
+}
+.tier-featured-badge {
+  position: absolute; top: -.7rem; left: 50%; transform: translateX(-50%);
+  max-width: calc(100% - .4rem); width: max-content;
+  text-align: center; line-height: 1.25;
+  font-size: .64rem; font-weight: 700;
+  background: var(--accent-strong); color: #fff;
+  border-radius: 999px; padding: .3rem .55rem;
+  box-shadow: 0 6px 14px -6px rgba(20,43,27,.5);
+}
+.tier-note-badge {
+  display: block; font-size: .68rem; font-weight: 600; color: var(--ink-mute); margin-top: .45rem;
+}
+
+.pdp-b2b-banner {
+  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
+  margin-top: 1.1rem; padding: .9rem 1.1rem;
+  background: var(--accent-deep); color: var(--cream);
+  border-radius: var(--radius-sm); font-size: .84rem; line-height: 1.5;
+}
+.pdp-b2b-banner .icon { width: 22px; height: 22px; flex: none; color: var(--accent); }
+.pdp-b2b-banner a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+
+/* ---------- Video + prueba social (sección única) ---------- */
+.pdp-proof {
+  display: grid; grid-template-columns: 1fr; gap: 1.6rem;
+  align-items: center;
+}
+.pdp-proof-video {
+  /* width:100% explícito porque, dentro de un grid item, margin-inline:auto
+     + aspect-ratio sin un width propio colapsaba la caja a 0x0 (el auto
+     margin activa un sizing "fit-content" que, sin contenido intrínseco
+     — el placeholder de adentro es position:absolute — no tiene de dónde
+     sacar un tamaño). Con width:100% ya no depende de ese cálculo. */
+  position: relative; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin-inline: auto;
+  border-radius: var(--radius); overflow: hidden; background: #10241a;
+  box-shadow: 0 28px 52px -24px rgba(20,43,27,.5);
+}
+.pdp-proof-video video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pdp-proof-video-caption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: .9rem 1rem;
+  background: linear-gradient(to top, rgba(0,0,0,.75), transparent);
+  color: #fff; font-size: .82rem; font-weight: 600; pointer-events: none;
+}
+.pdp-proof-sound-btn {
+  position: absolute; top: .8rem; right: .8rem; width: 38px; height: 38px; border-radius: 50%;
+  background: rgba(0,0,0,.55); color: #fff; display: flex; align-items: center; justify-content: center;
+  backdrop-filter: blur(2px);
+}
+.pdp-proof-sound-btn .icon { width: 17px; height: 17px; }
+
+.pdp-testimonial-featured {
+  padding: 1.6rem 1.7rem; max-width: 420px; margin-inline: auto;
+  display: flex; flex-direction: column; gap: .9rem;
+}
+.pdp-testimonial-featured .stars { display: flex; gap: 2px; color: var(--gold); }
+.pdp-testimonial-featured .stars .icon { width: 16px; height: 16px; }
+.pdp-testimonial-featured blockquote { font-size: 1.08rem; color: var(--ink-soft); font-family: var(--serif); font-style: italic; line-height: 1.5; }
+.pdp-testimonial-who { display: flex; align-items: center; gap: .8rem; }
+.pdp-testimonial-photo {
+  width: 52px; height: 52px; border-radius: 50%; overflow: hidden; flex: none; position: relative;
+  background: linear-gradient(150deg, var(--accent-tint), var(--bg-3));
+}
+.pdp-testimonial-photo img { width: 100%; height: 100%; object-fit: cover; }
+.pdp-testimonial-photo .pdp-photo-placeholder { padding: 0; gap: .1rem; }
+.pdp-testimonial-photo .pdp-photo-placeholder .icon { width: 40%; height: 40%; min-width: 0; min-height: 0; }
+.pdp-testimonial-photo .pdp-photo-placeholder span { display: none; } /* sin espacio en un avatar chico — la etiqueta va en el texto de al lado */
+.pdp-testimonial-name { font-weight: 700; font-size: .95rem; display: flex; align-items: center; gap: .35rem; }
+.pdp-testimonial-role { font-size: .8rem; color: var(--ink-mute); }
+.pdp-testimonial-photo-note { font-size: .7rem; color: #b5842a; font-weight: 700; margin-top: -.4rem; }
+
+/* ---------- Por qué funciona (tarjetas de beneficio) ---------- */
+.pdp-benefit-cards {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem;
+}
+.pdp-benefit-card {
+  display: flex; flex-direction: column; align-items: center; gap: .6rem; text-align: center;
+  padding: 1.3rem 1rem;
+}
+.pdp-benefit-card .icon-wrap {
+  width: 46px; height: 46px; border-radius: 12px; background: var(--accent-tint); color: var(--accent-ink);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.pdp-benefit-card .icon-wrap .icon { width: 22px; height: 22px; }
+.pdp-benefit-card p { font-weight: 700; font-size: .88rem; color: var(--ink); }
+
+/* ---------- Ideal para / No es para ti ---------- */
+.pdp-ideal-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+.pdp-ideal-col { padding: 1.4rem 1.5rem; }
+.pdp-ideal-col h3 { font-size: 1rem; margin-bottom: .8rem; }
+.pdp-ideal-col ul { display: flex; flex-direction: column; gap: .55rem; }
+.pdp-ideal-col li { display: flex; align-items: flex-start; gap: .6rem; font-size: .92rem; color: var(--ink-soft); }
+.pdp-ideal-col .icon { width: 17px; height: 17px; flex: none; margin-top: .1rem; }
+.pdp-ideal-col--yes .icon { color: var(--accent-strong); }
+.pdp-ideal-col--no { background: var(--bg-2); }
+.pdp-ideal-col--no .icon { color: #c23b3b; }
+
+/* ---------- Cómo usar (visual, 3 pasos) ---------- */
+.pdp-steps-visual { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
+.pdp-step-visual { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .6rem; }
+.pdp-step-visual .step-num {
+  width: 40px; height: 40px; border-radius: 50%; background: var(--accent-strong); color: #fff;
+  font-family: var(--serif); font-weight: 700; font-size: 1.1rem;
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.pdp-step-visual p { font-size: .92rem; color: var(--ink-soft); }
+
+/* ---------- Qué acabado deja (barras) ---------- */
+.pdp-finish { display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: center; }
+.pdp-finish-bars { display: flex; flex-direction: column; gap: 1.1rem; }
+.pdp-finish-bar-label { display: flex; justify-content: space-between; font-size: .86rem; font-weight: 600; margin-bottom: .4rem; }
+.pdp-finish-bar-label span:last-child { color: var(--ink-mute); font-weight: 500; }
+.pdp-finish-bar-track { height: 8px; border-radius: 999px; background: var(--bg-3); overflow: hidden; }
+.pdp-finish-bar-fill { height: 100%; border-radius: 999px; background: var(--accent-strong); }
+.pdp-finish-note { font-size: .74rem; color: var(--ink-mute); margin-top: .4rem; font-style: italic; }
+
+/* ---------- Comparativa: tarjetas en mobile, tabla en desktop ---------- */
+.compare-cards { display: flex; flex-direction: column; gap: .7rem; }
+.compare-card { padding: 1rem 1.2rem; display: flex; flex-direction: column; gap: .5rem; }
+.compare-card h4 { font-size: .88rem; color: var(--ink-mute); font-weight: 600; }
+.compare-card-row { display: flex; align-items: center; gap: .5rem; font-size: .9rem; }
+.compare-card-row.is-ours { color: var(--accent-ink); font-weight: 700; }
+.compare-card-row.is-generic { color: var(--ink-mute); }
+.compare-card-row .icon { width: 15px; height: 15px; flex: none; }
+.compare-card-row.is-ours .icon { color: var(--accent-strong); }
+.compare-card-row.is-generic .icon { color: #c23b3b; }
+
+@media (min-width: 640px) {
+  .pdp-quick-benefits { grid-template-columns: repeat(4, 1fr); }
+  .pdp-benefit-cards { grid-template-columns: repeat(3, 1fr); }
+  .pdp-ideal-grid { grid-template-columns: 1fr 1fr; }
+  .pdp-steps-visual { grid-template-columns: repeat(3, 1fr); }
+  .pdp-proof { grid-template-columns: 320px 1fr; }
+}
+
+@media (min-width: 900px) {
+  .pdp-benefit-cards { grid-template-columns: repeat(5, 1fr); }
+  .pdp-finish { grid-template-columns: 1fr 1fr; }
+}
+
+/* Tabla solo en pantallas donde entra cómoda sin scroll horizontal;
+   abajo de eso, tarjetas — nunca tabla con scroll lateral. */
+.compare-cards { display: flex; }
+.compare-wrap { display: none; }
+@media (min-width: 640px) {
+  .compare-cards { display: none; }
+  .compare-wrap { display: block; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pdp-finish-bar-fill { transition: none; }
+}
