@@ -341,22 +341,22 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .shop-card-visual {
   aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center;
   background: linear-gradient(150deg, var(--accent-tint), var(--bg-3)); color: var(--accent-ink);
+  /* Contenedor de la foto con su propio límite de recorte — antes solo
+     .shop-card (la tarjeta completa) tenía overflow:hidden, así que una
+     imagen con zoom podía "pintar" fuera de este cuadro y encimarse con
+     el título/precio de abajo sin llegar a salirse de la tarjeta entera.
+     Ahora el límite está acá, en el contenedor de la imagen mismo. */
+  overflow: hidden;
+  position: relative;
 }
 .shop-card-visual .icon { width: 52px; height: 52px; stroke-width: 1.3; }
-.shop-card-visual img { width: 100%; height: 100%; object-fit: cover; }
-/* Ajuste puntual SOLO para las 4 fotos donde el envase se ve más chico
-   que en el resto de la grilla (mismo problema de encuadre en la toma
-   original, no de esta tarjeta) — Cera Deluxe Matte Pasta Fuchsia,
-   Cera Deluxe Matte Wax Peony, Cera Aqua Wax Red y Cera Cream Wax
-   Fiber Effect. Como las fotos ya son cuadradas (1400x1400), acá
-   object-position no recorta nada — el zoom real lo hace
-   transform-origin: como las fotos originales tienen mucho espacio
-   vacío arriba (maceta/planta) y el frasco queda en la mitad inferior,
-   el origen se corre hacia abajo (61.9%) para que, al escalar, se
-   recorte sobre todo espacio vacío de arriba y se mantenga el frasco
-   completo (probado recortando la imagen con el mismo cálculo antes
-   de aplicarlo, para no cortar la tapa ni la etiqueta). */
-.shop-card-visual-img--zoom { transform: scale(1.32); transform-origin: center 61.9%; }
+/* Una sola regla de recorte, igual para las 15 fotos — sin ajustes
+   manuales por imagen (eso fue lo que generó el bug de superposición
+   la vez anterior). Si alguna foto puntual queda visiblemente más
+   chica/grande que el resto con esta regla uniforme, hay que
+   recortarla o volver a tomarla pareja a las demás — no forzarla más
+   con CSS. */
+.shop-card-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
 .shop-card-info { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
 /* Envuelve precio+nombre+línea en un solo link (además de la foto) para
    que en mobile baste con tocar cualquier parte de esa info para abrir
