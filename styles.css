@@ -344,10 +344,11 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 }
 .shop-card-visual .icon { width: 52px; height: 52px; stroke-width: 1.3; }
 .shop-card-visual img { width: 100%; height: 100%; object-fit: cover; }
-/* Ajuste puntual SOLO para las 2 fotos donde el envase se ve más chico
+/* Ajuste puntual SOLO para las 4 fotos donde el envase se ve más chico
    que en el resto de la grilla (mismo problema de encuadre en la toma
-   original, no de esta tarjeta) — Cera Deluxe Matte Pasta Fuchsia y
-   Cera Aqua Wax Red. Como las fotos ya son cuadradas (1400x1400), acá
+   original, no de esta tarjeta) — Cera Deluxe Matte Pasta Fuchsia,
+   Cera Deluxe Matte Wax Peony, Cera Aqua Wax Red y Cera Cream Wax
+   Fiber Effect. Como las fotos ya son cuadradas (1400x1400), acá
    object-position no recorta nada — el zoom real lo hace
    transform-origin: como las fotos originales tienen mucho espacio
    vacío arriba (maceta/planta) y el frasco queda en la mitad inferior,
