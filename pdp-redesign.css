@@ -58,14 +58,34 @@
   display: block; font-size: .68rem; font-weight: 600; color: var(--ink-mute); margin-top: .45rem;
 }
 
-.pdp-b2b-banner {
-  display: flex; align-items: center; gap: .8rem; flex-wrap: wrap;
-  margin-top: 1.1rem; padding: .9rem 1.1rem;
-  background: var(--accent-deep); color: var(--cream);
-  border-radius: var(--radius-sm); font-size: .84rem; line-height: 1.5;
+/* ---------- Franja de confianza / información comercial ----------
+   Componente reutilizable para cualquier ficha de producto (no
+   específico de esta cera): 4 beneficios cortos con ícono + título +
+   detalle secundario, en una franja compacta antes del precio. Los
+   divisores de 1px salen solos del gap del grid pintado con
+   var(--line) de fondo (mismo truco en las 4 columnas de desktop y
+   en las 2 de mobile) — no hay bloque de color sólido dominante como
+   el banner anterior, así no compite con el precio/CTA de abajo. */
+.pdp-trust-strip {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  margin-top: 1.1rem; background: var(--line);
+  border: 1px solid var(--line); border-radius: var(--radius-sm);
+  overflow: hidden;
 }
-.pdp-b2b-banner .icon { width: 22px; height: 22px; flex: none; color: var(--accent); }
-.pdp-b2b-banner a { color: #fff; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
+.pdp-trust-item {
+  display: flex; align-items: flex-start; gap: .55rem;
+  padding: .65rem .75rem; background: var(--bg-2);
+  text-decoration: none; color: inherit;
+}
+.pdp-trust-item .icon { width: 18px; height: 18px; flex: none; margin-top: .1rem; color: var(--accent-strong); }
+.pdp-trust-item-title { display: block; font-size: .78rem; font-weight: 700; color: var(--ink); line-height: 1.25; }
+.pdp-trust-item-sub { display: block; font-size: .68rem; color: var(--ink-mute); line-height: 1.3; margin-top: .1rem; }
+.pdp-trust-item--link:hover .pdp-trust-item-title,
+.pdp-trust-item--link:focus-visible .pdp-trust-item-title { text-decoration: underline; text-underline-offset: 2px; }
+
+@media (min-width: 640px) {
+  .pdp-trust-strip { grid-template-columns: repeat(4, 1fr); }
+}
 
 /* ---------- Video + prueba social (sección única) ---------- */
 .pdp-proof {
