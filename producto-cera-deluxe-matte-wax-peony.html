@@ -57,6 +57,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <link rel="stylesheet" href="styles.css?v=20260775" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
+<link rel="stylesheet" href="pdp-redesign.css?v=1" />
 
 <!-- JSON-LD — Schema.org Product -->
 <script type="application/ld+json">
@@ -302,44 +303,63 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fórmula profesional ROQVEL</li>
           </ul>
 
-          <p class="tier-legend">Elige tu cantidad</p>
+          <div class="pdp-quick-benefits">
+            <div class="pdp-quick-benefit"><svg class="icon" aria-hidden="true"><use href="#icon-truck"/></svg> Envío rápido</div>
+            <div class="pdp-quick-benefit"><svg class="icon" aria-hidden="true"><use href="#icon-shield"/></svg> Pago seguro</div>
+            <div class="pdp-quick-benefit"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura disponible</div>
+            <div class="pdp-quick-benefit"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Cambios 10 días</div>
+          </div>
+
+          <p class="tier-legend">Compra para tu barbería</p>
           <div class="tier-grid">
             <label class="tier-card">
+              <span class="tier-persona">Uso personal</span>
               <input type="radio" name="qty-tier" checked data-qty="1" data-unit-price="12000" data-total-price="12000"
                 data-sku="cera-deluxe-matte-wax-peony" data-sku-name="Cera Deluxe Matte Wax Peony (ROQVEL)" />
-              <div class="tier-qty">1x</div>
-              <div class="tier-unit">$12.000 c/u</div>
+              <div class="tier-qty">1 unidad</div>
               <div class="tier-total">$12.000</div>
+              <div class="tier-unit">$12.000 c/u</div>
             </label>
             <label class="tier-card">
-              <span class="tier-badge">Más elegido</span>
+              <span class="tier-persona">Barbería pequeña</span>
               <input type="radio" name="qty-tier" data-qty="6" data-unit-price="8500" data-total-price="51000"
                 data-sku="cera-deluxe-matte-wax-peony-pack6" data-sku-name="Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x6" />
-              <div class="tier-qty">6x</div>
-              <div class="tier-unit">$8.500 c/u</div>
+              <div class="tier-qty">6 unidades</div>
               <div class="tier-total">$51.000</div>
-              <div class="tier-save">Ahorras $21.000</div>
-              <div class="tier-wholesale-note">Ideal para peluquerías y barberías · con factura</div>
+              <div class="tier-compare">$12.000 c/u</div>
+              <div class="tier-unit">$8.500 c/u</div>
+              <div class="tier-save">Ahorra 29%</div>
+              <span class="tier-invoice-badge"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura incluida</span>
             </label>
             <label class="tier-card">
+              <span class="tier-persona">Barbería profesional</span>
               <input type="radio" name="qty-tier" data-qty="12" data-unit-price="7700" data-total-price="92400"
                 data-sku="cera-deluxe-matte-wax-peony-pack12" data-sku-name="Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x12 (mayorista)" />
-              <div class="tier-qty">12x</div>
-              <div class="tier-unit">$7.700 c/u</div>
+              <div class="tier-qty">12 unidades</div>
               <div class="tier-total">$92.400</div>
-              <div class="tier-save">Ahorras $51.600</div>
-              <div class="tier-wholesale-note">Ideal para peluquerías y barberías · con factura</div>
+              <div class="tier-compare">$12.000 c/u</div>
+              <div class="tier-unit">$7.700 c/u</div>
+              <div class="tier-save">Ahorra 36%</div>
+              <span class="tier-invoice-badge"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura incluida</span>
             </label>
-            <label class="tier-card">
-              <span class="tier-badge">Mejor precio</span>
+            <label class="tier-card tier-card--featured">
+              <span class="tier-featured-badge">⭐ Recomendado</span>
+              <span class="tier-persona">Distribuidor</span>
               <input type="radio" name="qty-tier" data-qty="24" data-unit-price="7200" data-total-price="172800"
                 data-sku="cera-deluxe-matte-wax-peony-pack24" data-sku-name="Cera Deluxe Matte Wax Peony (ROQVEL) — Pack x24 (mayorista)" />
-              <div class="tier-qty">24x</div>
-              <div class="tier-unit">$7.200 c/u</div>
+              <div class="tier-qty">24 unidades</div>
               <div class="tier-total">$172.800</div>
-              <div class="tier-save">Ahorras $115.200</div>
-              <div class="tier-wholesale-note">Ideal para peluquerías y barberías · con factura</div>
+              <div class="tier-compare">$12.000 c/u</div>
+              <div class="tier-unit">$7.200 c/u</div>
+              <div class="tier-save">Ahorra 40%</div>
+              <span class="tier-invoice-badge"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura incluida</span>
+              <span class="tier-note-badge">Mejor precio por unidad</span>
             </label>
+          </div>
+
+          <div class="pdp-b2b-banner">
+            <svg class="icon" aria-hidden="true"><use href="#icon-truck"/></svg>
+            <span>🏪 ¿Compras para tu barbería? Despachamos a todo Chile y emitimos factura. ¿Necesitas más de 24 unidades? <a href="tienda-mayorista.html">Escríbenos por precios de distribuidor →</a></span>
           </div>
 
           <div class="pdp-buybox" id="pdp-buybox">
@@ -373,103 +393,156 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   <!-- ============================================================
-       RESEÑA DEL PRODUCTO — beneficios / cómo se usa / ingredientes
+       ASÍ SE APLICA — video/proof + testimonio único destacado
        ============================================================ -->
-  <section class="section section--tint" id="detalle">
-    <div class="container" style="max-width:920px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Sobre el producto</span>
-        <h2 class="section-title reveal reveal-delay-1">Todo lo que necesitas saber</h2>
-      </div>
-
-      <div class="pdp-accordion">
-        <details class="pdp-accordion-item card reveal">
-          <summary>Beneficios</summary>
-          <div class="pdp-accordion-body">
-            <ul class="benefits-list">
-              <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fijación fuerte todo el día sin apelmazar.</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Acabado 100% mate, sin efecto grasoso.</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> No deja residuos blancos ni caspa de producto.</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fácil de reaplicar y remodelar durante el día.</li>
-              <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Rinde muchas aplicaciones — el bote dura semanas de uso diario.</li>
-            </ul>
+  <section class="section section--tint" id="testimonios">
+    <div class="container" style="max-width:1000px">
+      <div class="pdp-proof reveal reveal-delay-2">
+        <!-- FALTA: video real de aplicación (vertical, en loop, silenciado
+             por defecto) para este producto — no existe todavía, así que
+             se deja el bloque preparado con un placeholder claramente
+             marcado en vez de inventar uno o reutilizar el de otro
+             producto. -->
+        <div class="pdp-proof-video">
+          <div class="pdp-photo-placeholder">
+            <svg class="icon" aria-hidden="true"><use href="#icon-alert"/></svg>
+            <span>VIDEO PENDIENTE</span>
           </div>
-        </details>
-
-        <details class="pdp-accordion-item card reveal reveal-delay-1">
-          <summary>¿Cómo se usa?</summary>
-          <div class="pdp-accordion-body">
-            <ol class="steps-list">
-              <li><p>Toma una porción pequeña (tamaño arveja) con la yema de los dedos.</p></li>
-              <li><p>Frota entre las palmas hasta que se sienta cremosa y tibia.</p></li>
-              <li><p>Aplica desde medios a puntas, moldeando el estilo. Repite si necesitas más fijación.</p></li>
-            </ol>
+        </div>
+        <div class="card pdp-testimonial-featured">
+          <div class="stars">
+            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
+            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
+            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
+            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
+            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
           </div>
-        </details>
-
-        <details class="pdp-accordion-item card reveal reveal-delay-2">
-          <summary>Tipo de pelo recomendado</summary>
-          <div class="pdp-accordion-body">
-            <p class="hair-type-info">Todo tipo y largo de cabello. Ideal para looks texturizados y desordenados con acabado mate, fijación fuerte y bajo brillo.</p>
+          <blockquote>"La pedí de a 12 para mi local y a los clientes les encantó. Rinde mucho y el olor es súper discreto."</blockquote>
+          <div class="pdp-testimonial-who">
+            <div class="pdp-testimonial-photo">
+              <div class="pdp-photo-placeholder">
+                <svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg>
+              </div>
+            </div>
+            <div>
+              <div class="pdp-testimonial-name">Camila V. <svg class="icon verified-badge" aria-hidden="true"><use href="#icon-verified"/></svg></div>
+              <div class="pdp-testimonial-role">Dueña de barbería</div>
+            </div>
           </div>
-        </details>
+          <p class="pdp-testimonial-photo-note">📸 FALTA foto real (idealmente tomada en la barbería) — hoy se muestra un ícono genérico en su lugar.</p>
+        </div>
       </div>
     </div>
   </section>
 
   <!-- ============================================================
-       TESTIMONIOS
+       POR QUÉ FUNCIONA — tarjetas de beneficio
        ============================================================ -->
-  <section class="section" id="testimonios">
-    <div class="container">
+  <section class="section" id="detalle">
+    <div class="container" style="max-width:1000px">
+      <div class="pdp-benefit-cards">
+        <div class="card pdp-benefit-card reveal">
+          <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
+          <p>Fijación fuerte sin apelmazar</p>
+        </div>
+        <div class="card pdp-benefit-card reveal reveal-delay-1">
+          <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
+          <p>Acabado 100% mate</p>
+        </div>
+        <div class="card pdp-benefit-card reveal reveal-delay-2">
+          <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
+          <p>No deja residuos blancos</p>
+        </div>
+        <div class="card pdp-benefit-card reveal">
+          <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
+          <p>Fácil de reaplicar</p>
+        </div>
+        <div class="card pdp-benefit-card reveal reveal-delay-1">
+          <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
+          <p>Rinde semanas de uso diario</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       IDEAL PARA / NO ES PARA TI
+       ============================================================ -->
+  <section class="section section--tint" id="ideal-para">
+    <div class="container" style="max-width:900px">
+      <div class="pdp-ideal-grid">
+        <div class="card pdp-ideal-col pdp-ideal-col--yes reveal">
+          <h3>Ideal si buscas:</h3>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Acabado 100% mate, sin brillo</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fijación fuerte todo el día</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Looks texturizados y desordenados</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Todo tipo y largo de cabello</li>
+          </ul>
+        </div>
+        <div class="card pdp-ideal-col pdp-ideal-col--no reveal reveal-delay-1">
+          <h3>No es para ti si:</h3>
+          <ul>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Buscas brillo o efecto mojado</li>
+            <li><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> No estás acostumbrado a usar poca cantidad (rinde mucho, aplicar de a poco)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       CÓMO USAR — 3 pasos visuales
+       ============================================================ -->
+  <section class="section" id="como-usar">
+    <div class="container" style="max-width:900px">
       <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Testimonios</span>
-        <h2 class="section-title reveal reveal-delay-1">Lo que dicen quienes ya la probaron</h2>
+        <h2 class="section-title reveal reveal-delay-1">Cómo usarla</h2>
       </div>
-      <div class="testimonial-grid">
-        <article class="review-card card reveal">
-          <div class="stars">
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-          </div>
-          <p>"Llevo 3 meses usándola y no he vuelto a comprar otra marca. Fija todo el día y no queda ese brillo aceitoso que odio."</p>
-          <div class="who">
-            <div class="who-avatar--plain">M</div>
-            <div><div class="who-name">Matías R. <svg class="icon verified-badge" aria-hidden="true"><use href="#icon-verified"/></svg></div><div class="who-date">Hace 2 semanas</div></div>
-          </div>
-        </article>
-        <article class="review-card card reveal reveal-delay-1">
-          <div class="stars">
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-          </div>
-          <p>"La pedí de a 12 para mi local y a los clientes les encantó. Rinde mucho y el olor es súper discreto."</p>
-          <div class="who">
-            <div class="who-avatar--plain">C</div>
-            <div><div class="who-name">Camila V. <svg class="icon verified-badge" aria-hidden="true"><use href="#icon-verified"/></svg></div><div class="who-date">Compra para su barbería · hace 1 mes</div></div>
-          </div>
-        </article>
-        <article class="review-card card reveal reveal-delay-2">
-          <div class="stars">
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
-            <svg class="icon icon-star-off" aria-hidden="true"><use href="#icon-star"/></svg>
-          </div>
-          <p>"Buena fijación y fácil de aplicar, solo hay que usar poquita cantidad porque cunde caleta. Volvería a comprar."</p>
-          <div class="who">
-            <div class="who-avatar--plain">J</div>
-            <div><div class="who-name">Joaquín P. <svg class="icon verified-badge" aria-hidden="true"><use href="#icon-verified"/></svg></div><div class="who-date">Hace 3 semanas</div></div>
-          </div>
-        </article>
+      <div class="pdp-steps-visual">
+        <div class="pdp-step-visual reveal">
+          <div class="step-num">1</div>
+          <p>Toma una porción pequeña (tamaño arveja) con la yema de los dedos.</p>
+        </div>
+        <div class="pdp-step-visual reveal reveal-delay-1">
+          <div class="step-num">2</div>
+          <p>Frota entre las palmas hasta que se sienta cremosa y tibia.</p>
+        </div>
+        <div class="pdp-step-visual reveal reveal-delay-2">
+          <div class="step-num">3</div>
+          <p>Aplica desde medios a puntas, moldeando el estilo.</p>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       QUÉ ACABADO DEJA — barras
+       ============================================================ -->
+  <section class="section section--tint" id="acabado">
+    <div class="container" style="max-width:900px">
+      <div class="pdp-finish reveal reveal-delay-2">
+        <img src="assets/img/products/cera-deluxe-matte-wax-peony-2.webp" alt="Detalle de textura de Cera Deluxe Matte Wax Peony" width="700" height="700" loading="lazy" style="border-radius:var(--radius);width:100%;height:auto" />
+        <div class="pdp-finish-bars">
+          <div>
+            <div class="pdp-finish-bar-label"><span>Brillo</span><span>Bajo (mate)</span></div>
+            <div class="pdp-finish-bar-track"><div class="pdp-finish-bar-fill" style="width:15%"></div></div>
+          </div>
+          <div>
+            <div class="pdp-finish-bar-label"><span>Fijación</span><span>Alta</span></div>
+            <div class="pdp-finish-bar-track"><div class="pdp-finish-bar-fill" style="width:90%"></div></div>
+          </div>
+          <div>
+            <div class="pdp-finish-bar-label"><span>Textura</span><span>Media-alta</span></div>
+            <div class="pdp-finish-bar-track"><div class="pdp-finish-bar-fill" style="width:70%"></div></div>
+          </div>
+          <div>
+            <div class="pdp-finish-bar-label"><span>Facilidad de lavado</span><span>Media</span></div>
+            <div class="pdp-finish-bar-track"><div class="pdp-finish-bar-fill" style="width:55%"></div></div>
+          </div>
+        </div>
+      </div>
+      <p class="pdp-finish-note reveal reveal-delay-3" style="text-align:center;max-width:620px;margin-inline:auto">* Brillo y fijación según la fórmula del producto (ya descrita arriba). Textura y facilidad de lavado son una estimación editorial mía — confírmame el nivel exacto o dime si prefieres sacarlas.</p>
     </div>
   </section>
 
@@ -503,10 +576,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
        ============================================================ -->
   <section class="section" id="comparativa">
     <div class="container">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Comparativa</span>
-        <h2 class="section-title reveal reveal-delay-1">La diferencia se nota</h2>
-      </div>
       <div class="compare-wrap reveal reveal-delay-2">
         <table class="compare-table">
           <thead>
@@ -533,22 +602,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Alcohol y parabenos que resecan el cabello</td>
             </tr>
             <tr>
-              <th>Rendimiento</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Rinde semanas con uso diario</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Se termina rápido, hay que reaplicar más cantidad</td>
-            </tr>
-            <tr>
-              <th>Uso recomendado</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Uso profesional en barberías y en casa</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Solo uso doméstico ocasional</td>
-            </tr>
-            <tr>
               <th>Precio por aplicación</th>
               <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Más bajo en el largo plazo</td>
               <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Parece más barata pero rinde menos</td>
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="compare-cards reveal reveal-delay-2">
+        <div class="card compare-card">
+          <h4>Fijación</h4>
+          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fuerte, dura todo el día</div>
+          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Se cae después de pocas horas</div>
+        </div>
+        <div class="card compare-card">
+          <h4>Acabado</h4>
+          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Mate profesional, sin brillo</div>
+          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Brillo artificial o efecto grasoso</div>
+        </div>
+        <div class="card compare-card">
+          <h4>Ingredientes</h4>
+          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fórmula profesional, sin residuos</div>
+          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Alcohol y parabenos que resecan el cabello</div>
+        </div>
+        <div class="card compare-card">
+          <h4>Precio por aplicación</h4>
+          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Más bajo en el largo plazo</div>
+          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Parece más barata pero rinde menos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       INFORMACIÓN TÉCNICA — tipo de pelo + ingredientes/modo de
+       uso/advertencias pendientes de dato real
+       ============================================================ -->
+  <section class="section section--tint" id="info-tecnica">
+    <div class="container" style="max-width:920px">
+      <div class="pdp-accordion">
+        <details class="pdp-accordion-item card reveal">
+          <summary>Tipo de pelo recomendado</summary>
+          <div class="pdp-accordion-body">
+            <p class="hair-type-info">Todo tipo y largo de cabello. Ideal para looks texturizados y desordenados con acabado mate, fijación fuerte y bajo brillo.</p>
+          </div>
+        </details>
       </div>
     </div>
   </section>
@@ -563,8 +661,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="section section--tint" id="rutina">
     <div class="container">
       <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Completa tu rutina</span>
-        <h2 class="section-title reveal reveal-delay-1">Otras opciones ROQVEL</h2>
+        <h2 class="section-title reveal reveal-delay-1">Combina perfecto con</h2>
       </div>
       <div class="related-grid-wrap">
       <div class="related-grid" data-related-carousel>
@@ -860,6 +957,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script defer src="checkout.js?v=20260770"></script>
 <script defer src="main.js?v=20260766"></script>
 <script defer src="product.js?v=20260770"></script>
+<script defer src="pdp-redesign.js?v=1"></script>
 <script defer src="popup-descuento.js?v=8"></script>
 <script defer src="cookie-consent.js?v=1"></script>
 </body>

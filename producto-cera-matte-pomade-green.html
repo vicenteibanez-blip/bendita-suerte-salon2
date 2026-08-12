@@ -302,8 +302,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="tier-save">Ahorra 32%</div>
               <span class="tier-invoice-badge"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura incluida</span>
             </label>
-            <label class="tier-card tier-card--featured">
-              <span class="tier-featured-badge">⭐ Recomendado</span>
+            <label class="tier-card">
               <span class="tier-persona">Barbería profesional</span>
               <input type="radio" name="qty-tier" data-qty="12" data-unit-price="6000" data-total-price="72000"
                 data-sku="cera-matte-pomade-green-pack12" data-sku-name="Cera Matte Pomade Green (ROQVEL) — Pack x12 (mayorista)" />
@@ -314,7 +313,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="tier-save">Ahorra 40%</div>
               <span class="tier-invoice-badge"><svg class="icon" aria-hidden="true"><use href="#icon-card"/></svg> Factura incluida</span>
             </label>
-            <label class="tier-card">
+            <label class="tier-card tier-card--featured">
+              <span class="tier-featured-badge">⭐ Recomendado</span>
               <span class="tier-persona">Distribuidor</span>
               <input type="radio" name="qty-tier" data-qty="24" data-unit-price="5000" data-total-price="120000"
                 data-sku="cera-matte-pomade-green-pack24" data-sku-name="Cera Matte Pomade Green (ROQVEL) — Pack x24 (mayorista)" />
@@ -365,10 +365,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section section--tint" id="testimonios">
     <div class="container" style="max-width:1000px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Así se aplica</span>
-        <h2 class="section-title reveal reveal-delay-1">Así se aplica y por qué tantos barberos la recomiendan</h2>
-      </div>
       <div class="pdp-proof reveal reveal-delay-2">
         <!-- FALTA: video real de aplicación (vertical, en loop, silenciado
              por defecto) para este producto — no existe todavía, así que
@@ -414,10 +410,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section" id="detalle">
     <div class="container" style="max-width:1000px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Por qué funciona</span>
-        <h2 class="section-title reveal reveal-delay-1">Por qué los barberos la usan todos los días</h2>
-      </div>
       <div class="pdp-benefit-cards">
         <div class="card pdp-benefit-card reveal">
           <div class="icon-wrap"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg></div>
@@ -445,10 +437,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section section--tint" id="ideal-para">
     <div class="container" style="max-width:900px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>¿Es para ti?</span>
-        <h2 class="section-title reveal reveal-delay-1">Ideal para</h2>
-      </div>
       <div class="pdp-ideal-grid">
         <div class="card pdp-ideal-col pdp-ideal-col--yes reveal">
           <h3>Ideal si buscas:</h3>
@@ -473,7 +461,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="section" id="como-usar">
     <div class="container" style="max-width:900px">
       <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Modo de uso</span>
         <h2 class="section-title reveal reveal-delay-1">Cómo usarla</h2>
       </div>
       <div class="pdp-steps-visual">
@@ -495,10 +482,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section section--tint" id="acabado">
     <div class="container" style="max-width:900px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Resultado</span>
-        <h2 class="section-title reveal reveal-delay-1">¿Qué acabado deja?</h2>
-      </div>
       <div class="pdp-finish reveal reveal-delay-2">
         <img src="assets/img/products/cera-matte-pomade-green-3.webp" alt="Detalle de textura de Cera Matte Pomade Green" width="700" height="700" loading="lazy" style="border-radius:var(--radius);width:100%;height:auto" />
         <div class="pdp-finish-bars">
@@ -548,15 +531,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section" id="comparativa">
     <div class="container">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Comparativa</span>
-        <h2 class="section-title reveal reveal-delay-1">La diferencia se nota</h2>
-      </div>
-      <!-- Tabla en desktop, tarjetas en mobile (mismo contenido, 2 marcados
-           distintos — ver pdp-redesign.css: nunca tabla con scroll lateral
-           en pantallas chicas). Recortado a 4 filas máximo y textos cortos,
-           mismos 4 atributos que pediste: Fijación / Acabado / Ingredientes
-           / Precio por aplicación. -->
       <div class="compare-wrap reveal reveal-delay-2">
         <table class="compare-table">
           <thead>
@@ -617,44 +591,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section section--tint" id="info-tecnica">
     <div class="container" style="max-width:920px">
-      <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Información técnica</span>
-        <h2 class="section-title reveal reveal-delay-1">Detalles técnicos</h2>
-      </div>
-
       <div class="pdp-accordion">
         <details class="pdp-accordion-item card reveal">
           <summary>Tipo de pelo recomendado</summary>
           <div class="pdp-accordion-body">
             <p class="hair-type-info">Todo tipo de cabello. Ideal para estilos con fijación fuerte y acabado mate elegante.</p>
-          </div>
-        </details>
-
-        <!-- FALTA: lista real de ingredientes (INCI) del envase. No se
-             inventa — completar acá cuando me pases el dato. -->
-        <details class="pdp-accordion-item card reveal reveal-delay-1">
-          <summary>Ingredientes (INCI)</summary>
-          <div class="pdp-accordion-body">
-            <p class="hair-type-info">📋 PENDIENTE — agrega acá la lista de ingredientes (INCI) que viene en el envase.</p>
-          </div>
-        </details>
-
-        <!-- FALTA: modo de uso extendido (cantidad recomendada, frecuencia,
-             combinación con otros productos, etc.) más allá de los 3 pasos
-             ya visibles arriba en "Cómo usarla". -->
-        <details class="pdp-accordion-item card reveal reveal-delay-2">
-          <summary>Modo de uso completo</summary>
-          <div class="pdp-accordion-body">
-            <p class="hair-type-info">📋 PENDIENTE — si hay instrucciones más detalladas que los 3 pasos de arriba (cantidad exacta, frecuencia de uso, con qué combinarla), agrégalas acá.</p>
-          </div>
-        </details>
-
-        <!-- FALTA: advertencias reales de uso, si existen (contacto con
-             ojos, cuero cabelludo irritado, alergias conocidas, etc.). -->
-        <details class="pdp-accordion-item card reveal reveal-delay-3">
-          <summary>Advertencias</summary>
-          <div class="pdp-accordion-body">
-            <p class="hair-type-info">📋 PENDIENTE — si el envase trae alguna advertencia de uso, agrégala acá. Si no tiene ninguna, dime y saco esta sección.</p>
           </div>
         </details>
       </div>
@@ -664,7 +605,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section class="section section--tint" id="rutina">
     <div class="container">
       <div class="section-head section-head--center">
-        <span class="kicker reveal"><svg class="dot" aria-hidden="true"><use href="#icon-dot"/></svg>Cross-sell</span>
         <h2 class="section-title reveal reveal-delay-1">Combina perfecto con</h2>
       </div>
       <div class="related-grid-wrap">
