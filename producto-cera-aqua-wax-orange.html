@@ -53,7 +53,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 <link rel="stylesheet" href="styles.css?v=20260775" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
-<link rel="stylesheet" href="pdp-redesign.css?v=3" />
+<link rel="stylesheet" href="pdp-redesign.css?v=4" />
 
 <script type="application/ld+json">
 {
@@ -152,6 +152,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <symbol id="icon-card" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18"/><path d="M7 14.5h4"/></symbol>
   <symbol id="icon-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5"/><path d="M12 16h.01"/></symbol>
   <symbol id="icon-verified" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="#3b82c4" stroke="none"/><path d="M7.5 12.5l3 3 6-6.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="icon-sparkles" viewBox="0 0 24 24"><path d="M12 3l1.8 4.9L18.5 9l-4.7 1.8L12 15.5l-1.8-4.7L5.5 9l4.7-1.1z"/><path d="M19 14.5l.7 2 2 .7-2 .7-.7 2-.7-2-2-.7 2-.7z"/></symbol>
+  <symbol id="icon-droplet" viewBox="0 0 24 24"><path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11z"/></symbol>
+  <symbol id="icon-droplets" viewBox="0 0 24 24"><path d="M15 4s4.5 5 4.5 8.2a4.5 4.5 0 0 1-9 0C10.5 9 15 4 15 4z"/><path d="M7.5 12.5s2.7 3 2.7 4.9a2.7 2.7 0 0 1-5.4 0c0-1.9 2.7-4.9 2.7-4.9z"/></symbol>
+  <symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M5 19c9 1 14-4 14-13-9 0-14 4-14 13z"/><path d="M5 19c2-4 5-7 9-9"/></symbol>
+  <symbol id="icon-package" viewBox="0 0 24 24"><path d="M3.5 8L12 3.5 20.5 8v9L12 21.5 3.5 17z"/><path d="M3.5 8L12 12.5 20.5 8"/><path d="M12 12.5V21.5"/></symbol>
 </svg>
 
 <header class="nav" id="nav">
@@ -550,59 +555,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <section class="section" id="comparativa">
     <div class="container">
-      <div class="compare-wrap reveal reveal-delay-2">
-        <table class="compare-table">
-          <thead>
-            <tr>
-              <th>Característica</th>
-              <th>Cera ROQVEL Aqua Wax</th>
-              <th>Gel/cera con brillo genérico</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <th>Brillo</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Intenso y natural</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Artificial y opaco con el tiempo</td>
-            </tr>
-            <tr>
-              <th>Fijación</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Dura todo el día</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Se cae en pocas horas</td>
-            </tr>
-            <tr>
-              <th>Retiro</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Fácil, solo con agua</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Requiere shampoo varias veces</td>
-            </tr>
-            <tr>
-              <th>Precio por aplicación</th>
-              <td class="is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg>Más bajo en el largo plazo</td>
-              <td class="is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg>Parece más barata pero rinde menos</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="compare-cards reveal reveal-delay-2">
-        <div class="card compare-card">
-          <h4>Brillo</h4>
-          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Intenso y natural</div>
-          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Artificial y opaco con el tiempo</div>
+      <div class="pdp-icon-grid reveal reveal-delay-2">
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-sparkles"/></svg>
+          <span>Brillo natural</span>
         </div>
-        <div class="card compare-card">
-          <h4>Fijación</h4>
-          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Dura todo el día</div>
-          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Se cae en pocas horas</div>
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-droplet"/></svg>
+          <span>Acabado húmedo</span>
         </div>
-        <div class="card compare-card">
-          <h4>Retiro</h4>
-          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Fácil, solo con agua</div>
-          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Requiere shampoo varias veces</div>
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-clock"/></svg>
+          <span>Fijación suave</span>
         </div>
-        <div class="card compare-card">
-          <h4>Precio por aplicación</h4>
-          <div class="compare-card-row is-ours"><svg class="icon" aria-hidden="true"><use href="#icon-check"/></svg> Más bajo en el largo plazo</div>
-          <div class="compare-card-row is-generic"><svg class="icon" aria-hidden="true"><use href="#icon-close"/></svg> Parece más barata pero rinde menos</div>
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-droplets"/></svg>
+          <span>Retiro solo agua</span>
+        </div>
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-leaf"/></svg>
+          <span>Aroma agradable</span>
+        </div>
+        <div class="pdp-icon-grid-item">
+          <svg class="icon" aria-hidden="true"><use href="#icon-package"/></svg>
+          <span>Rinde hasta 3 meses</span>
         </div>
       </div>
     </div>
