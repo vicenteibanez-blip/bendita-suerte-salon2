@@ -337,120 +337,210 @@
     });
   }
 
-  /* ---------- Product grids (home destacados + catálogo completo) ----------
-     Un solo sistema, sin Embla/drag — grid CSS puro (ver .product-grid en
-     styles.css). Dos contextos posibles en la misma página, distinguidos
-     por atributos en el contenedor:
-       - data-featured-only: la home (index.html#productos) — solo
-         productos con featured:true y category "ceras"/"polvo", sin
-         pestañas de filtro (aunque hubiera un [data-category-filter]
-         cerca, se ignora — la home no filtra).
-       - sin ese atributo: el catálogo completo (productos.html) — TODOS
-         los productos, filtrable si la sección trae un
-         [data-category-filter] con pestañas .filter-btn. */
-  function escHTML(s) {
-    return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
-    });
-  }
-  function formatCLP(n) { return "$" + Math.round(Number(n) || 0).toLocaleString("es-CL"); }
+  /* ---------- Product carousel — category tabs + Embla infinite drag loop ----------
+     Baseline (no JS): .embla__viewport is a native overflow-x:auto scroll-snap track,
+     so all 9 products stay swipeable/scrollable with zero JavaScript.
+     Enhancement (JS + Embla present): infinite loop, drag anywhere, arrows, autoplay,
+     and the category tabs re-render the slide list from manifest.js data. */
+  function initProductCarousel() {
+    var wrap = $("[data-product-carousel]");
+    var viewport = $("[data-embla-viewport]", wrap);
+    var container = $("[data-embla-container]", wrap);
+    var tabsBar = $("[data-category-filter]");
+    if (!wrap || !viewport || !container) return;
 
-  function productCardHTML(p) {
-    var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
-    var cartId = p.id || cartLabel;
-    var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
-    var visualInner = p.photo
-      ? '<img src="' + escHTML(p.photo) + '" alt="" loading="lazy" />'
-      : '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
-    var visualHTML = p.productUrl
-      ? '<a class="product-card-media" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
-      : '<div class="product-card-media">' + visualInner + '</div>';
+    var allSlidesHTML = container.innerHTML; // hardcoded "Todos" markup, used as the reset state
 
-    // Rating: solo si el producto trae reseñas propias reales (p.rating);
-    // nunca se rellena con la calificación general de la barbería. Sin
-    // ese dato, la tarjeta simplemente no muestra estrellas (no se
-    // inventa un "0 estrellas" ni un placeholder vacío).
-    var ratingHTML = "";
-    if (p.rating && p.rating.count > 0) {
-      var full = Math.round(p.rating.value);
-      var starsHTML = "";
-      for (var i = 1; i <= 5; i++) {
-        starsHTML += '<svg class="icon' + (i > full ? ' icon-star-off' : '') + '" aria-hidden="true"><use href="#icon-star"/></svg>';
-      }
-      ratingHTML = '<div class="product-card-rating"><span class="stars">' + starsHTML + '</span><span class="product-card-rating-count">(' + p.rating.count + ')</span></div>';
+    function escHTML(s) {
+      return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
     }
 
-    // Precio anterior tachado: solo si el producto trae un
-    // originalPriceCLP real definido en manifest.js — nunca inventado.
-    var hasDiscount = p.originalPriceCLP != null && p.originalPriceCLP > cartPrice;
-    var priceHTML =
-      '<div class="product-card-price">' +
-        '<span class="product-card-price-now">' + escHTML(p.price) + '</span>' +
-        (hasDiscount ? '<span class="product-card-price-was">' + escHTML(formatCLP(p.originalPriceCLP)) + '</span>' : '') +
-      '</div>';
+    function formatCLP(n) { return "$" + Math.round(Number(n) || 0).toLocaleString("es-CL"); }
 
-    var nameText = p.name + (p.sub ? " " + p.sub : "");
-    var nameHTML = p.productUrl
-      ? '<a class="product-card-name" href="' + escHTML(p.productUrl) + '">' + escHTML(nameText) + '</a>'
-      : '<span class="product-card-name">' + escHTML(nameText) + '</span>';
+    function slideHTML(p) {
+      var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
+      var cartId = p.id || cartLabel;
+      var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
+      var visualInner = p.photo
+        ? '<img src="' + escHTML(p.photo) + '" alt="" loading="lazy" />'
+        : '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
 
-    // display:flex;flex-direction:column en .product-card +
-    // margin-top:auto en .product-card-actions (ver styles.css) —
-    // el botón siempre queda pegado abajo sin importar si el nombre
-    // ocupa 1 o 2 líneas ni si hay rating o precio anterior o no.
-    return (
-      '<article class="product-card" data-category="' + escHTML(p.category) + '">' +
-        visualHTML +
-        '<div class="product-card-body">' +
-          ratingHTML +
-          nameHTML +
-          priceHTML +
-          '<div class="product-card-actions">' +
-            '<button class="btn btn-primary product-card-buy" type="button" data-buy-now data-id="' + escHTML(cartId) + '" data-name="' + escHTML(cartLabel) + '" data-price="' + cartPrice + '">Comprar ahora</button>' +
+      // Badge de esquina: descuento real (originalPriceCLP > priceCLP) tiene
+      // prioridad; si no hay descuento, "Nuevo" solo si el producto lo trae
+      // marcado explícitamente. Nunca ambos ni inventado sin dato de origen.
+      var hasDiscount = p.originalPriceCLP != null && p.originalPriceCLP > cartPrice;
+      var discountPct = hasDiscount ? Math.round((1 - cartPrice / p.originalPriceCLP) * 100) : 0;
+      var badgeHTML = hasDiscount
+        ? '<span class="shop-card-badge shop-card-badge--sale">Ahorra ' + discountPct + '%</span>'
+        : (p.isNew ? '<span class="shop-card-badge shop-card-badge--new">Nuevo</span>' : '');
+
+      var visualHTML = p.productUrl
+        ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
+        : '<div class="shop-card-visual">' + visualInner + '</div>';
+
+      // Rating: solo si el producto trae reseñas propias reales (p.rating);
+      // nunca se rellena con la calificación general de la barbería.
+      var ratingHTML = "";
+      if (p.rating && p.rating.count > 0) {
+        var full = Math.round(p.rating.value);
+        var starsHTML = "";
+        for (var i = 1; i <= 5; i++) {
+          starsHTML += '<svg class="icon' + (i > full ? ' icon-star-off' : '') + '" aria-hidden="true"><use href="#icon-star"/></svg>';
+        }
+        ratingHTML = '<div class="shop-rating"><span class="stars">' + starsHTML + '</span><span class="shop-rating-count">(' + p.rating.count + ')</span></div>';
+      }
+
+      var priceHTML = hasDiscount
+        ? '<p class="shop-price"><span class="shop-price-was">' + escHTML(formatCLP(p.originalPriceCLP)) + '</span><span class="shop-price-now">' + escHTML(p.price) + '</span></p>'
+        : '<p class="shop-price">' + escHTML(p.price) + '</p>';
+
+      var infoTop =
+        priceHTML +
+        '<h3>' + escHTML(p.name) + '</h3>' +
+        '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>' +
+        ratingHTML;
+      // Todo el bloque precio/nombre/línea es un solo link (además de la
+      // foto) para que en mobile no dependa de acertarle justo al título.
+      var infoTopHTML = p.productUrl
+        ? '<a class="shop-card-link" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + infoTop + '</a>'
+        : infoTop;
+      return (
+        '<article class="card shop-card embla__slide" data-category="' + escHTML(p.category) + '">' +
+          '<button class="shop-fav" type="button" aria-label="Agregar a favoritos" data-fav="' + escHTML(p.name) + '">' +
+            '<svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>' +
+          badgeHTML +
+          visualHTML +
+          '<div class="shop-card-info">' +
+            infoTopHTML +
+            '<details class="shop-detail"><summary>Ver detalle</summary><dl>' +
+              '<div><dt>Composición</dt><dd>' + escHTML(p.composicion) + '</dd></div>' +
+              '<div><dt>Modo de uso</dt><dd>' + escHTML(p.modoUso) + '</dd></div>' +
+              '<div><dt>Tipo de cabello</dt><dd>' + escHTML(p.tipoCabello) + '</dd></div>' +
+            '</dl></details>' +
+            '<button class="btn btn-primary btn-sm btn-block" type="button" data-buy-now data-id="' + escHTML(cartId) + '" data-name="' + escHTML(cartLabel) + '" data-price="' + cartPrice + '">' +
+              '<svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"/></svg> Comprar ahora</button>' +
+            '<button class="btn btn-cart btn-sm btn-block" type="button" data-add-to-cart data-id="' + escHTML(cartId) + '" data-name="' + escHTML(cartLabel) + '" data-price="' + cartPrice + '">' +
+              '<svg class="icon" aria-hidden="true"><use href="#icon-cart"/></svg> Agregar al carrito</button>' +
           '</div>' +
-        '</div>' +
-      '</article>'
-    );
-  }
+        '</article>'
+      );
+    }
 
-  function initProductGrids() {
-    $$("[data-product-grid]").forEach(function (grid) {
-      var section = grid.closest("section");
-      var tabsBar = section ? $("[data-category-filter]", section) : null;
-      var featuredOnly = grid.hasAttribute("data-featured-only");
-      var fallbackHTML = grid.innerHTML; // markup estático, fallback sin JS/datos
+    var emblaApi = null;
+    var autoplay = null;
+    var hasEmbla = typeof window.EmblaCarousel === "function";
+    // Bajo este ancho el catálogo pasa de carrusel a grid de 2 columnas
+    // (mismo corte que el resto del sitio usa para "mobile", ver
+    // styles.css línea ~876 @media (min-width:720px)) — sin arrastre,
+    // sin loop, todas las tarjetas visibles de una.
+    var mobileGridQuery = typeof window.matchMedia === "function" ? window.matchMedia("(max-width: 719.98px)") : null;
+    function isMobileGrid() { return !!(mobileGridQuery && mobileGridQuery.matches); }
 
-      function pool() {
-        var all = (data.products || []).filter(function (p) { return !p.hidden; });
-        if (!featuredOnly) return all;
-        return all.filter(function (p) { return p.featured && (p.category === "ceras" || p.category === "polvo"); });
+    // Embla's loop mode necesita bastante más contenido que el ancho del
+    // viewport para calcular sus "loop points" sin saltos raros al llegar
+    // al borde (con 9 tarjetas nomás, en pantallas anchas se ve el catálogo
+    // "devolverse" a medio arrastre). El arreglo recomendado por Embla es
+    // duplicar las slides reales; la copia queda con inert + aria-hidden
+    // para que nunca sea clickeable ni la lean lectores de pantalla.
+    function ensureLoopClone() {
+      var oldClone = container.querySelector(":scope > [data-loop-clone]");
+      if (oldClone) oldClone.remove();
+      var realSlides = $$(".embla__slide", container);
+      if (realSlides.length < 2) return;
+      var cloneWrap = document.createElement("div");
+      cloneWrap.setAttribute("data-loop-clone", "");
+      cloneWrap.setAttribute("aria-hidden", "true");
+      cloneWrap.setAttribute("inert", "");
+      cloneWrap.className = "embla__loop-clone";
+      realSlides.forEach(function (slide) {
+        cloneWrap.appendChild(slide.cloneNode(true));
+      });
+      container.appendChild(cloneWrap);
+    }
+
+    function reInit() {
+      bindBrand(); // re-wire the whatsapp hrefs on the freshly rendered slides
+      initFavButtons(container);
+      if (hasEmbla && !isMobileGrid()) {
+        if (emblaApi) { emblaApi.destroy(); }
+        ensureLoopClone();
+        var plugins = [];
+        if (typeof window.EmblaCarouselAutoplay === "function") {
+          autoplay = window.EmblaCarouselAutoplay({ delay: 3800, stopOnInteraction: true, stopOnMouseEnter: true });
+          plugins.push(autoplay);
+        }
+        emblaApi = window.EmblaCarousel(viewport, { loop: true, align: "start", dragFree: false }, plugins);
+        viewport.classList.add("is-embla-active");
+        wrap.classList.add("is-embla-ready");
+      } else {
+        // Mobile: sin carrusel — destruir instancia previa (si veníamos de
+        // desktop tras un resize) y sacar la copia del loop, que en grid
+        // se vería como tarjetas duplicadas.
+        if (emblaApi) { emblaApi.destroy(); emblaApi = null; }
+        var oldClone = container.querySelector(":scope > [data-loop-clone]");
+        if (oldClone) oldClone.remove();
+        viewport.classList.remove("is-embla-active");
+        wrap.classList.remove("is-embla-ready");
       }
+    }
 
-      function render(category) {
-        var products = pool();
-        if (!products.length) return; // sin datos: deja el HTML de fallback
-        var list = (!category || category === "all")
-          ? products
-          : products.filter(function (p) { return p.category === category; });
-        grid.innerHTML = list.map(productCardHTML).join("") || fallbackHTML;
-        bindBrand(); // re-wire los href de whatsapp en las tarjetas recién pintadas
-      }
+    function applyFilter(category) {
+      var products = (data.products || []).filter(function (p) { return !p.hidden; });
+      if (!products.length) return; // no data available: keep the hardcoded "Todos" markup
+      var html = category === "all"
+        ? products.map(slideHTML).join("")
+        : products.filter(function (p) { return p.category === category; }).map(slideHTML).join("");
+      container.innerHTML = html || allSlidesHTML;
+      reInit();
+    }
 
-      if (tabsBar) {
-        $$(".filter-btn", tabsBar).forEach(function (tab) {
-          tab.addEventListener("click", function () {
-            $$(".filter-btn", tabsBar).forEach(function (t) {
-              var active = t === tab;
-              t.classList.toggle("is-active", active);
-              t.setAttribute("aria-selected", active ? "true" : "false");
-            });
-            render(tab.getAttribute("data-category"));
+    if (tabsBar) {
+      $$(".filter-btn", tabsBar).forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          $$(".filter-btn", tabsBar).forEach(function (t) {
+            var active = t === tab;
+            t.classList.toggle("is-active", active);
+            t.setAttribute("aria-selected", active ? "true" : "false");
           });
+          applyFilter(tab.getAttribute("data-category"));
         });
-      }
+      });
+    }
 
-      render("all");
-    });
+    var prevBtn = $("[data-embla-prev]", wrap);
+    var nextBtn = $("[data-embla-next]", wrap);
+    if (prevBtn) prevBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollPrev(); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollNext(); });
+
+    // Si el visitante gira la pantalla o redimensiona la ventana cruzando
+    // el corte mobile/desktop, re-armar en el modo que corresponde
+    // (carrusel <-> grid) — pero solo cuando el modo realmente cambió,
+    // para no destruir/re-crear Embla en cada pixel de resize.
+    if (mobileGridQuery) {
+      var wasMobile = isMobileGrid();
+      var onBreakpointChange = function () {
+        var nowMobile = isMobileGrid();
+        if (nowMobile !== wasMobile) { wasMobile = nowMobile; reInit(); }
+      };
+      if (typeof mobileGridQuery.addEventListener === "function") {
+        mobileGridQuery.addEventListener("change", onBreakpointChange);
+      } else if (typeof mobileGridQuery.addListener === "function") {
+        mobileGridQuery.addListener(onBreakpointChange); // Safari viejo
+      }
+    }
+
+    // El "Todos" inicial arranca como HTML estático (fallback sin JS,
+    // ver comentario arriba) — si manifest.js sí cargó, lo reemplazamos
+    // de una por el render real desde data para que precio/rating/
+    // badges de descuento estén al día desde el primer pintado, sin
+    // esperar a que alguien toque una pestaña de filtro.
+    if ((data.products || []).some(function (p) { return !p.hidden; })) {
+      applyFilter("all");
+    } else {
+      reInit();
+    }
   }
 
   /* ---------- Carril de videos testimoniales (home) ----------
@@ -628,7 +718,7 @@
     safe(initLightbox, "initLightbox");
     safe(initYear, "initYear");
     safe(initWaFloat, "initWaFloat");
-    safe(initProductGrids, "initProductGrids");
+    safe(initProductCarousel, "initProductCarousel");
     safe(initVideoCarousel, "initVideoCarousel");
     document.documentElement.classList.add("is-ready");
   }
