@@ -453,16 +453,17 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 
 /* --- Catálogo mobile agrupado por categoría (solo filtro "Todos") ----
    main.js (mobileGroupsHTML/applyFilter) rellena este contenedor con una
-   sección por categoría — título + carrusel horizontal con efecto
-   "peek" — y lo muestra en vez del .embla de arriba. Las cards de acá
-   son EXACTAMENTE las mismas que usa desktop (mismo .shop-card, mismo
+   sección por categoría (solo Ceras/Pomadas y Polvo de Textura — Barba
+   y Cabello quedan afuera de "Todos", ver HOME_FEED_CATEGORIES) — sin
+   título visible, solo el carrusel horizontal con efecto "peek" — y lo
+   muestra en vez del .embla de arriba. Las cards de acá son EXACTAMENTE
+   las mismas que usa desktop (mismo .shop-card, mismo
    ancho min(78vw,280px) que ya usa el fallback sin JS de más arriba) —
    sin recortar ni compactar ningún elemento. Un filtro de categoría
    específico oculta esto y vuelve a mostrar el .embla como grid de 2
    columnas (reglas justo arriba). */
 .mobile-cat-groups { display: flex; flex-direction: column; gap: 1.8rem; }
 .mobile-cat-groups[hidden] { display: none; }
-.mobile-cat-section-title { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin-bottom: .8rem; }
 .mobile-cat-scroll {
   display: flex; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;

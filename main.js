@@ -352,6 +352,12 @@
 
     var allSlidesHTML = container.innerHTML; // hardcoded "Todos" markup, used as the reset state
 
+    // Categorías que sí aparecen en el feed "Todos" (agrupado en mobile,
+    // listado plano en desktop) — Cuidado de Barba y Cuidado del Cabello
+    // quedan afuera de "Todos" a pedido, pero siguen accesibles tocando
+    // su propia pestaña de filtro (esa sigue mostrando todo lo suyo).
+    var HOME_FEED_CATEGORIES = ["ceras", "polvo"];
+
     function escHTML(s) {
       return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
         return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
@@ -441,13 +447,12 @@
     // labels que las pestañas de filtro (data.productCategories), y se
     // salta categorías sin productos visibles.
     function mobileGroupsHTML(products) {
-      var cats = (data.productCategories || []).filter(function (c) { return c.id !== "all"; });
+      var cats = (data.productCategories || []).filter(function (c) { return HOME_FEED_CATEGORIES.indexOf(c.id) !== -1; });
       return cats.map(function (cat) {
         var items = products.filter(function (p) { return p.category === cat.id; });
         if (!items.length) return "";
         return (
           '<div class="mobile-cat-section">' +
-            '<h3 class="mobile-cat-section-title">' + escHTML(cat.label) + '</h3>' +
             '<div class="mobile-cat-scroll">' + items.map(function (p) { return slideHTML(p, true); }).join("") + '</div>' +
           '</div>'
         );
@@ -540,7 +545,7 @@
       // que le sacaba la clase embla__slide a todas las cards menos la
       // primera y las dejaba angostas/aplastadas en el carrusel desktop.
       var html = category === "all"
-        ? products.map(function (p) { return slideHTML(p); }).join("")
+        ? products.filter(function (p) { return HOME_FEED_CATEGORIES.indexOf(p.category) !== -1; }).map(function (p) { return slideHTML(p); }).join("")
         : products.filter(function (p) { return p.category === category; }).map(function (p) { return slideHTML(p); }).join("");
       container.innerHTML = html || allSlidesHTML;
       reInit();
