@@ -869,19 +869,18 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .footer-trust-sub { font-size: .88rem; color: rgba(244,237,224,.75); margin-bottom: 1.3rem; }
 .footer-payment-badges {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: .7rem; margin-bottom: 1.6rem;
+  gap: .6rem; margin-bottom: 1.6rem;
 }
+/* Logos reales (Visa / Mastercard / Mercado Pago), recortados de la
+   imagen entregada por el negocio. Cada uno ya trae su propia tarjeta
+   redondeada de color con fondo transparente alrededor, así que basta
+   con fijar el alto — el ancho queda automático y respeta su relación
+   de aspecto real (240x155), sin deformar ningún logo. */
 .footer-payment-badge {
-  display: flex; align-items: center; justify-content: center; height: 34px; padding: 0 .9rem;
-  border-radius: 8px; background: rgba(244,237,224,.08); border: 1px solid rgba(244,237,224,.16);
-  transition: background .25s var(--ease-out), border-color .25s var(--ease-out);
+  display: block; height: 30px; width: auto; border-radius: 6px;
+  opacity: .92; transition: opacity .25s var(--ease-out);
 }
-.footer-payment-badge:hover { background: rgba(244,237,224,.14); border-color: rgba(244,237,224,.3); }
-/* Cada símbolo trae su propio viewBox real (proporciones oficiales de
-   cada marca) — se fija solo el alto y el ancho queda automático, así
-   ninguno se deforma sin importar su relación de aspecto. */
-.footer-payment-icon { display: block; height: 17px; width: auto; }
-.footer-payment-icon--mp { height: 21px; }
+.footer-payment-badge:hover { opacity: 1; }
 .footer-legal-links {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
   row-gap: .5rem; column-gap: .7rem; font-size: .78rem;
