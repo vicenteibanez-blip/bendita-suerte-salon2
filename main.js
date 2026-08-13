@@ -376,8 +376,16 @@
       var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
       var cartId = p.id || cartLabel;
       var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
+      // Segunda foto (tapa abierta / textura) solo cuando el producto
+      // trae una realmente más interesante que la de portada (ver
+      // photoHover en manifest.js) — nunca se inventa ni se reusa la
+      // misma foto dos veces. Con ella: click/hover en desktop y toque
+      // en mobile cambian a esa segunda foto (ver .has-swap más abajo
+      // y initCardImageSwap).
+      var hasSwap = !!(p.photo && p.photoHover);
       var visualInner = p.photo
-        ? '<img src="' + escHTML(p.photo) + '" alt="" loading="lazy" />'
+        ? '<img class="' + (hasSwap ? 'shop-img-1' : '') + '" src="' + escHTML(p.photo) + '" alt="" loading="lazy" />' +
+          (hasSwap ? '<img class="shop-img-2" src="' + escHTML(p.photoHover) + '" alt="" loading="lazy" />' : '')
         : '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
 
       // Badge de esquina: descuento real (originalPriceCLP > priceCLP) tiene
@@ -389,9 +397,10 @@
         ? '<span class="shop-card-badge shop-card-badge--sale">Ahorra ' + discountPct + '%</span>'
         : (p.isNew ? '<span class="shop-card-badge shop-card-badge--new">Nuevo</span>' : '');
 
+      var visualClass = 'shop-card-visual' + (hasSwap ? ' has-swap' : '');
       var visualHTML = p.productUrl
-        ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
-        : '<div class="shop-card-visual">' + visualInner + '</div>';
+        ? '<a class="' + visualClass + '" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
+        : '<div class="' + visualClass + '">' + visualInner + '</div>';
 
       // Rating: solo si el producto trae reseñas propias reales (p.rating);
       // nunca se rellena con la calificación general de la barbería.
@@ -601,6 +610,32 @@
     }
   }
 
+  /* ---------- Cambio de foto en tarjetas de producto (home) ----------
+     Productos con photoHover (ver manifest.js) muestran una segunda
+     foto — el envase abierto — al pasar el mouse por encima en desktop
+     (puro CSS, ver .has-swap en styles.css) o al tocar la foto en
+     mobile/touch (sin :hover real). Acá solo se resuelve la parte
+     táctil: en dispositivos sin hover, el primer toque sobre la foto
+     la cambia (sin navegar); el resto de la tarjeta (nombre, "Ver
+     detalle", botones) sigue llevando a la ficha del producto como
+     siempre. Delegado en document para cubrir tarjetas que se
+     re-renderizan (filtros, carrusel mobile por categoría). */
+  function initCardImageSwap() {
+    if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    document.addEventListener(
+      "click",
+      function (e) {
+        var visual = e.target.closest(".shop-card-visual.has-swap");
+        if (!visual) return;
+        if (!visual.classList.contains("is-flipped")) {
+          e.preventDefault();
+          visual.classList.add("is-flipped");
+        }
+      },
+      true
+    );
+  }
+
   /* ---------- Carril de videos testimoniales (home) ----------
      "Coverflow" circular propio, sin librería externa. Cada tarjeta
      es position:absolute (centrada con left:50% + transform) y
@@ -777,6 +812,7 @@
     safe(initYear, "initYear");
     safe(initWaFloat, "initWaFloat");
     safe(initProductCarousel, "initProductCarousel");
+    safe(initCardImageSwap, "initCardImageSwap");
     safe(initVideoCarousel, "initVideoCarousel");
     document.documentElement.classList.add("is-ready");
   }

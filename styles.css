@@ -377,6 +377,19 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
    recortarla o volver a tomarla pareja a las demás — no forzarla más
    con CSS. */
 .shop-card-visual img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+/* Segunda foto (envase abierto) para productos con photoHover — ver
+   slideHTML en main.js. Ambas fotos quedan apiladas (position:absolute,
+   el mismo cuadro 1/1 de .shop-card-visual) y se cruzan con opacity;
+   sin JS en desktop (:hover), con un toque en mobile via
+   initCardImageSwap (clase .is-flipped). */
+.shop-card-visual.has-swap img { position: absolute; inset: 0; }
+.shop-card-visual.has-swap .shop-img-2 { opacity: 0; transition: opacity .4s var(--ease-out); }
+@media (hover: hover) and (pointer: fine) {
+  .shop-card-visual.has-swap:hover .shop-img-2 { opacity: 1; }
+  .shop-card-visual.has-swap:hover .shop-img-1 { opacity: 0; }
+}
+.shop-card-visual.has-swap.is-flipped .shop-img-2 { opacity: 1; }
+.shop-card-visual.has-swap.is-flipped .shop-img-1 { opacity: 0; }
 .shop-card-info { padding: 1.1rem 1.2rem 1.3rem; display: flex; flex-direction: column; flex: 1; }
 /* Envuelve precio+nombre+línea en un solo link (además de la foto) para
    que en mobile baste con tocar cualquier parte de esa info para abrir
