@@ -531,7 +531,16 @@
       }
     }
 
-    reInit();
+    // El "Todos" inicial arranca como HTML estático (fallback sin JS,
+    // ver comentario arriba) — si manifest.js sí cargó, lo reemplazamos
+    // de una por el render real desde data para que precio/rating/
+    // badges de descuento estén al día desde el primer pintado, sin
+    // esperar a que alguien toque una pestaña de filtro.
+    if ((data.products || []).some(function (p) { return !p.hidden; })) {
+      applyFilter("all");
+    } else {
+      reInit();
+    }
   }
 
   /* ---------- Carril de videos testimoniales (home) ----------
