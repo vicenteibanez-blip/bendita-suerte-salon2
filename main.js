@@ -347,6 +347,7 @@
     var viewport = $("[data-embla-viewport]", wrap);
     var container = $("[data-embla-container]", wrap);
     var tabsBar = $("[data-category-filter]");
+    var groupsEl = $("[data-mobile-cat-groups]");
     if (!wrap || !viewport || !container) return;
 
     var allSlidesHTML = container.innerHTML; // hardcoded "Todos" markup, used as the reset state
@@ -359,7 +360,13 @@
 
     function formatCLP(n) { return "$" + Math.round(Number(n) || 0).toLocaleString("es-CL"); }
 
-    function slideHTML(p) {
+    function slideHTML(p, plain) {
+      // plain=true: para las filas .mobile-cat-scroll (agrupadas por
+      // categoría) — sin la clase embla__slide, que no corresponde ahí
+      // (no hay Embla ni loop-clone en ese modo) y cuyas reglas de ancho
+      // #productos .embla__slide (con ID, más específicas) le ganarían
+      // al ancho fijo de .mobile-cat-scroll .shop-card. El resto de la
+      // card queda idéntico a la de desktop, sin recortar nada.
       var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
       var cartId = p.id || cartLabel;
       var cartPrice = p.priceCLP != null ? p.priceCLP : 0;
@@ -407,7 +414,7 @@
         ? '<a class="shop-card-link" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + infoTop + '</a>'
         : infoTop;
       return (
-        '<article class="card shop-card embla__slide" data-category="' + escHTML(p.category) + '">' +
+        '<article class="card shop-card' + (plain ? '' : ' embla__slide') + '" data-category="' + escHTML(p.category) + '">' +
           '<button class="shop-fav" type="button" aria-label="Agregar a favoritos" data-fav="' + escHTML(p.name) + '">' +
             '<svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>' +
           badgeHTML +
@@ -426,6 +433,25 @@
           '</div>' +
         '</article>'
       );
+    }
+
+    // Vista "Todos" en mobile: en vez de un solo listado, una sección por
+    // categoría (título + carrusel horizontal con efecto "peek", ver
+    // .mobile-cat-scroll en styles.css). Usa el mismo orden y los mismos
+    // labels que las pestañas de filtro (data.productCategories), y se
+    // salta categorías sin productos visibles.
+    function mobileGroupsHTML(products) {
+      var cats = (data.productCategories || []).filter(function (c) { return c.id !== "all"; });
+      return cats.map(function (cat) {
+        var items = products.filter(function (p) { return p.category === cat.id; });
+        if (!items.length) return "";
+        return (
+          '<div class="mobile-cat-section">' +
+            '<h3 class="mobile-cat-section-title">' + escHTML(cat.label) + '</h3>' +
+            '<div class="mobile-cat-scroll">' + items.map(function (p) { return slideHTML(p, true); }).join("") + '</div>' +
+          '</div>'
+        );
+      }).join("");
     }
 
     var emblaApi = null;
@@ -486,9 +512,28 @@
       }
     }
 
+    var currentCategory = "all";
+
     function applyFilter(category) {
+      currentCategory = category;
       var products = (data.products || []).filter(function (p) { return !p.hidden; });
-      if (!products.length) return; // no data available: keep the hardcoded "Todos" markup
+      if (!products.length) return; // no data available: keep el HTML estático de fallback
+
+      // Mobile + "Todos" -> secciones agrupadas por categoría (carrusel
+      // peek cada una); cualquier otro caso (desktop, o mobile con una
+      // categoría específica elegida) -> el listado plano de siempre.
+      if (groupsEl && isMobileGrid() && category === "all") {
+        groupsEl.innerHTML = mobileGroupsHTML(products);
+        groupsEl.hidden = false;
+        wrap.hidden = true;
+        if (emblaApi) { emblaApi.destroy(); emblaApi = null; }
+        bindBrand();
+        initFavButtons(groupsEl);
+        return;
+      }
+
+      if (groupsEl) { groupsEl.hidden = true; groupsEl.innerHTML = ""; }
+      wrap.hidden = false;
       var html = category === "all"
         ? products.map(slideHTML).join("")
         : products.filter(function (p) { return p.category === category; }).map(slideHTML).join("");
@@ -522,7 +567,10 @@
       var wasMobile = isMobileGrid();
       var onBreakpointChange = function () {
         var nowMobile = isMobileGrid();
-        if (nowMobile !== wasMobile) { wasMobile = nowMobile; reInit(); }
+        // applyFilter (no solo reInit) porque cruzar el corte también
+        // decide si toca mostrar las secciones agrupadas por categoría
+        // (mobile + "Todos") o el listado plano de siempre.
+        if (nowMobile !== wasMobile) { wasMobile = nowMobile; applyFilter(currentCategory); }
       };
       if (typeof mobileGridQuery.addEventListener === "function") {
         mobileGridQuery.addEventListener("change", onBreakpointChange);

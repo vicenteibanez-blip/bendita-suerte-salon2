@@ -451,6 +451,31 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   #productos .embla__loop-clone { display: none; }
 }
 
+/* --- Catálogo mobile agrupado por categoría (solo filtro "Todos") ----
+   main.js (mobileGroupsHTML/applyFilter) rellena este contenedor con una
+   sección por categoría — título + carrusel horizontal con efecto
+   "peek" — y lo muestra en vez del .embla de arriba. Las cards de acá
+   son EXACTAMENTE las mismas que usa desktop (mismo .shop-card, mismo
+   ancho min(78vw,280px) que ya usa el fallback sin JS de más arriba) —
+   sin recortar ni compactar ningún elemento. Un filtro de categoría
+   específico oculta esto y vuelve a mostrar el .embla como grid de 2
+   columnas (reglas justo arriba). */
+.mobile-cat-groups { display: flex; flex-direction: column; gap: 1.8rem; }
+.mobile-cat-groups[hidden] { display: none; }
+.mobile-cat-section-title { font-family: var(--serif); font-weight: 700; font-size: 1.15rem; margin-bottom: .8rem; }
+.mobile-cat-scroll {
+  display: flex; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch; scrollbar-width: none; -ms-overflow-style: none;
+  /* "Bleed": el riel sale del padding-inline de .container por la
+     derecha (margin-right negativo) para que la card siguiente se corte
+     justo en el borde real de la pantalla — señal de que hay más para
+     deslizar. La izquierda respeta el margen normal de la página. */
+  margin-right: -1.5rem;
+}
+.mobile-cat-scroll::-webkit-scrollbar { display: none; }
+.mobile-cat-scroll .shop-card { flex: 0 0 auto; width: min(78vw, 280px); scroll-snap-align: start; }
+.mobile-cat-scroll .shop-card:last-child { margin-right: 1.5rem; }
+
 /* --- Gallery / lightbox --- */
 .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem; }
 .gallery-item {
