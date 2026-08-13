@@ -350,6 +350,26 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
   position: relative;
 }
 .shop-card-visual .icon { width: 52px; height: 52px; stroke-width: 1.3; }
+/* Badge de esquina superior (izquierda, para no chocar con el corazón
+   de favoritos que ya ocupa la derecha): "Ahorra X%" real cuando hay
+   originalPriceCLP, o "Nuevo" si el producto lo trae marcado — nunca
+   los dos a la vez (ver slideHTML en main.js). */
+.shop-card-badge {
+  position: absolute; top: .8rem; left: .8rem; z-index: 2;
+  padding: .32rem .65rem; border-radius: 999px; font-size: .68rem; font-weight: 700;
+  letter-spacing: .01em;
+}
+.shop-card-badge--new { background: var(--accent-deep); color: var(--cream); }
+.shop-card-badge--sale { background: #c23b3b; color: #fff; }
+/* Rating por producto (solo si hay reseñas reales, ver slideHTML) */
+.shop-rating { display: flex; align-items: center; gap: .3rem; margin-top: .4rem; }
+.shop-rating .stars { display: flex; gap: 1px; color: var(--gold); }
+.shop-rating .icon { width: 13px; height: 13px; }
+.shop-rating-count { font-size: .74rem; color: var(--ink-mute); }
+/* Precio con descuento: tachado arriba (chico, apagado) + precio final
+   abajo (grande, el mismo tamaño que .shop-price sin descuento). */
+.shop-price-was { display: block; font-size: .82rem; font-weight: 500; color: var(--ink-mute); text-decoration: line-through; margin-bottom: .1rem; }
+.shop-price-now { display: block; font-weight: 800; font-size: 1.3rem; color: var(--ink); }
 /* Una sola regla de recorte, igual para las 15 fotos — sin ajustes
    manuales por imagen (eso fue lo que generó el bug de superposición
    la vez anterior). Si alguna foto puntual queda visiblemente más
@@ -401,6 +421,35 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .embla__prev:hover, .embla__next:hover { background: var(--accent-tint); transform: translateY(-2px); }
 .embla__prev { left: -10px; }
 .embla__next { right: -10px; }
+
+/* --- Catálogo principal (#productos): tarjetas más grandes/prominentes ---
+   Escopado a #productos (no al .shop-card genérico) para no afectar las
+   tarjetas más chicas de "Combina perfecto con" en las fichas de producto,
+   que reutilizan las mismas clases pero deben seguir viéndose como antes. */
+#productos .shop-card-info { padding: 1.4rem 1.5rem 1.6rem; }
+#productos .shop-price, #productos .shop-price-now { font-weight: 800; font-size: 1.35rem; }
+@media (hover: hover) and (pointer: fine) {
+  #productos .shop-card { transition: box-shadow .35s var(--ease-out), transform .35s var(--ease-out); }
+  #productos .shop-card:hover { box-shadow: 0 26px 44px -26px rgba(20,43,27,.4); transform: translateY(-3px); }
+  #productos .shop-card-visual img { transition: transform .5s var(--ease-out); }
+  #productos .shop-card:hover .shop-card-visual img { transform: scale(1.045); }
+}
+
+/* Más aire entre tarjetas del catálogo en desktop (el carrusel de
+   "Combina perfecto con" en las PDP mantiene su tamaño compacto). */
+@media (min-width: 720px) {
+  #productos .embla__slide { width: 300px; margin-right: 1.5rem; }
+}
+
+/* En mobile, el catálogo pasa de scroll horizontal a grid de 2 columnas
+   (mismo corte de 720px que usa el resto del sitio) — sin arrastre ni
+   loop; main.js no inicializa Embla bajo este ancho (ver isMobileGrid). */
+@media (max-width: 719.98px) {
+  #productos .embla__viewport { overflow: visible; -webkit-mask-image: none; mask-image: none; }
+  #productos .embla__container { display: grid; grid-template-columns: repeat(2, 1fr); gap: .9rem; }
+  #productos .embla__slide { width: auto; margin-right: 0; }
+  #productos .embla__loop-clone { display: none; }
+}
 
 /* --- Gallery / lightbox --- */
 .gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .7rem; }

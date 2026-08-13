@@ -357,6 +357,8 @@
       });
     }
 
+    function formatCLP(n) { return "$" + Math.round(Number(n) || 0).toLocaleString("es-CL"); }
+
     function slideHTML(p) {
       var cartLabel = p.name + (p.sub ? " " + p.sub : "") + " (" + p.brand + ")";
       var cartId = p.id || cartLabel;
@@ -364,13 +366,41 @@
       var visualInner = p.photo
         ? '<img src="' + escHTML(p.photo) + '" alt="" loading="lazy" />'
         : '<svg class="icon" aria-hidden="true"><use href="#icon-' + escHTML(p.icon) + '"/></svg>';
+
+      // Badge de esquina: descuento real (originalPriceCLP > priceCLP) tiene
+      // prioridad; si no hay descuento, "Nuevo" solo si el producto lo trae
+      // marcado explícitamente. Nunca ambos ni inventado sin dato de origen.
+      var hasDiscount = p.originalPriceCLP != null && p.originalPriceCLP > cartPrice;
+      var discountPct = hasDiscount ? Math.round((1 - cartPrice / p.originalPriceCLP) * 100) : 0;
+      var badgeHTML = hasDiscount
+        ? '<span class="shop-card-badge shop-card-badge--sale">Ahorra ' + discountPct + '%</span>'
+        : (p.isNew ? '<span class="shop-card-badge shop-card-badge--new">Nuevo</span>' : '');
+
       var visualHTML = p.productUrl
         ? '<a class="shop-card-visual" href="' + escHTML(p.productUrl) + '" aria-label="Ver producto: ' + escHTML(p.name) + '">' + visualInner + '</a>'
         : '<div class="shop-card-visual">' + visualInner + '</div>';
+
+      // Rating: solo si el producto trae reseñas propias reales (p.rating);
+      // nunca se rellena con la calificación general de la barbería.
+      var ratingHTML = "";
+      if (p.rating && p.rating.count > 0) {
+        var full = Math.round(p.rating.value);
+        var starsHTML = "";
+        for (var i = 1; i <= 5; i++) {
+          starsHTML += '<svg class="icon' + (i > full ? ' icon-star-off' : '') + '" aria-hidden="true"><use href="#icon-star"/></svg>';
+        }
+        ratingHTML = '<div class="shop-rating"><span class="stars">' + starsHTML + '</span><span class="shop-rating-count">(' + p.rating.count + ')</span></div>';
+      }
+
+      var priceHTML = hasDiscount
+        ? '<p class="shop-price"><span class="shop-price-was">' + escHTML(formatCLP(p.originalPriceCLP)) + '</span><span class="shop-price-now">' + escHTML(p.price) + '</span></p>'
+        : '<p class="shop-price">' + escHTML(p.price) + '</p>';
+
       var infoTop =
-        '<p class="shop-price">' + escHTML(p.price) + '</p>' +
+        priceHTML +
         '<h3>' + escHTML(p.name) + '</h3>' +
-        '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>';
+        '<p class="shop-line">' + escHTML(p.brand) + (p.sub ? " · " + escHTML(p.sub) : "") + '</p>' +
+        ratingHTML;
       // Todo el bloque precio/nombre/línea es un solo link (además de la
       // foto) para que en mobile no dependa de acertarle justo al título.
       var infoTopHTML = p.productUrl
@@ -380,6 +410,7 @@
         '<article class="card shop-card embla__slide" data-category="' + escHTML(p.category) + '">' +
           '<button class="shop-fav" type="button" aria-label="Agregar a favoritos" data-fav="' + escHTML(p.name) + '">' +
             '<svg class="icon" aria-hidden="true"><use href="#icon-heart"/></svg></button>' +
+          badgeHTML +
           visualHTML +
           '<div class="shop-card-info">' +
             infoTopHTML +
@@ -400,6 +431,12 @@
     var emblaApi = null;
     var autoplay = null;
     var hasEmbla = typeof window.EmblaCarousel === "function";
+    // Bajo este ancho el catálogo pasa de carrusel a grid de 2 columnas
+    // (mismo corte que el resto del sitio usa para "mobile", ver
+    // styles.css línea ~876 @media (min-width:720px)) — sin arrastre,
+    // sin loop, todas las tarjetas visibles de una.
+    var mobileGridQuery = typeof window.matchMedia === "function" ? window.matchMedia("(max-width: 719.98px)") : null;
+    function isMobileGrid() { return !!(mobileGridQuery && mobileGridQuery.matches); }
 
     // Embla's loop mode necesita bastante más contenido que el ancho del
     // viewport para calcular sus "loop points" sin saltos raros al llegar
@@ -426,7 +463,7 @@
     function reInit() {
       bindBrand(); // re-wire the whatsapp hrefs on the freshly rendered slides
       initFavButtons(container);
-      if (hasEmbla) {
+      if (hasEmbla && !isMobileGrid()) {
         if (emblaApi) { emblaApi.destroy(); }
         ensureLoopClone();
         var plugins = [];
@@ -437,6 +474,15 @@
         emblaApi = window.EmblaCarousel(viewport, { loop: true, align: "start", dragFree: false }, plugins);
         viewport.classList.add("is-embla-active");
         wrap.classList.add("is-embla-ready");
+      } else {
+        // Mobile: sin carrusel — destruir instancia previa (si veníamos de
+        // desktop tras un resize) y sacar la copia del loop, que en grid
+        // se vería como tarjetas duplicadas.
+        if (emblaApi) { emblaApi.destroy(); emblaApi = null; }
+        var oldClone = container.querySelector(":scope > [data-loop-clone]");
+        if (oldClone) oldClone.remove();
+        viewport.classList.remove("is-embla-active");
+        wrap.classList.remove("is-embla-ready");
       }
     }
 
@@ -467,6 +513,23 @@
     var nextBtn = $("[data-embla-next]", wrap);
     if (prevBtn) prevBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollPrev(); });
     if (nextBtn) nextBtn.addEventListener("click", function () { if (emblaApi) emblaApi.scrollNext(); });
+
+    // Si el visitante gira la pantalla o redimensiona la ventana cruzando
+    // el corte mobile/desktop, re-armar en el modo que corresponde
+    // (carrusel <-> grid) — pero solo cuando el modo realmente cambió,
+    // para no destruir/re-crear Embla en cada pixel de resize.
+    if (mobileGridQuery) {
+      var wasMobile = isMobileGrid();
+      var onBreakpointChange = function () {
+        var nowMobile = isMobileGrid();
+        if (nowMobile !== wasMobile) { wasMobile = nowMobile; reInit(); }
+      };
+      if (typeof mobileGridQuery.addEventListener === "function") {
+        mobileGridQuery.addEventListener("change", onBreakpointChange);
+      } else if (typeof mobileGridQuery.addListener === "function") {
+        mobileGridQuery.addListener(onBreakpointChange); // Safari viejo
+      }
+    }
 
     reInit();
   }
