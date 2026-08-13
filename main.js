@@ -613,24 +613,33 @@
   /* ---------- Cambio de foto en tarjetas de producto (home) ----------
      Productos con photoHover (ver manifest.js) muestran una segunda
      foto — el envase abierto — al pasar el mouse por encima en desktop
-     (puro CSS, ver .has-swap en styles.css) o al tocar la foto en
-     mobile/touch (sin :hover real). Acá solo se resuelve la parte
-     táctil: en dispositivos sin hover, el primer toque sobre la foto
-     la cambia (sin navegar); el resto de la tarjeta (nombre, "Ver
-     detalle", botones) sigue llevando a la ficha del producto como
-     siempre. Delegado en document para cubrir tarjetas que se
+     (puro CSS, ver .has-swap en styles.css). En mobile/touch no existe
+     :hover real, así que se simula con el dedo: el cambio ocurre apenas
+     el dedo TOCA la foto (touchstart), sin esperar a que se complete un
+     click/tap — no hace falta "cliquear" para que pase. Como la foto ya
+     no dispara navegación en touch (para eso está el nombre/"Ver
+     detalle"/botones, que siguen intactos), cada toque alterna entre
+     ambas fotos. Delegado en document para cubrir tarjetas que se
      re-renderizan (filtros, carrusel mobile por categoría). */
   function initCardImageSwap() {
     if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    document.addEventListener(
+      "touchstart",
+      function (e) {
+        var visual = e.target.closest(".shop-card-visual.has-swap");
+        if (!visual) return;
+        visual.classList.toggle("is-flipped");
+      },
+      { passive: true }
+    );
+    // La foto deja de ser un link funcional en touch (solo cambia de
+    // imagen); se navega igual desde el nombre/"Ver detalle"/botones.
     document.addEventListener(
       "click",
       function (e) {
         var visual = e.target.closest(".shop-card-visual.has-swap");
         if (!visual) return;
-        if (!visual.classList.contains("is-flipped")) {
-          e.preventDefault();
-          visual.classList.add("is-flipped");
-        }
+        e.preventDefault();
       },
       true
     );
