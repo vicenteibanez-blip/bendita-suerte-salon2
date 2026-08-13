@@ -851,6 +851,45 @@ h2.section-title { font-size: clamp(2rem, 4.2vw, 3.1rem); }
 .footer-bottom a { color: rgba(244,237,224,.75); }
 .footer-bottom a:hover { color: var(--accent); }
 
+/* --- Footer: franja de confianza (medios de pago + legales) ----------
+   Se agrega DESPUÉS del contenido principal del footer (.footer-grid)
+   y ANTES de .footer-bottom (copyright) — no reemplaza nada de lo que
+   ya había. Su propio border-top hace de separador con el contenido
+   de arriba; .footer-bottom ya trae su propio border-top de siempre,
+   así que ese mismo divisor existente separa esto del copyright, sin
+   agregar una tercera línea innecesaria. */
+.footer-trust {
+  margin-top: 2.6rem; padding-top: 2.2rem; border-top: 1px solid rgba(244,237,224,.15);
+  text-align: center;
+}
+.footer-trust-kicker {
+  display: block; font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: .5rem;
+}
+.footer-trust-sub { font-size: .88rem; color: rgba(244,237,224,.75); margin-bottom: 1.3rem; }
+.footer-payment-badges {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: .7rem; margin-bottom: 1.6rem;
+}
+.footer-payment-badge {
+  display: flex; align-items: center; justify-content: center; height: 34px; padding: 0 .9rem;
+  border-radius: 8px; background: rgba(244,237,224,.08); border: 1px solid rgba(244,237,224,.16);
+  transition: background .25s var(--ease-out), border-color .25s var(--ease-out);
+}
+.footer-payment-badge:hover { background: rgba(244,237,224,.14); border-color: rgba(244,237,224,.3); }
+/* Cada símbolo trae su propio viewBox real (proporciones oficiales de
+   cada marca) — se fija solo el alto y el ancho queda automático, así
+   ninguno se deforma sin importar su relación de aspecto. */
+.footer-payment-icon { display: block; height: 17px; width: auto; }
+.footer-payment-icon--mp { height: 21px; }
+.footer-legal-links {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  row-gap: .5rem; column-gap: .7rem; font-size: .78rem;
+}
+.footer-legal-links a { color: rgba(244,237,224,.68); }
+.footer-legal-links a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.footer-legal-sep { color: rgba(244,237,224,.3); }
+
 /* =============================================================
    6. Sections
    ============================================================= */

@@ -51,7 +51,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" />
 
-<link rel="stylesheet" href="styles.css?v=20260783" />
+<link rel="stylesheet" href="styles.css?v=20260784" />
 <link rel="stylesheet" href="popup-descuento.css?v=3" />
 <link rel="stylesheet" href="pdp-redesign.css?v=5" />
 
@@ -157,6 +157,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <symbol id="icon-droplets" viewBox="0 0 24 24"><path d="M15 4s4.5 5 4.5 8.2a4.5 4.5 0 0 1-9 0C10.5 9 15 4 15 4z"/><path d="M7.5 12.5s2.7 3 2.7 4.9a2.7 2.7 0 0 1-5.4 0c0-1.9 2.7-4.9 2.7-4.9z"/></symbol>
   <symbol id="icon-leaf" viewBox="0 0 24 24"><path d="M5 19c9 1 14-4 14-13-9 0-14 4-14 13z"/><path d="M5 19c2-4 5-7 9-9"/></symbol>
   <symbol id="icon-package" viewBox="0 0 24 24"><path d="M3.5 8L12 3.5 20.5 8v9L12 21.5 3.5 17z"/><path d="M3.5 8L12 12.5 20.5 8"/><path d="M12 12.5V21.5"/></symbol>
+  <symbol id="icon-visa" viewBox="0 0 48 20"><text x="24" y="15" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-style="italic" font-weight="800" font-size="15" fill="#1A1F71">VISA</text></symbol>
+  <symbol id="icon-mastercard" viewBox="0 0 40 24"><circle cx="15" cy="12" r="9" fill="#EB001B"/><circle cx="25" cy="12" r="9" fill="#F79E1B"/><path d="M20 5.3a9 9 0 0 1 0 13.4 9 9 0 0 1 0-13.4z" fill="#FF5F00"/></symbol>
+  <symbol id="icon-mercadopago" viewBox="0 0 120 28"><rect x="0" y="0" width="120" height="28" rx="6" fill="#00B1EA"/><text x="60" y="19" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="13" fill="#fff">Mercado Pago</text></symbol>
 </svg>
 
 <header class="nav" id="nav">
@@ -798,6 +801,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a href="https://www.google.com/maps/place/Bendita+Suerte+Barberia+%2F+Peluqueria/@-33.5571081,-70.5597532,17z/data=!4m8!3m7!1s0x9662d1484d0c81e5:0xa7de1b11707bbf6a!8m2!3d-33.5571081!4d-70.5597532!9m1!1b1!16s%2Fg%2F11z131vkm6" target="_blank" rel="noopener" style="font-size:.85rem;display:inline-block;margin-top:.6rem;color:var(--accent)">Ver en Google Maps →</a>
       </div>
     </div>
+    <div class="footer-trust">
+      <span class="footer-trust-kicker">Compra segura</span>
+      <p class="footer-trust-sub">Compra de forma segura y confiable</p>
+      <div class="footer-payment-badges">
+        <span class="footer-payment-badge"><svg class="footer-payment-icon" viewBox="0 0 48 20" role="img" aria-label="Visa"><use href="#icon-visa"/></svg></span>
+        <span class="footer-payment-badge"><svg class="footer-payment-icon" viewBox="0 0 40 24" role="img" aria-label="Mastercard"><use href="#icon-mastercard"/></svg></span>
+        <span class="footer-payment-badge"><svg class="footer-payment-icon footer-payment-icon--mp" viewBox="0 0 120 28" role="img" aria-label="Mercado Pago"><use href="#icon-mercadopago"/></svg></span>
+      </div>
+      <nav class="footer-legal-links" aria-label="Enlaces legales">
+        <a href="terminos-condiciones.html">Términos y condiciones</a><span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="politica-privacidad.html">Privacidad</a><span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="politica-envios.html">Envíos</a><span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="cambios-devoluciones.html">Cambios y devoluciones</a><span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="politica-reembolsos.html">Reembolsos</a><span class="footer-legal-sep" aria-hidden="true">·</span>
+        <a href="index.html#contacto">Contacto</a>
+      </nav>
+    </div>
     <div class="footer-bottom">
       <span>© <span data-year>2026</span> Bendita Suerte Salón. Todos los derechos reservados.</span>
       <span><a href="creditos.html">Créditos fotográficos</a></span>
@@ -937,7 +957,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </button>
 </div>
 
-<script defer src="lib/manifest.js?v=20260765"></script>
+<script defer src="lib/manifest.js?v=20260766"></script>
 <script defer src="meta-events.js?v=1"></script>
 <script defer src="cart.js?v=20260770"></script>
 <script defer src="checkout.js?v=20260770"></script>
