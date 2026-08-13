@@ -136,6 +136,15 @@
 .pdp-testimonial-role { font-size: .8rem; color: var(--ink-mute); }
 .pdp-testimonial-photo-note { font-size: .7rem; color: #b5842a; font-weight: 700; margin-top: -.4rem; }
 
+/* ---------- Reseñas adicionales (debajo del testimonio destacado) ----------
+   Mismo look de tarjeta que .pdp-testimonial-featured, reutilizado sin
+   el video, para sumar reseñas cortas reales cuando hay más de una. */
+.pdp-testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
+.pdp-testimonial-grid .pdp-testimonial-featured { max-width: none; margin-inline: 0; padding: 1.3rem 1.4rem; }
+@media (min-width: 640px) {
+  .pdp-testimonial-grid { grid-template-columns: 1fr 1fr; }
+}
+
 /* ---------- Por qué funciona (tarjetas de beneficio) ---------- */
 .pdp-benefit-cards {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem;
