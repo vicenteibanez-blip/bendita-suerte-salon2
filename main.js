@@ -534,9 +534,14 @@
 
       if (groupsEl) { groupsEl.hidden = true; groupsEl.innerHTML = ""; }
       wrap.hidden = false;
+      // OJO: no pasar slideHTML directo a .map() — Array#map llama al
+      // callback con (item, index, array), y ese índice caería en el
+      // parámetro "plain" de slideHTML (falsy solo en el índice 0), lo
+      // que le sacaba la clase embla__slide a todas las cards menos la
+      // primera y las dejaba angostas/aplastadas en el carrusel desktop.
       var html = category === "all"
-        ? products.map(slideHTML).join("")
-        : products.filter(function (p) { return p.category === category; }).map(slideHTML).join("");
+        ? products.map(function (p) { return slideHTML(p); }).join("")
+        : products.filter(function (p) { return p.category === category; }).map(function (p) { return slideHTML(p); }).join("");
       container.innerHTML = html || allSlidesHTML;
       reInit();
     }
