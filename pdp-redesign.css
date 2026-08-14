@@ -182,6 +182,23 @@
 .pdp-ideal-col--no { background: var(--bg-2); }
 .pdp-ideal-col--no .icon { color: #c23b3b; }
 
+/* ---------- Para quién es (tipo de cabello) ----------
+   Reemplaza el checklist genérico "Ideal si buscas / No es para
+   ti" cuando lo que hay que comunicar es un solo público muy
+   específico (ej. cabello ondulado) — un foco visual (ícono grande)
+   en vez de dos columnas de pros/contras. */
+.pdp-hairtype { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.1rem; padding: 2.4rem 1.8rem; }
+.pdp-hairtype-icon {
+  width: 68px; height: 68px; border-radius: 50%; background: var(--bg-2);
+  display: flex; align-items: center; justify-content: center; flex: none;
+}
+.pdp-hairtype-icon .icon { width: 34px; height: 34px; color: var(--accent-strong); stroke-width: 1.4; }
+.pdp-hairtype h3 { font-size: 1.3rem; }
+.pdp-hairtype p { font-size: .96rem; color: var(--ink-soft); max-width: 480px; line-height: 1.6; }
+.pdp-hairtype-points { display: flex; flex-wrap: wrap; justify-content: center; gap: .6rem 1.4rem; margin-top: .2rem; }
+.pdp-hairtype-points li { display: flex; align-items: center; gap: .5rem; font-size: .88rem; font-weight: 600; color: var(--ink); }
+.pdp-hairtype-points .icon { width: 15px; height: 15px; color: var(--accent-strong); flex: none; }
+
 /* ---------- Cómo usar (visual, 3 pasos) ---------- */
 .pdp-steps-visual { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
 .pdp-step-visual { display: flex; flex-direction: column; align-items: center; text-align: center; gap: .6rem; }
