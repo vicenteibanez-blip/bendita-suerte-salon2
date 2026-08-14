@@ -612,27 +612,31 @@
 
   /* ---------- Cambio de foto en tarjetas de producto (home) ----------
      Productos con photoHover (ver manifest.js) muestran una segunda
-     foto — el envase abierto — al pasar el mouse por encima en desktop
-     (puro CSS, ver .has-swap en styles.css). En mobile/touch no existe
-     :hover real, así que se simula con el dedo: el cambio ocurre apenas
-     el dedo TOCA cualquier parte de la tarjeta completa (touchstart en
-     .shop-card, no solo en la foto), sin esperar a que se complete un
-     click/tap. Como la foto ya no dispara navegación en touch (para eso
-     está el nombre/"Ver detalle"/botones, que siguen intactos), cada
-     toque alterna entre ambas fotos. Delegado en document para cubrir
-     tarjetas que se re-renderizan (filtros, carrusel mobile por
-     categoría). */
+     foto — el envase abierto o, en las ceras, la pieza con más info —
+     al pasar el mouse por encima en desktop (puro CSS, ver .has-swap en
+     styles.css). En mobile/touch no existe :hover real, así que se
+     simula con el dedo: el cambio ocurre apenas el dedo TOCA cualquier
+     parte de la tarjeta completa (no solo la foto), sin esperar a que
+     se levante el dedo ni a que se complete un tap/click. Se usa
+     "pointerdown" (se dispara en el instante del contacto, para touch
+     Y mouse/pen por igual) en vez de "touchstart" — más consistente
+     entre navegadores móviles. Como la foto ya no dispara navegación en
+     touch (para eso está el nombre/"Ver detalle"/botones, que siguen
+     intactos), cada toque alterna entre ambas fotos. Delegado en
+     document para cubrir tarjetas que se re-renderizan (filtros,
+     carrusel mobile por categoría). */
   function initCardImageSwap() {
     if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     document.addEventListener(
-      "touchstart",
+      "pointerdown",
       function (e) {
+        if (e.pointerType === "mouse") return;
         var card = e.target.closest(".shop-card");
         var visual = card && card.querySelector(".shop-card-visual.has-swap");
         if (!visual) return;
         visual.classList.toggle("is-flipped");
       },
-      { passive: true }
+      true
     );
     // La foto deja de ser un link funcional en touch (solo cambia de
     // imagen); se navega igual desde el nombre/"Ver detalle"/botones.
