@@ -615,18 +615,20 @@
      foto — el envase abierto — al pasar el mouse por encima en desktop
      (puro CSS, ver .has-swap en styles.css). En mobile/touch no existe
      :hover real, así que se simula con el dedo: el cambio ocurre apenas
-     el dedo TOCA la foto (touchstart), sin esperar a que se complete un
-     click/tap — no hace falta "cliquear" para que pase. Como la foto ya
-     no dispara navegación en touch (para eso está el nombre/"Ver
-     detalle"/botones, que siguen intactos), cada toque alterna entre
-     ambas fotos. Delegado en document para cubrir tarjetas que se
-     re-renderizan (filtros, carrusel mobile por categoría). */
+     el dedo TOCA cualquier parte de la tarjeta completa (touchstart en
+     .shop-card, no solo en la foto), sin esperar a que se complete un
+     click/tap. Como la foto ya no dispara navegación en touch (para eso
+     está el nombre/"Ver detalle"/botones, que siguen intactos), cada
+     toque alterna entre ambas fotos. Delegado en document para cubrir
+     tarjetas que se re-renderizan (filtros, carrusel mobile por
+     categoría). */
   function initCardImageSwap() {
     if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
     document.addEventListener(
       "touchstart",
       function (e) {
-        var visual = e.target.closest(".shop-card-visual.has-swap");
+        var card = e.target.closest(".shop-card");
+        var visual = card && card.querySelector(".shop-card-visual.has-swap");
         if (!visual) return;
         visual.classList.toggle("is-flipped");
       },
