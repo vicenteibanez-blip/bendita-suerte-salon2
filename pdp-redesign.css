@@ -88,18 +88,20 @@
   .pdp-trust-strip { grid-template-columns: repeat(4, 1fr); }
 }
 
-/* ---------- Video + prueba social (sección única) ---------- */
-.pdp-proof {
-  display: grid; grid-template-columns: 1fr; gap: 1.6rem;
-  align-items: center;
-}
+/* ---------- Video + prueba social (sección única) ----------
+   El video (si existe) va como bloque propio arriba, centrado y
+   desacoplado de las tarjetas de reseña — antes compartía fila de
+   grid con la primera reseña (320px + 1fr), lo que la dejaba más
+   ancha que las otras dos y rompía la alineación entre las 3. Con
+   las 3 reseñas ahora en el mismo .pdp-testimonial-grid, todas
+   quedan del mismo ancho sin importar si el video existe o no. */
 .pdp-proof-video {
-  /* width:100% explícito porque, dentro de un grid item, margin-inline:auto
-     + aspect-ratio sin un width propio colapsaba la caja a 0x0 (el auto
-     margin activa un sizing "fit-content" que, sin contenido intrínseco
-     — el placeholder de adentro es position:absolute — no tiene de dónde
+  /* width:100% explícito porque margin-inline:auto + aspect-ratio sin
+     un width propio colapsaba la caja a 0x0 (el auto margin activa un
+     sizing "fit-content" que, sin contenido intrínseco — el
+     placeholder de adentro es position:absolute — no tiene de dónde
      sacar un tamaño). Con width:100% ya no depende de ese cálculo. */
-  position: relative; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin-inline: auto;
+  position: relative; width: 100%; aspect-ratio: 9/16; max-width: 320px; margin: 0 auto 1.6rem;
   border-radius: var(--radius); overflow: hidden; background: #10241a;
   box-shadow: 0 28px 52px -24px rgba(20,43,27,.5);
 }
@@ -147,13 +149,17 @@
 .pdp-testimonial-proof-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .pdp-testimonial-proof-caption { font-size: .72rem; font-weight: 600; color: var(--ink-mute); margin-top: -.4rem; }
 
-/* ---------- Reseñas adicionales (debajo del testimonio destacado) ----------
-   Mismo look de tarjeta que .pdp-testimonial-featured, reutilizado sin
-   el video, para sumar reseñas cortas reales cuando hay más de una. */
-.pdp-testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.4rem; }
+/* ---------- Todas las reseñas (mismo ancho, mismos bordes) ----------
+   Una sola grilla para las 3 reseñas (antes la destacada vivía aparte,
+   compartiendo fila con el video, y quedaba más ancha que las otras
+   dos). Todas usan la misma tarjeta — foto real 1:1 arriba, estrellas,
+   cita, autor — así que ninguna se ve distinta ni desalineada. Salta
+   directo de 1 a 3 columnas (sin paso intermedio de 2) para que las 3
+   quedan parejas apenas hay espacio, sin una tarjeta sola en su fila. */
+.pdp-testimonial-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
 .pdp-testimonial-grid .pdp-testimonial-featured { max-width: none; margin-inline: 0; padding: 1.3rem 1.4rem; }
-@media (min-width: 640px) {
-  .pdp-testimonial-grid { grid-template-columns: 1fr 1fr; }
+@media (min-width: 860px) {
+  .pdp-testimonial-grid { grid-template-columns: repeat(3, 1fr); align-items: start; }
 }
 
 /* ---------- Por qué funciona (tarjetas de beneficio) ---------- */
