@@ -184,18 +184,15 @@
 
 /* ---------- Para quién es (tipo de cabello) ----------
    Reemplaza el checklist genérico "Ideal si buscas / No es para
-   ti" cuando lo que hay que comunicar es un solo público muy
-   específico (ej. cabello ondulado) — sin texto explicativo, solo
-   un ícono grande tipo insignia (silueta de cabeza con pelo con
-   textura) + una etiqueta corta debajo, mismo espíritu que los
-   íconos "tipo de cabello" que usan otras marcas de styling. */
-.pdp-hairtype { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; padding: 2.4rem 1.8rem; }
-.pdp-hairtype-icon {
-  width: 96px; height: 96px; border-radius: 50%; background: var(--accent-deep);
-  display: flex; align-items: center; justify-content: center; flex: none;
+   ti" con la foto real (ilustración) que manda el negocio mostrando
+   los looks/tipos de peinado para los que sirve el producto — sin
+   texto ni ícono agregado, la imagen sola. No es clickeable ni
+   interactiva a propósito: es contenido informativo, no un link. */
+.pdp-hairtype { padding: 1.4rem; }
+.pdp-hairtype-photo {
+  display: block; width: 100%; height: auto; border-radius: var(--radius);
+  box-shadow: 0 20px 40px -22px rgba(20,43,27,.35);
 }
-.pdp-hairtype-icon .icon { width: 52px; height: 52px; color: var(--cream); }
-.pdp-hairtype h3 { font-size: 1.15rem; }
 
 /* ---------- Cómo usar (visual, 3 pasos) ---------- */
 .pdp-steps-visual { display: grid; grid-template-columns: 1fr; gap: 1.4rem; }
