@@ -101,6 +101,11 @@ src="https://www.facebook.com/tr?id=2102602733654553&ev=PageView&noscript=1"
 </script>
 <script defer src="analytics.js?v=3"></script>
 <link rel="stylesheet" href="cookie-consent.css?v=2" />
+<!-- Preload de las 3 fotos de reseñas para que el carrusel de
+     #testimonios nunca se vea vacío mientras cargan en movil. -->
+<link rel="preload" as="image" href="assets/img/reviews/cera-aqua-wax-orange-review-1.webp" />
+<link rel="preload" as="image" href="assets/img/reviews/cera-aqua-wax-orange-review-2.webp" />
+<link rel="preload" as="image" href="assets/img/reviews/cera-aqua-wax-orange-review-3.webp" />
 </head>
 <body class="page-product">
 <!-- Google Tag Manager (noscript) -->
@@ -413,7 +418,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="pdp-testimonial-carousel" aria-label="Reseñas de clientes de Cera Aqua Wax Orange">
           <div class="card pdp-testimonial-featured">
             <div class="pdp-testimonial-proof-photo">
-              <img src="assets/img/reviews/cera-aqua-wax-orange-review-1.webp" alt="Foto real enviada por Rodrigo C. usando Cera Aqua Wax Orange" width="800" height="800" />
+              <img src="assets/img/reviews/cera-aqua-wax-orange-review-1.webp" alt="Foto real enviada por Rodrigo C. usando Cera Aqua Wax Orange" width="800" height="800" fetchpriority="high" decoding="async" />
             </div>
             <div class="stars">
               <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
@@ -437,7 +442,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
           <div class="card pdp-testimonial-featured">
             <div class="pdp-testimonial-proof-photo">
-              <img src="assets/img/reviews/cera-aqua-wax-orange-review-2.webp" alt="Foto real enviada por Fernando C. usando Cera Aqua Wax Orange" width="800" height="800" />
+              <img src="assets/img/reviews/cera-aqua-wax-orange-review-2.webp" alt="Foto real enviada por Fernando C. usando Cera Aqua Wax Orange" width="800" height="800" fetchpriority="high" decoding="async" />
             </div>
             <div class="stars">
               <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
@@ -461,7 +466,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
           <div class="card pdp-testimonial-featured">
             <div class="pdp-testimonial-proof-photo">
-              <img src="assets/img/reviews/cera-aqua-wax-orange-review-3.webp" alt="Foto real enviada por Martin F. usando Cera Aqua Wax Orange" width="800" height="800" />
+              <img src="assets/img/reviews/cera-aqua-wax-orange-review-3.webp" alt="Foto real enviada por Martin F. usando Cera Aqua Wax Orange" width="800" height="800" fetchpriority="high" decoding="async" />
             </div>
             <div class="stars">
               <svg class="icon" aria-hidden="true"><use href="#icon-star"/></svg>
