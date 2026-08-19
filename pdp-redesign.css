@@ -162,38 +162,25 @@
   .pdp-testimonial-grid { grid-template-columns: repeat(3, 1fr); align-items: start; }
 }
 
-/* ---------- Reseñas: carrusel automático (mismo mecanismo que
-   .reviews-carousel del home, ver styles.css) ----------
-   Cinta autoportante e infinita, sin JS y sin overflow-x:auto/scroll
-   en el wrapper — no hay nada que arrastrar, pausar ni apurar, se
-   mueve sola siempre a la misma velocidad lenta para dar tiempo a
-   leer. El set de tarjetas va duplicado una vez
-   (.pdp-testimonial-carousel-clone, aria-hidden + inert, invisible
-   para lectores de pantalla y no interactuable) así el loop calza sin
-   salto visible. A diferencia del home (que se mueve hacia la
-   izquierda), acá va hacia la derecha.
-   El difuminado de los bordes se hace con dos pseudo-elementos
-   estáticos (degradado sólido, sin animar) en vez de mask-image:
-   un mask-image sobre un contenedor cuyo hijo se anima sin parar
-   causa que Safari/Chrome de iOS (WebKit) pierda la capa compuesta
-   de forma intermitente y el carrusel completo parpadee/desaparezca
-   unos segundos — bug conocido de WebKit con mask + transform en
-   bucle. Los pseudo-elementos evitan tocar la capa animada. */
-.pdp-testimonial-carousel-wrap { overflow: hidden; position: relative; }
-.pdp-testimonial-carousel-wrap::before,
-.pdp-testimonial-carousel-wrap::after {
-  content: ""; position: absolute; top: 0; bottom: 0; width: 32px; z-index: 2; pointer-events: none;
-}
-.pdp-testimonial-carousel-wrap::before { left: 0; background: linear-gradient(to right, var(--bg-2), transparent); }
-.pdp-testimonial-carousel-wrap::after { right: 0; background: linear-gradient(to left, var(--bg-2), transparent); }
+/* ---------- Reseñas: carrusel automático ----------
+   MISMO mecanismo, sin ningún extra, que .reviews-carousel del home
+   (ver styles.css) — ese carrusel es estable en todos los dispositivos
+   probados. Cualquier añadido extra (mask-image para difuminar bordes,
+   translateZ/will-change para forzar una capa GPU) resultó ser
+   contraproducente: en iOS (Safari y Chrome, que comparten el motor
+   WebKit) causaba que el carrusel perdiera la capa compuesta de forma
+   intermitente y desapareciera unos segundos. Se elimina todo eso y se
+   deja la implementación mínima, idéntica en estructura al home:
+   overflow:hidden sin más en el wrapper, sin position/mask/pseudo-
+   elementos, sin transform/will-change forzado en la cinta. El set de
+   tarjetas va duplicado una vez (.pdp-testimonial-carousel-clone,
+   aria-hidden + inert, invisible para lectores de pantalla y no
+   interactuable) así el loop calza sin salto visible. A diferencia del
+   home (que se mueve hacia la izquierda), acá va hacia la derecha. */
+.pdp-testimonial-carousel-wrap { overflow: hidden; }
 .pdp-testimonial-carousel {
   display: flex; align-items: stretch; gap: 1.1rem; width: max-content;
   animation: pdp-testimonial-marquee-right 70s linear infinite;
-  /* Fuerza una capa GPU propia y estable para el hijo animado, para
-     que WebKit no la re-cree/pierda durante el scroll (misma causa
-     del parpadeo que el mask-image de arriba). */
-  -webkit-transform: translateZ(0); transform: translateZ(0); will-change: transform;
-  -webkit-backface-visibility: hidden; backface-visibility: hidden;
 }
 .pdp-testimonial-carousel .pdp-testimonial-featured { flex: 0 0 340px; max-width: none; margin-inline: 0; padding: 1.3rem 1.4rem; }
 .pdp-testimonial-carousel-clone { display: contents; }
