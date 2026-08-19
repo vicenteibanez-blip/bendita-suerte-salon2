@@ -172,7 +172,11 @@
    para lectores de pantalla y no interactuable) así el loop calza sin
    salto visible. A diferencia del home (que se mueve hacia la
    izquierda), acá va hacia la derecha. */
-.pdp-testimonial-carousel-wrap { overflow: hidden; }
+.pdp-testimonial-carousel-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
+  mask-image: linear-gradient(to right, transparent, black 32px, black calc(100% - 32px), transparent);
+}
 .pdp-testimonial-carousel {
   display: flex; align-items: stretch; gap: 1.1rem; width: max-content;
   animation: pdp-testimonial-marquee-right 70s linear infinite;
