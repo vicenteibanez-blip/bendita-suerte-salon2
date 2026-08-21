@@ -27,38 +27,48 @@
 
     /* ---------- Empujoncito para enseñar que las reseñas se deslizan ----------
        El carril de reseñas (#testimonios) es 100% manual — el usuario
-       arrastra con el dedo/mouse, nada se mueve solo (a pedido
+       arrastra con el dedo/mouse, nada avanza de reseña solo (a pedido
        explícito, se sacó el carrusel automático que había antes). Para
-       que la gente note que hay más tarjetas al costado, la primera
-       vez que la sección entra en pantalla el carril se desliza un
-       poquito hacia la derecha y se QUEDA ahí — a diferencia de la
-       versión anterior, ya NO vuelve solo a 0. El empujón se sostiene
-       como llamado a la acción hasta que la persona misma desliza (ahí
-       el control vuelve 100% a su gesto). Se dispara UNA sola vez y se
-       cancela si ya estaba tocando/deslizando antes de que ocurriera. */
+       llamar la atención sobre que hay más tarjetas al costado, cuando
+       la sección entra en pantalla el carril hace un pulso: se desliza
+       un poco hacia la derecha, vuelve, y se repite en bucle — SIEMPRE
+       yendo y volviendo al mismo lugar (nunca avanza a la reseña
+       siguiente) — hasta que la persona misma toca/desliza el carril,
+       momento en que el pulso se detiene para siempre y el control
+       queda 100% en su gesto. */
     var rail = document.querySelector(".pdp-testimonial-carousel");
     var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (rail && !reducedMotion && typeof IntersectionObserver !== "undefined") {
-      var hintDone = false;
+      var hintStarted = false;
+      var stopped = false;
+      var pulseTimer = null;
+
       var restoreSnap = function () { rail.style.scrollSnapType = ""; };
-      var cancelHint = function () { hintDone = true; restoreSnap(); };
-      rail.addEventListener("pointerdown", cancelHint, { once: true, passive: true });
-      rail.addEventListener("wheel", cancelHint, { once: true, passive: true });
+      var stopHint = function () {
+        stopped = true;
+        if (pulseTimer) { clearTimeout(pulseTimer); pulseTimer = null; }
+        restoreSnap();
+      };
+      rail.addEventListener("pointerdown", stopHint, { once: true, passive: true });
+      rail.addEventListener("wheel", stopHint, { once: true, passive: true });
+
+      function pulse() {
+        if (stopped) return;
+        rail.style.scrollSnapType = "none"; // si no, el snap devuelve el scroll a 0 al instante
+        rail.scrollTo({ left: 56, behavior: "smooth" });
+        pulseTimer = setTimeout(function () {
+          if (stopped) return;
+          rail.scrollTo({ left: 0, behavior: "smooth" });
+          pulseTimer = setTimeout(pulse, 1400); // pausa antes del próximo pulso
+        }, 700);
+      }
 
       var io = new IntersectionObserver(function (entries) {
         entries.forEach(function (entry) {
-          if (!entry.isIntersecting || hintDone) return;
-          hintDone = true;
+          if (!entry.isIntersecting || hintStarted) return;
+          hintStarted = true;
           io.unobserve(rail);
-          setTimeout(function () {
-            /* scroll-snap-type interrumpe un scrollTo() chico y lo
-               vuelve a dejar en 0 al instante — se desactiva el snap
-               para que el empujón se sostenga en su posición. Se repone
-               recién cuando el usuario toca/desliza (cancelHint de
-               arriba), así su gesto queda con el snap normal. */
-            rail.style.scrollSnapType = "none";
-            rail.scrollTo({ left: 56, behavior: "smooth" });
-          }, 500);
+          pulseTimer = setTimeout(pulse, 500);
         });
       }, { threshold: 0.6 });
       io.observe(rail);
