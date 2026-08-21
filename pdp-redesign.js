@@ -31,14 +31,17 @@
        explícito, se sacó el carrusel automático que había antes). Para
        que la gente note que hay más tarjetas al costado, la primera
        vez que la sección entra en pantalla el carril se desliza un
-       poquito hacia la derecha y vuelve — UNA sola vez, nunca más, y
-       se cancela si la persona ya lo tocó/deslizó por su cuenta. No es
-       un carrusel automático: es una demostración única del gesto. */
+       poquito hacia la derecha y se QUEDA ahí — a diferencia de la
+       versión anterior, ya NO vuelve solo a 0. El empujón se sostiene
+       como llamado a la acción hasta que la persona misma desliza (ahí
+       el control vuelve 100% a su gesto). Se dispara UNA sola vez y se
+       cancela si ya estaba tocando/deslizando antes de que ocurriera. */
     var rail = document.querySelector(".pdp-testimonial-carousel");
     var reducedMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (rail && !reducedMotion && typeof IntersectionObserver !== "undefined") {
       var hintDone = false;
-      var cancelHint = function () { hintDone = true; };
+      var restoreSnap = function () { rail.style.scrollSnapType = ""; };
+      var cancelHint = function () { hintDone = true; restoreSnap(); };
       rail.addEventListener("pointerdown", cancelHint, { once: true, passive: true });
       rail.addEventListener("wheel", cancelHint, { once: true, passive: true });
 
@@ -50,15 +53,11 @@
           setTimeout(function () {
             /* scroll-snap-type interrumpe un scrollTo() chico y lo
                vuelve a dejar en 0 al instante — se desactiva el snap
-               mientras dura el empujoncito y se repone al terminar. */
+               para que el empujón se sostenga en su posición. Se repone
+               recién cuando el usuario toca/desliza (cancelHint de
+               arriba), así su gesto queda con el snap normal. */
             rail.style.scrollSnapType = "none";
             rail.scrollTo({ left: 56, behavior: "smooth" });
-            setTimeout(function () {
-              rail.scrollTo({ left: 0, behavior: "smooth" });
-              setTimeout(function () {
-                rail.style.scrollSnapType = "";
-              }, 500);
-            }, 700);
           }, 500);
         });
       }, { threshold: 0.6 });
