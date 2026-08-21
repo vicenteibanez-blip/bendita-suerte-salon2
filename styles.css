@@ -1400,6 +1400,12 @@ body.cart-open-lock { overflow: hidden; }
 
 @media (min-width: 720px) {
   .pdp-hero { grid-template-columns: 1fr 1fr; gap: 2.4rem; align-items: start; }
+  /* La columna de info (descripción + tiers + franja de confianza) es
+     más alta que la galería, así que en PC quedaba un bloque de
+     espacio en blanco debajo de las miniaturas. Se deja la galería
+     "pegada" (sticky) mientras se hace scroll por la info de al lado,
+     para que ese espacio se aproveche en vez de verse vacío. */
+  .pdp-gallery { position: sticky; top: calc(var(--nav-h) + 1.5rem); align-self: start; }
   .tier-grid { grid-template-columns: repeat(4, 1fr); }
   .testimonial-grid { grid-template-columns: repeat(3, 1fr); }
   .trust-grid { grid-template-columns: repeat(2, 1fr); }
