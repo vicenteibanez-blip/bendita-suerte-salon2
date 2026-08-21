@@ -164,11 +164,17 @@
 
 /* ---------- Reseñas: carril deslizable manual ----------
    A pedido explícito del usuario, YA NO es un carrusel automático: se
-   quitó toda animación/JS. Mismo patrón que .related-grid (ver
-   styles.css, "Completa tu rutina"): scroll horizontal nativo con
-   scroll-snap, el usuario arrastra/desliza con el dedo o el mouse para
-   ver cada reseña, sin nada que se mueva solo. Degradado en el borde
-   derecho para insinuar que hay más tarjetas. */
+   quitó toda animación/JS que lo moviera solo. Mismo patrón que
+   .related-grid (ver styles.css, "Completa tu rutina"): scroll
+   horizontal nativo con scroll-snap, el usuario arrastra/desliza con
+   el dedo o el mouse para ver cada reseña. La tarjeta se deja algo
+   más angosta que el contenedor (en vez de ocupar casi todo el ancho)
+   para que siempre asome un pedazo de la siguiente — esa es la pista
+   visual permanente de que hay más. El degradado en el borde derecho
+   refuerza el mismo mensaje. Además, initSwipeHint (pdp-redesign.js)
+   hace un empujoncito de scroll UNA sola vez cuando la sección entra
+   en pantalla, para enseñar el gesto — no es un carrusel automático:
+   se ejecuta una vez y nunca más se mueve solo. */
 .pdp-testimonial-carousel-wrap { position: relative; }
 .pdp-testimonial-carousel {
   display: flex; align-items: stretch; gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
@@ -177,7 +183,7 @@
   mask-image: linear-gradient(to right, black calc(100% - 48px), transparent 100%);
 }
 .pdp-testimonial-carousel::-webkit-scrollbar { display: none; }
-.pdp-testimonial-carousel .pdp-testimonial-featured { flex: 0 0 min(84vw, 340px); max-width: none; margin-inline: 0; padding: 1.3rem 1.4rem; scroll-snap-align: start; }
+.pdp-testimonial-carousel .pdp-testimonial-featured { flex: 0 0 min(76vw, 300px); max-width: none; margin-inline: 0; padding: 1.3rem 1.4rem; scroll-snap-align: start; }
 
 /* ---------- Por qué funciona (tarjetas de beneficio) ---------- */
 .pdp-benefit-cards {
