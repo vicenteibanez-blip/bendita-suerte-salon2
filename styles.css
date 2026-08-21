@@ -1237,21 +1237,35 @@ body.cart-open-lock { overflow: hidden; }
 .pdp-highlights li { display: flex; align-items: flex-start; gap: .6rem; font-size: .93rem; color: var(--ink-soft); }
 .pdp-highlights .icon { width: 17px; height: 17px; color: var(--accent-strong); flex: none; margin-top: .15rem; }
 
-/* --- Selector de cantidad (venta por mayor) --- */
+/* --- Selector de cantidad (venta por mayor) ---
+   Las 4 tarjetas no tienen los mismos campos (la de "1 unidad" no
+   tiene precio tachado, ahorro ni "factura incluida", las otras sí),
+   así que en un simple display:block cada una termina con distinta
+   altura por campo y el conjunto se ve descuadrado. Con
+   grid-template-rows:subgrid + grid-row explícito por campo, las 4
+   tarjetas comparten las mismas líneas de fila: el campo que le
+   falta a una tarjeta simplemente queda vacío en su fila, pero esa
+   fila ocupa el mismo alto en las 4 — todo remata parejo aunque el
+   contenido no sea igual. */
 .tier-legend { font-weight: 600; font-size: .95rem; margin-top: 1.2rem; margin-bottom: .6rem; }
 .tier-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: .8rem; }
 .tier-card {
-  position: relative; display: block; text-align: left; padding: 1.1rem 1rem; border-radius: var(--radius-sm);
+  position: relative; display: grid; grid-template-rows: subgrid; grid-row: span 8;
+  text-align: left; padding: 1.1rem 1rem; border-radius: var(--radius-sm);
   border: 2px solid var(--line); background: var(--paper); cursor: pointer;
   transition: border-color .25s var(--ease-out), box-shadow .25s var(--ease-out), transform .25s var(--ease-out);
 }
 .tier-card:hover { border-color: var(--accent); transform: translateY(-2px); }
 .tier-card.is-selected { border-color: var(--accent-strong); box-shadow: 0 0 0 3px var(--accent-tint); }
 .tier-card input { position: absolute; opacity: 0; pointer-events: none; }
-.tier-card .tier-qty { font-family: var(--serif); font-weight: 700; font-size: 1.25rem; }
-.tier-card .tier-unit { font-size: .76rem; color: var(--ink-mute); margin-top: .15rem; }
-.tier-card .tier-total { font-weight: 700; font-size: 1.02rem; margin-top: .5rem; color: var(--accent-ink); }
-.tier-card .tier-save { font-size: .74rem; color: #8a6a1a; font-weight: 600; margin-top: .15rem; }
+.tier-card .tier-persona { grid-row: 1; }
+.tier-card .tier-qty { grid-row: 2; align-self: end; font-family: var(--serif); font-weight: 700; font-size: 1.25rem; }
+.tier-card .tier-total { grid-row: 3; align-self: start; font-weight: 700; font-size: 1.02rem; margin-top: .5rem; color: var(--accent-ink); }
+.tier-card .tier-compare { grid-row: 4; align-self: start; }
+.tier-card .tier-unit { grid-row: 5; align-self: start; font-size: .76rem; color: var(--ink-mute); margin-top: .15rem; }
+.tier-card .tier-save { grid-row: 6; align-self: start; font-size: .74rem; color: #8a6a1a; font-weight: 600; margin-top: .15rem; }
+.tier-card .tier-invoice-badge { grid-row: 7; align-self: start; justify-self: start; }
+.tier-card .tier-note-badge { grid-row: 8; align-self: start; }
 .tier-badge {
   position: absolute; top: -.65rem; right: .8rem; background: var(--gold); color: #fff; font-size: .62rem; font-weight: 700;
   letter-spacing: .03em; text-transform: uppercase; padding: .28rem .6rem; border-radius: 999px;
