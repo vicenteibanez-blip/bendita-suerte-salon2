@@ -277,7 +277,6 @@
 }
 
 @media (min-width: 900px) {
-  .pdp-benefit-cards { grid-template-columns: repeat(5, 1fr); }
   .pdp-finish { grid-template-columns: 1fr 1fr; }
 }
 
