@@ -26,7 +26,7 @@
 
   var STORAGE_EMAIL_KEY = "bs_popup_email"; // solo respaldo del último email capturado, no controla si se muestra
   var SESSION_SHOWN_KEY = "bs_popup_shown"; // sessionStorage: marca "ya se mostró en esta pestaña"
-  var SHOW_DELAY_MS = 4000; // entre 3 y 5 segundos, pedido explícito
+  var SHOW_DELAY_MS = 10000; // 10 segundos, pedido explícito
   var DISCOUNT_CODE = "BENDITASUERTE";
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
